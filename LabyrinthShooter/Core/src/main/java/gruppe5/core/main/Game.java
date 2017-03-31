@@ -4,14 +4,15 @@ import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-//import dk.sdu.mmmi.cbse.common.data.Entity;
-//import dk.sdu.mmmi.cbse.common.data.GameData;
-//import dk.sdu.mmmi.cbse.common.data.World;
-//import dk.sdu.mmmi.cbse.common.services.IEntityProcessingService;
-//import dk.sdu.mmmi.cbse.common.services.IGamePluginService;
-//import dk.sdu.mmmi.cbse.common.services.IPostEntityProcessingService;
-//import dk.sdu.mmmi.cbse.core.managers.GameInputProcessor;
+import gruppe5.common.data.GameData;
+import gruppe5.common.data.World;
+import gruppe5.common.services.IEntityProcessingService;
+import gruppe5.common.services.IGamePluginService;
+import gruppe5.common.services.IRenderService;
+import gruppe5.core.managers.GameInputProcessor;
+import java.util.Collection;
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 import org.openide.util.Lookup;
 import org.openide.util.LookupEvent;
 import org.openide.util.LookupListener;
@@ -19,21 +20,56 @@ import org.openide.util.LookupListener;
 public class Game implements ApplicationListener {
 
     private static OrthographicCamera cam;
-//    private final GameData gameData = new GameData();
-//    private World world = new World();
+    private final GameData gameData = new GameData();
+    private World world = new World();
+//    private final Lookup lookup = Lookup.getDefault();
+//    private List<IGamePluginService> gamePlugins = new CopyOnWriteArrayList<>();
+//    private Lookup.Result<IGamePluginService> result;
 
     @Override
     public void create() {
+        gameData.setDisplayWidth(Gdx.graphics.getWidth());
+        gameData.setDisplayHeight(Gdx.graphics.getHeight());
+
+        cam = new OrthographicCamera(gameData.getDisplayWidth(), gameData.getDisplayHeight());
+        cam.translate(gameData.getDisplayWidth() / 2, gameData.getDisplayHeight() / 2);
+        cam.update();
+
+        Gdx.input.setInputProcessor(new GameInputProcessor(gameData));
+        
+//        result = lookup.lookupResult(IGamePluginService.class);
+//        result.addLookupListener(lookupListener);
+//        result.allItems();
+//
+//        for (IGamePluginService plugin : result.allInstances()) {
+//            plugin.start(gameData, world);
+//            gamePlugins.add(plugin);
+//        }
     }
 
     @Override
     public void render() {
+        // clear screen to black
+        Gdx.gl.glClearColor(0, 0, 0, 1);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+        gameData.setDelta(Gdx.graphics.getDeltaTime());
+        gameData.getKeys().update();
+
+        update();
+        draw();
     }
 
     private void update() {
+//        for (IEntityProcessingService entityProcessorService : getEntityProcessingServices()) {
+//            entityProcessorService.process(gameData, world);
+//        }
     }
 
     private void draw() {
+//        for (IRenderService renderService : getRenderServices()) {
+//            renderService.render(gameData, world);
+//        }
     }
 
     @Override
@@ -51,4 +87,29 @@ public class Game implements ApplicationListener {
     @Override
     public void dispose() {
     }
+    
+//    private final LookupListener lookupListener = new LookupListener() {
+//        @Override
+//        public void resultChanged(LookupEvent le) {
+//
+//            Collection<? extends IGamePluginService> updated = result.allInstances();
+//
+//            for (IGamePluginService us : updated) {
+//                // Newly installed modules
+//                if (!gamePlugins.contains(us)) {
+//                    us.start(gameData, world);
+//                    gamePlugins.add(us);
+//                }
+//            }
+//
+//            // Stop and remove module
+//            for (IGamePluginService gs : gamePlugins) {
+//                if (!updated.contains(gs)) {
+//                    gs.stop(gameData, world);
+//                    gamePlugins.remove(gs);
+//                }
+//            }
+//        }
+//
+//    };
 }
