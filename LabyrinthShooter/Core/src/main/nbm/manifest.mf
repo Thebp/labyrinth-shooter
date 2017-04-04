@@ -1,3 +1,4 @@
 Manifest-Version: 1.0
+OpenIDE-Module-Install: gruppe5/core/main/Installer.class
 OpenIDE-Module-Localizing-Bundle: gruppe5/core/Bundle.properties
 

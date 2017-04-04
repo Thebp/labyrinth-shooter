@@ -1,0 +1,16 @@
+Manifest-Version: 1.0
+OpenIDE-Module-Localizing-Bundle: gruppe5/commonplayer/Bundle.properti
+ es
+OpenIDE-Module-Specification-Version: 1.0.0
+OpenIDE-Module-Implementation-Version: 1.0.0-20170404
+OpenIDE-Module-Build-Version: 201704041244
+OpenIDE-Module: gruppe5.CommonPlayer
+OpenIDE-Module-Public-Packages: -
+OpenIDE-Module-Requires: org.openide.modules.ModuleFormat1
+OpenIDE-Module-Display-Category: gruppe5
+OpenIDE-Module-Name: CommonPlayer
+OpenIDE-Module-Short-Description: <undefined>
+OpenIDE-Module-Long-Description: <undefined>
+OpenIDE-Module-Module-Dependencies: org.netbeans.api.annotations.commo
+ n/1 > 1.27.1, gruppe5.Common > 1.0.0
+

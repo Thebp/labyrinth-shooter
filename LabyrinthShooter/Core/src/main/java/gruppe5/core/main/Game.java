@@ -22,9 +22,9 @@ public class Game implements ApplicationListener {
     private static OrthographicCamera cam;
     private final GameData gameData = new GameData();
     private World world = new World();
-//    private final Lookup lookup = Lookup.getDefault();
-//    private List<IGamePluginService> gamePlugins = new CopyOnWriteArrayList<>();
-//    private Lookup.Result<IGamePluginService> result;
+    private final Lookup lookup = Lookup.getDefault();
+    private List<IGamePluginService> gamePlugins = new CopyOnWriteArrayList<>();
+    private Lookup.Result<IGamePluginService> result;
 
     @Override
     public void create() {
@@ -37,14 +37,14 @@ public class Game implements ApplicationListener {
 
         Gdx.input.setInputProcessor(new GameInputProcessor(gameData));
         
-//        result = lookup.lookupResult(IGamePluginService.class);
-//        result.addLookupListener(lookupListener);
-//        result.allItems();
-//
-//        for (IGamePluginService plugin : result.allInstances()) {
-//            plugin.start(gameData, world);
-//            gamePlugins.add(plugin);
-//        }
+        result = lookup.lookupResult(IGamePluginService.class);
+        result.addLookupListener(lookupListener);
+        result.allItems();
+
+        for (IGamePluginService plugin : result.allInstances()) {
+            plugin.start(gameData, world);
+            gamePlugins.add(plugin);
+        }
     }
 
     @Override
@@ -61,15 +61,15 @@ public class Game implements ApplicationListener {
     }
 
     private void update() {
-//        for (IEntityProcessingService entityProcessorService : getEntityProcessingServices()) {
-//            entityProcessorService.process(gameData, world);
-//        }
+        for (IEntityProcessingService entityProcessorService : getEntityProcessingServices()) {
+            entityProcessorService.process(gameData, world);
+        }
     }
 
     private void draw() {
-//        for (IRenderService renderService : getRenderServices()) {
-//            renderService.render(gameData, world);
-//        }
+        for (IRenderService renderService : getRenderServices()) {
+            renderService.render(gameData, world);
+        }
     }
 
     @Override
@@ -88,28 +88,36 @@ public class Game implements ApplicationListener {
     public void dispose() {
     }
     
-//    private final LookupListener lookupListener = new LookupListener() {
-//        @Override
-//        public void resultChanged(LookupEvent le) {
-//
-//            Collection<? extends IGamePluginService> updated = result.allInstances();
-//
-//            for (IGamePluginService us : updated) {
-//                // Newly installed modules
-//                if (!gamePlugins.contains(us)) {
-//                    us.start(gameData, world);
-//                    gamePlugins.add(us);
-//                }
-//            }
-//
-//            // Stop and remove module
-//            for (IGamePluginService gs : gamePlugins) {
-//                if (!updated.contains(gs)) {
-//                    gs.stop(gameData, world);
-//                    gamePlugins.remove(gs);
-//                }
-//            }
-//        }
-//
-//    };
+    private Collection<? extends IEntityProcessingService> getEntityProcessingServices() {
+        return lookup.lookupAll(IEntityProcessingService.class);
+    }
+
+    private Collection<? extends IRenderService> getRenderServices() {
+        return lookup.lookupAll(IRenderService.class);
+    }
+    
+    private final LookupListener lookupListener = new LookupListener() {
+        @Override
+        public void resultChanged(LookupEvent le) {
+
+            Collection<? extends IGamePluginService> updated = result.allInstances();
+
+            for (IGamePluginService us : updated) {
+                // Newly installed modules
+                if (!gamePlugins.contains(us)) {
+                    us.start(gameData, world);
+                    gamePlugins.add(us);
+                }
+            }
+
+            // Stop and remove module
+            for (IGamePluginService gs : gamePlugins) {
+                if (!updated.contains(gs)) {
+                    gs.stop(gameData, world);
+                    gamePlugins.remove(gs);
+                }
+            }
+        }
+
+    };
 }
