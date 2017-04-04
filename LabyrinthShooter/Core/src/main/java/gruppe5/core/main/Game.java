@@ -45,6 +45,9 @@ public class Game implements ApplicationListener {
             plugin.start(gameData, world);
             gamePlugins.add(plugin);
         }
+        for (IRenderService renderService : getRenderServices()) {
+            renderService.create(gameData, world);
+        }
     }
 
     @Override
