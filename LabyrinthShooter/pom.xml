@@ -60,7 +60,11 @@
         <module>application</module>
         <module>Core</module>
         <module>Common</module>
-        <module>MapCommon</module>
+        <module>CommonMap</module>
+        <module>CommonBullet</module>
+        <module>CommonItem</module>
+        <module>CommonPlayer</module>
+        <module>CommonWeapon</module>
     </modules>
 
     <properties>
