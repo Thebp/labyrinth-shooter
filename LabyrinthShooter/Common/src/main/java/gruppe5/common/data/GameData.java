@@ -12,6 +12,7 @@ public class GameData {
     private int displayHeight;
     private final GameKeys keys = new GameKeys();
     private List<Event> events = new CopyOnWriteArrayList<>();
+    public static final float UNIT_SIZE = 25;
 
     public void addEvent(Event e) {
         events.add(e);
