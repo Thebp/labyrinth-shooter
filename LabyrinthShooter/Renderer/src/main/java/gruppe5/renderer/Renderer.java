@@ -4,13 +4,15 @@
  * and open the template in the editor.
  */
 package gruppe5.renderer;
+import com.badlogic.gdx.Gdx;
 import gruppe5.common.data.Entity;
 import gruppe5.common.data.GameData;
 import gruppe5.common.data.World;
 import gruppe5.common.services.IRenderService;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import org.openide.util.lookup.ServiceProvider;
 
-
+@ServiceProvider(service = IRenderService.class)
 /**
  *
  * @author Daniel
