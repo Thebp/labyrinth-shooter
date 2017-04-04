@@ -63,8 +63,8 @@
         <module>CommonMap</module>
         <module>CommonBullet</module>
         <module>CommonItem</module>
-        <module>mavenproject1/CommonWeapon</module>
         <module>CommonPlayer</module>
+        <module>CommonWeapon</module>
     </modules>
 
     <properties>
