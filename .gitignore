@@ -17,3 +17,4 @@ hs_err_pid*
 /LabyrinthShooter/CommonMap/target/
 /LabyrinthShooter/CommonBullet/target/
 /LabyrinthShooter/Renderer/target/
+/LabyrinthShooter/Bullet/target/

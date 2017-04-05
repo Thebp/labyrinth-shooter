@@ -10,7 +10,10 @@ import gruppe5.common.data.Entity;
 import gruppe5.common.data.GameData;
 import gruppe5.common.data.World;
 import gruppe5.common.services.IGamePluginService;
+import org.openide.util.lookup.ServiceProvider;
 
+
+@ServiceProvider(service = IGamePluginService.class)
 /**
  *
  * @author marcn
