@@ -66,6 +66,7 @@
         <module>CommonPlayer</module>
         <module>CommonWeapon</module>
         <module>Renderer</module>
+        <module>Collision</module>
     </modules>
 
     <properties>
