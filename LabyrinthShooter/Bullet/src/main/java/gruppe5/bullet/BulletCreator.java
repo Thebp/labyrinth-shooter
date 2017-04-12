@@ -20,7 +20,7 @@ import org.openide.util.lookup.ServiceProvider;
 public class BulletCreator implements BulletSPI{
 
     @Override
-    public Entity createBullet(GameData gameData, Entity creator) {
+    public Entity createBullet(Entity creator) {
         Entity bullet = new Bullet();
         bullet.setAcceleration(1000);
         bullet.setCollidable(true);
@@ -32,6 +32,8 @@ public class BulletCreator implements BulletSPI{
         bullet.setLife(1);
         bullet.setMaxSpeed(300);
         bullet.setPosition(creator.getX(), creator.getY());
+        bullet.setX(creator.getX() + (float) Math.cos(creator.getRadians()) * (creator.getRadius() + bullet.getRadius() + 1));
+        bullet.setY(creator.getY() + (float) Math.sin(creator.getRadians()) * (creator.getRadius() + bullet.getRadius() + 1));
         bullet.setRadians(creator.getRadians());
         bullet.setRadius(8);
         bullet.setRotationSpeed(0);

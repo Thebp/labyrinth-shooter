@@ -67,6 +67,7 @@
         <module>CommonWeapon</module>
         <module>Bullet</module>
         <module>Renderer</module>
+        <module>Weapon</module>
     </modules>
 
     <properties>
