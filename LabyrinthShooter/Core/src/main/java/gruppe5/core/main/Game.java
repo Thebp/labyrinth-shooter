@@ -4,6 +4,8 @@ import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import gruppe5.common.data.Entity;
 import gruppe5.common.data.GameData;
 import gruppe5.common.data.World;
 import gruppe5.common.services.IEntityProcessingService;
@@ -19,6 +21,7 @@ import org.openide.util.LookupListener;
 
 public class Game implements ApplicationListener {
 
+    private ShapeRenderer sr;
     private static OrthographicCamera cam;
     private final GameData gameData = new GameData();
     private World world = new World();
@@ -34,6 +37,8 @@ public class Game implements ApplicationListener {
         cam = new OrthographicCamera(gameData.getDisplayWidth(), gameData.getDisplayHeight());
         cam.translate(gameData.getDisplayWidth() / 2, gameData.getDisplayHeight() / 2);
         cam.update();
+        
+        sr = new ShapeRenderer();
 
         Gdx.input.setInputProcessor(new GameInputProcessor(gameData));
         
@@ -45,6 +50,9 @@ public class Game implements ApplicationListener {
             plugin.start(gameData, world);
             gamePlugins.add(plugin);
         }
+//        for (IRenderService renderService : getRenderServices()) {
+//            renderService.create(gameData, world);
+//        }
     }
 
     @Override
@@ -69,6 +77,25 @@ public class Game implements ApplicationListener {
     private void draw() {
         for (IRenderService renderService : getRenderServices()) {
             renderService.render(gameData, world);
+//        for (IRenderService renderService : getRenderServices()) {
+//            renderService.render(gameData, world);
+//        }
+        for (Entity entity : world.getEntities()) {
+            sr.setColor(1, 1, 1, 1);
+
+            sr.begin(ShapeRenderer.ShapeType.Line);
+
+            float[] shapex = entity.getShapeX();
+            float[] shapey = entity.getShapeY();
+
+            for (int i = 0, j = shapex.length - 1;
+                    i < shapex.length;
+                    j = i++) {
+
+                sr.line(shapex[i], shapey[i], shapex[j], shapey[j]);
+            }
+
+            sr.end();
         }
     }
 

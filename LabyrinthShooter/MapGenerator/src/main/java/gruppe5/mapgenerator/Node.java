@@ -50,4 +50,9 @@ public class Node implements MapNode {
     public void setY(float y) {
         this.y = y;
     }
+    
+    @Override
+    public String toString() {
+        return x + ", " + y + (isMiddle ? " M" : "");
+    }
 }
