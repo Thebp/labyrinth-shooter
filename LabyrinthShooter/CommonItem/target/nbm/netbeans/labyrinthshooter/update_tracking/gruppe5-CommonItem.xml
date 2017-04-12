@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?><module codename="gruppe5.CommonItem">
-    <module_version install_time="1491384298033" last="true" origin="installer" specification_version="1.0.0">
+    <module_version install_time="1491997319967" last="true" origin="installer" specification_version="1.0.0">
         <file crc="1252010118" name="config/Modules/gruppe5-CommonItem.xml"/>
-        <file crc="201324808" name="modules/gruppe5-CommonItem.jar"/>
+        <file crc="3287860564" name="modules/gruppe5-CommonItem.jar"/>
     </module_version>
 </module>

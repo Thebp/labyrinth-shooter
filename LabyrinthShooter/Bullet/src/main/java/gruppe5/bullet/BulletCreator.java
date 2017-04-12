@@ -5,6 +5,7 @@
  */
 package gruppe5.bullet;
 
+import gruppe5.common.bullet.Bullet;
 import gruppe5.common.bullet.BulletSPI;
 import gruppe5.common.data.Entity;
 import gruppe5.common.data.GameData;
@@ -20,7 +21,7 @@ public class BulletCreator implements BulletSPI{
 
     @Override
     public Entity createBullet(GameData gameData, Entity creator) {
-        Entity bullet = new Entity();
+        Entity bullet = new Bullet();
         bullet.setAcceleration(1000);
         bullet.setCollidable(true);
         bullet.setDamage(1);
@@ -34,6 +35,8 @@ public class BulletCreator implements BulletSPI{
         bullet.setRadians(creator.getRadians());
         bullet.setRadius(8);
         bullet.setRotationSpeed(0);
+        bullet.setShapeX(new float[4]);
+        bullet.setShapeY(new float[4]);
         
         return bullet;
     }
