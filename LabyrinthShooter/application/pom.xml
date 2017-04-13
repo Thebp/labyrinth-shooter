@@ -62,7 +62,7 @@
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>MapGenerator</artifactId>
+            <artifactId>Collision</artifactId>
             <version>${project.version}</version>
         </dependency>
     </dependencies>
