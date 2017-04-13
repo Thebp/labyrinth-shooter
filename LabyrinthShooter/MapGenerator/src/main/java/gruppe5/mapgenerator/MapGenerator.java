@@ -99,6 +99,7 @@ public class MapGenerator implements MapSPI, IGamePluginService {
         
         wall.setPosition(x, y);
         wall.setType("Wall");
+       
         
         boolean[] points = new boolean[4];
         if (!neighbors[0]) {
