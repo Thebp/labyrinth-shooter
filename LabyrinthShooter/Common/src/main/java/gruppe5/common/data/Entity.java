@@ -11,7 +11,6 @@ import java.util.concurrent.ConcurrentHashMap;
 public class Entity implements Serializable {
     private final UUID ID = UUID.randomUUID();
     private Map<String, Entity> subEntities = new ConcurrentHashMap<>();
-    private String type;
     private boolean collidable;
     private boolean dynamic;
     private String imagePath;
@@ -79,14 +78,6 @@ public class Entity implements Serializable {
 
     public Entity getEntity(String ID) {
         return subEntities.get(ID);
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
     }
 
     public boolean isCollidable() {
