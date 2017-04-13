@@ -11,8 +11,8 @@ import org.openide.util.lookup.ServiceProvider;
  *
  * @author Daniel
  */
-
 @ServiceProvider(service = IEntityProcessingService.class)
+
 public class CollisionControlSystem implements IEntityProcessingService {
 
     Vector2 mtv = new Vector2();
@@ -20,12 +20,14 @@ public class CollisionControlSystem implements IEntityProcessingService {
     @Override
     public void process(GameData gameData, World world) {
         for (Entity shape1 : world.getEntities()) {
-            for (Entity shape2 : world.getEntities()) {
-                Vector2 velocity = new Vector2(shape1.getDx(), shape1.getDy());
-                if (checkConditions(shape1, shape2, mtv, velocity)) {
-                    shape1.setPosition(shape1.getX() + (velocity.x + mtv.x), shape1.getY() + (velocity.y + mtv.y));
-                    shape1.setLife(shape1.getLife() - shape2.getDamage());
-                    shape1.setIsHit(true);
+            if (shape1.isDynamic()) {
+                for (Entity shape2 : world.getEntities()) {
+                    Vector2 velocity = new Vector2(shape1.getDx(), shape1.getDy());
+                    if (checkConditions(shape1, shape2, mtv, velocity)) {
+                        shape1.setPosition(shape1.getX() + (velocity.x + mtv.x), shape1.getY() + (velocity.y + mtv.y));
+                        shape1.setLife(shape1.getLife() - shape2.getDamage());
+                        shape1.setIsHit(true);
+                    }
                 }
             }
         }
@@ -35,13 +37,10 @@ public class CollisionControlSystem implements IEntityProcessingService {
         if (shape1 == shape2) {
             return false;
         }
-        if (!shape1.isCollidable()){
+        if (!shape1.isCollidable()) {
             return false;
         }
         if (!polyCollideMTV(shape2, shape1, mtv, velocity)) {
-            return false;
-        }
-        if (!shape1.isDynamic()) {
             return false;
         }
         return true;
