@@ -27,28 +27,15 @@ public class CollisionControlSystem implements IEntityProcessingService {
                     shape1.setLife(shape1.getLife() - shape2.getDamage());
                     shape1.setIsHit(true);
                 }
-
-//                if (shape1 != shape2) {
-//                    //velocity is the velocity of polygon 1
-//                    Vector2 velocity = new Vector2(shape1.getDx(), shape1.getDy());
-//
-//                    if (polyCollideMTV(shape2, shape1, mtv, velocity)) {
-//                        if (shape1.getType() != EntityType.ASTEROIDS) { //Erstattes med Static vs Dynamic
-//                            shape1.setPosition(shape1.getX() + (velocity.x + mtv.x), shape1.getY() + (velocity.y + mtv.y));
-//                            shape1.setLife(shape1.getLife() - shape2.getDamage());
-//                            System.out.println(shape1.getType() + " : health: " + shape1.getLife());
-//                            System.out.println("shape2 damage: " + shape2.getDamage());
-//                            shape1.setIsHit(true);
-//
-//                        }
-//                    }
-//                }
             }
         }
     }
 
     private boolean checkConditions(Entity shape1, Entity shape2, Vector2 mtv, Vector2 velocity) {
         if (shape1 == shape2) {
+            return false;
+        }
+        if (!shape1.isCollidable()){
             return false;
         }
         if (!polyCollideMTV(shape2, shape1, mtv, velocity)) {
