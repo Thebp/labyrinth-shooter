@@ -15,7 +15,7 @@ import org.openide.util.lookup.ServiceProvider;
 
 public class CollisionControlSystem implements IEntityProcessingService {
 
-    Vector2 mtv = new Vector2();
+    Vector2 mtv = new Vector2();    //MTV: Minimum Translation Vector
 
     @Override
     public void process(GameData gameData, World world) {
@@ -58,6 +58,7 @@ public class CollisionControlSystem implements IEntityProcessingService {
         }
     }
 
+    //gets each corner from the entity, at returns an array of vectors.
     public Vector2[] getVertices(Entity shape) {
         Vector2[] axes = new Vector2[shape.getShapeX().length];
         float[] verticesX = shape.getShapeX();
