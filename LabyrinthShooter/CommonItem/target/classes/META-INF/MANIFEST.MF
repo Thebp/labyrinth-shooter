@@ -1,11 +1,9 @@
 Manifest-Version: 1.0
 OpenIDE-Module-Localizing-Bundle: gruppe5/commonitem/Bundle.properties
 OpenIDE-Module-Specification-Version: 1.0.0
-OpenIDE-Module-Implementation-Version: 1.0.0-20170404
-OpenIDE-Module-Build-Version: 201704041244
-OpenIDE-Module-Build-Version: 201704041548
+OpenIDE-Module-Implementation-Version: 1.0.0-20170413
+OpenIDE-Module-Build-Version: 201704131216
 OpenIDE-Module: gruppe5.CommonItem
-OpenIDE-Module-Public-Packages: -
 OpenIDE-Module-Public-Packages: gruppe5.common.item.*
 OpenIDE-Module-Requires: org.openide.modules.ModuleFormat1
 OpenIDE-Module-Display-Category: gruppe5

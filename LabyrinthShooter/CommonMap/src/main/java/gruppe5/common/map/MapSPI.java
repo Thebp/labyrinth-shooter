@@ -14,6 +14,7 @@ import java.util.List;
 public interface MapSPI {
     /**
      * 
+     * @return A list of all MapNodes in the game.
      */
     public List<MapNode> getMap();
 }

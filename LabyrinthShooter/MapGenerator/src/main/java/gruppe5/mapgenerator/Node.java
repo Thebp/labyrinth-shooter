@@ -23,6 +23,15 @@ public class Node implements MapNode {
     public List<MapNode> getNeighbours() {
         return neighbours;
     }
+    
+    public List<MapNode> getNeighbouringCenterNodes() {
+        ArrayList<MapNode> centerNodes = new ArrayList();
+        for (MapNode neighbour : neighbours) {
+            if (neighbour.isMiddle())
+                centerNodes.add(neighbour);
+        }
+        return centerNodes;
+    }
 
     @Override
     public boolean isMiddle() {
@@ -53,6 +62,39 @@ public class Node implements MapNode {
     
     @Override
     public String toString() {
-        return x + ", " + y + (isMiddle ? " M" : "");
+        return "(" + x + ", " + y + (isMiddle ? " M" : "") + ")";
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 3;
+        hash = 17 * hash + (this.isMiddle ? 1 : 0);
+        hash = 17 * hash + Float.floatToIntBits(this.x);
+        hash = 17 * hash + Float.floatToIntBits(this.y);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Node other = (Node) obj;
+        if (this.isMiddle != other.isMiddle) {
+            return false;
+        }
+        if (Float.floatToIntBits(this.x) != Float.floatToIntBits(other.x)) {
+            return false;
+        }
+        if (Float.floatToIntBits(this.y) != Float.floatToIntBits(other.y)) {
+            return false;
+        }
+        return true;
     }
 }

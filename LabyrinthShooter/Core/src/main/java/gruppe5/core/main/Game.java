@@ -31,6 +31,8 @@ public class Game implements ApplicationListener {
 
     @Override
     public void create() {
+        System.out.println("** Create");
+        
         gameData.setDisplayWidth(Gdx.graphics.getWidth());
         gameData.setDisplayHeight(Gdx.graphics.getHeight());
 
@@ -75,8 +77,6 @@ public class Game implements ApplicationListener {
     }
 
     private void draw() {
-        for (IRenderService renderService : getRenderServices()) {
-            renderService.render(gameData, world);
 //        for (IRenderService renderService : getRenderServices()) {
 //            renderService.render(gameData, world);
 //        }

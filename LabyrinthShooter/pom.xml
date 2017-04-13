@@ -65,8 +65,8 @@
         <module>CommonItem</module>
         <module>CommonPlayer</module>
         <module>CommonWeapon</module>
-<<<<<<< HEAD
         <module>MapGenerator</module>
+        <module>Renderer</module>
     </modules>
 
     <properties>
