@@ -98,7 +98,8 @@ public class MapGenerator implements MapSPI, IGamePluginService {
         float y = mazeY*unit;
         
         wall.setPosition(x, y);
-       
+        wall.setDynamic(false);
+        wall.setCollidable(true);
         
         boolean[] points = new boolean[4];
         if (!neighbors[0]) {
