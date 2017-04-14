@@ -68,6 +68,9 @@
         <module>MapGenerator</module>
         <module>Renderer</module>
         <module>Collision</module>
+        <module>Bullet</module>
+        <module>Renderer</module>
+        <module>Weapon</module>
     </modules>
 
     <properties>

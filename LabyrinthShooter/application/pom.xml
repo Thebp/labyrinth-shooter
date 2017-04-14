@@ -60,14 +60,24 @@
             <artifactId>Renderer</artifactId>
             <version>${project.version}</version>
         </dependency>
-        <dependency>
+		<dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>Collision</artifactId>
             <version>${project.version}</version>
         </dependency>
-        <dependency>
+		<dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>Bullet</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+		<dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>MapGenerator</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+		<dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>Weapon</artifactId>
             <version>${project.version}</version>
         </dependency>
     </dependencies>

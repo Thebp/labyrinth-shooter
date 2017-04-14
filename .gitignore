@@ -19,5 +19,8 @@ hs_err_pid*
 /LabyrinthShooter/Renderer/target/
 /LabyrinthShooter/MapGenerator/target/
 /LabyrinthShooter/Collision/target/
+/LabyrinthShooter/Bullet/target/
+/LabyrinthShooter/Weapon/target/
 *.properties
 *.netbeans_automatic_build
+

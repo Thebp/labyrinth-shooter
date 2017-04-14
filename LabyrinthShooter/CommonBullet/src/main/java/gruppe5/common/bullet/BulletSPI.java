@@ -13,5 +13,5 @@ import gruppe5.common.data.GameData;
  * @author marcn
  */
 public interface BulletSPI {
-    Entity createBullet(GameData gameData, Entity creator);
+    Entity createBullet(Entity creator);
 }
