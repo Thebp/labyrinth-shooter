@@ -30,9 +30,7 @@ public class Game implements ApplicationListener {
     private Lookup.Result<IGamePluginService> result;
 
     @Override
-    public void create() {
-        System.out.println("** Create");
-        
+    public void create() {  
         gameData.setDisplayWidth(Gdx.graphics.getWidth());
         gameData.setDisplayHeight(Gdx.graphics.getHeight());
 
