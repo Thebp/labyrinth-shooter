@@ -7,12 +7,9 @@ package gruppe5.weapon;
 
 import gruppe5.common.data.Entity;
 import gruppe5.common.data.GameData;
-import gruppe5.common.data.GameKeys;
 import gruppe5.common.data.World;
 import gruppe5.common.services.IEntityProcessingService;
 import gruppe5.common.weapon.Weapon;
-import gruppe5.common.weapon.WeaponSPI;
-import org.openide.util.Lookup;
 import org.openide.util.lookup.ServiceProvider;
 
 @ServiceProvider(service = IEntityProcessingService.class)

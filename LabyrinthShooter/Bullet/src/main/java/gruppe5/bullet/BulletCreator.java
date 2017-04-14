@@ -8,7 +8,6 @@ package gruppe5.bullet;
 import gruppe5.common.bullet.Bullet;
 import gruppe5.common.bullet.BulletSPI;
 import gruppe5.common.data.Entity;
-import gruppe5.common.data.GameData;
 import org.openide.util.lookup.ServiceProvider;
 
 
