@@ -19,8 +19,8 @@ public class Installer extends ModuleInstall {
 
         LwjglApplicationConfiguration cfg = new LwjglApplicationConfiguration();
         cfg.title = "Labyrinth Shooter";
-        cfg.width = 1600;
-        cfg.height = 1200;
+        cfg.width = 1000;
+        cfg.height = 800;
         cfg.useGL30 = false;
         cfg.resizable = false;
 
