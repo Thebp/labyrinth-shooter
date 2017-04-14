@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?><module codename="gruppe5.CommonPlayer">
-    <module_version install_time="1492104646546" last="true" origin="installer" specification_version="1.0.0">
+    <module_version install_time="1492206263740" last="true" origin="installer" specification_version="1.0.0">
         <file crc="160480737" name="config/Modules/gruppe5-CommonPlayer.xml"/>
-        <file crc="1959982943" name="modules/gruppe5-CommonPlayer.jar"/>
-        <file crc="2275163535" name="update_tracking/gruppe5-CommonPlayer.xml"/>
+        <file crc="3324104174" name="modules/gruppe5-CommonPlayer.jar"/>
     </module_version>
 </module>

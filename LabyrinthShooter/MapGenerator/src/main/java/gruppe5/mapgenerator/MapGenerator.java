@@ -5,7 +5,6 @@
  */
 package gruppe5.mapgenerator;
 
-import gruppe5.common.*;
 import gruppe5.common.data.Entity;
 import gruppe5.common.data.GameData;
 import gruppe5.common.data.World;
@@ -165,7 +164,7 @@ public class MapGenerator implements MapSPI, IGamePluginService {
         float[] shapey;
         if (n.isMiddle()) {
             shapex = new float[6];
-            shapey = new float[6]
+            shapey = new float[6];
         } else {
             shapex = new float[4];
             shapey = new float[4];
