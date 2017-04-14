@@ -27,9 +27,9 @@ public class RandDivisionMaze {
     public boolean[][] generate(int width, int height, int seed) {
         rand = new Random(Integer.toUnsignedLong(seed));
 
-        boolean[][] maze = new boolean[height][width];
+        boolean[][] maze = new boolean[width][height];
         
-        maze = divide(maze, true, 1, maze.length - 2, 1, maze.length - 2);
+        maze = divide(maze, true, 1, maze.length - 2, 1, maze[0].length - 2);
         maze = addOuterWalls(maze);
 
         return maze;
@@ -73,7 +73,7 @@ public class RandDivisionMaze {
         int hole = Math.floorDiv(rand.nextInt(maxX - minX) + minX, 2) * 2 + 1;
         
         for (int i = minX; i <= maxX; i++) 
-            grid[y][i] = i != hole;
+            grid[i][y] = i != hole;
         
         return grid;
     }
@@ -82,7 +82,7 @@ public class RandDivisionMaze {
         int hole = Math.floorDiv(rand.nextInt(maxY - minY) + minY, 2) * 2 + 1;
         
         for (int i = minY; i <= maxY; i++) 
-            grid[i][x] = i != hole;
+            grid[x][i] = i != hole;
         
         return grid;
     }
@@ -94,8 +94,8 @@ public class RandDivisionMaze {
         }
         
         for (int y = 0; y < maze[0].length; y++) {
-                maze[0][y] = true;
-                maze[maze.length - 1][y] = true;
+            maze[0][y] = true;
+            maze[maze.length - 1][y] = true;
         }
         
         return maze;

@@ -28,14 +28,16 @@ import org.openide.util.lookup.ServiceProviders;
  */
 public class MapGenerator implements MapSPI, IGamePluginService {
     public static final int NODES_IN_CORRIDOR = 3; // Must be odd to have a center node
-    private Random rand;
+    public static final boolean SHOW_NODES = true; // For debugging, if true entities for nodes will be created
+    
+    private Random rand; // Used for seed generation
     private List<MapNode> nodeList;
     
     @Override
     public List<MapNode> getMap() {
         if (nodeList != null)
             return nodeList;
-        System.out.println("MapGenerator: NodeList not initialized.");
+        System.out.println("MapGenerator.getMap(): NodeList not initialized.");
         return null;
     }
 
@@ -44,20 +46,34 @@ public class MapGenerator implements MapSPI, IGamePluginService {
         rand = new Random();
         RandDivisionMaze generator = new RandDivisionMaze();
 
-        boolean[][] maze = generator.generate(10, 10, rand.nextInt());
-        boolean[][] scaled = scaleMaze(maze, NODES_IN_CORRIDOR);
+        // Calculate the unit dimensions of the maze given the game width and height
+        int mazeWidth = (int)Math.floor(gameData.getDisplayWidth() / GameData.UNIT_SIZE / NODES_IN_CORRIDOR);
+        int mazeHeight = (int)Math.floor(gameData.getDisplayHeight() / GameData.UNIT_SIZE / NODES_IN_CORRIDOR);
+        
+        // Generate a minimalistic version of maze
+        boolean[][] maze = generator.generate(mazeWidth, mazeHeight, rand.nextInt());
+        // Scale the maze
+        boolean[][] scaledMaze = scaleMaze(maze, NODES_IN_CORRIDOR);
 
+        // Prints out the mini-version of the maze to console
         for (int i = 0; i < maze.length; i++) {
-            for (int j = 0; j < maze[i].length; j++) {
+            for (int j = 0; j < maze[i].length; j++) 
                 System.out.print(maze[i][j] ? "@@" : "  ");
-            }
             System.out.println();
         }
 
-        nodeList = createNodeList(scaled);
+        // Create MapNodes required by MapSPI
+        nodeList = createNodeList(scaledMaze);
         
-        for (Entity wall : createWallEntities(scaled))
+        // Add wall entities to world
+        for (Entity wall : createWallEntities(scaledMaze))
             world.addEntity(wall);
+        
+        // Add node entities to world if enabled
+        if (SHOW_NODES) {
+            for (MapNode n : nodeList)
+                world.addEntity(createNodeEntity(n));
+        }
     }
 
     @Override
@@ -157,6 +173,54 @@ public class MapGenerator implements MapSPI, IGamePluginService {
         return wall;
     }
     
+    private Entity createNodeEntity(MapNode n) {
+        Entity node = new Entity();
+        
+        float x = n.getX();
+        float y = n.getY();
+        float unit = GameData.UNIT_SIZE;
+        
+        node.setPosition(x, y);
+        node.setCollidable(false);
+        node.setDynamic(false);
+        
+        float[] shapex;
+        float[] shapey;
+        if (n.isMiddle()) {
+            shapex = new float[6];
+            shapey = new float[6]
+        } else {
+            shapex = new float[4];
+            shapey = new float[4];
+        }
+        
+        shapex[0] = x;
+        shapey[0] = y + unit/4;
+        
+        shapex[1] = x + unit/4;
+        shapey[1] = y;
+        
+        shapex[2] = x;
+        shapey[2] = y - unit/4;
+        
+        shapex[3] = x - unit/4;
+        shapey[3] = y;
+        
+        // Create a line in the middle to indicate that this node is a center node
+        if (n.isMiddle()) {
+            shapex[4] = x;
+            shapey[4] = y + unit/4;
+            
+            shapex[5] = x;
+            shapey[5] = y - unit/4;
+        }
+        
+        node.setShapeX(shapex);
+        node.setShapeY(shapey);
+        
+        return node;
+    }
+    
     /**
      *
      * @param maze
@@ -247,9 +311,10 @@ public class MapGenerator implements MapSPI, IGamePluginService {
                 iterateCenterNodes(child, nodeList, maze, x + 1, y);
                 iterateCenterNodes(child, nodeList, maze, x, y - 1);
                 iterateCenterNodes(child, nodeList, maze, x, y + 1);
-            } else // If nodeList already contains this node but it is not linked to its parent
-            if (!parent.getNeighbours().contains(child)) {
-                parent.getNeighbours().add(child);
+            } else {// If nodeList already contains this node but it is not linked to its parent
+                if (!parent.getNeighbours().contains(child)) {
+                    parent.getNeighbours().add(child);
+                }
             }
         }
         return nodeList;
@@ -263,16 +328,40 @@ public class MapGenerator implements MapSPI, IGamePluginService {
      * @return A boolean indicating whether the position is the center of a corridor 
      */
     private boolean isCenter(boolean[][] maze, int x, int y) {
-        boolean horizontal = false;
-        if (maze[x + NODES_IN_CORRIDOR][y] || maze[x - NODES_IN_CORRIDOR][y]) 
-            horizontal = true;
-       
-        if (horizontal) 
-            return (y - 1) % NODES_IN_CORRIDOR == 0;
-        else 
-            return (x - 1) % NODES_IN_CORRIDOR == 0;
+        boolean center = true;
+        boolean[] neighbors = neighbors(maze, x, y);
+        
+        // If the position has no neighbouring walls, it is a center node
+        for (int i = 0; i < neighbors.length; i++)
+            if (neighbors[i])
+                center = false;
+        
+        return center;
     }
 
+    /**
+     * 
+     * @param maze
+     * @param x
+     * @param y
+     * @return [0]: Up, [1]: UpRight, [2]: Right, [3]: RightDown, [4]: Down,
+     *          [5]: DownLeft, [6]: Left, [7]: LeftUp
+     */
+    private boolean[] neighbors(boolean[][] maze, int x, int y) {
+        boolean[] neighbors = new boolean[8];
+        
+        neighbors[0] = maze[x][y+1];
+        neighbors[1] = maze[x+1][y+1];
+        neighbors[2] = maze[x+1][y];
+        neighbors[3] = maze[x+1][y-1];
+        neighbors[4] = maze[x][y-1];
+        neighbors[5] = maze[x-1][y-1];
+        neighbors[6] = maze[x-1][y];
+        neighbors[7] = maze[x-1][y+1];
+        
+        return neighbors;
+    }
+    
     /**
      * Creates a new Node without any neighbors
      *
