@@ -38,14 +38,13 @@ public class PlayerPlugin implements IGamePluginService{
         Player player = new Player();
 
         player.setPosition(gameData.getDisplayWidth() / 2, gameData.getDisplayHeight() / 2);
-        player.setAcceleration(100);
-        player.setMaxSpeed(200);
-        player.setDeacceleration(50);
+        player.setAcceleration(1000);
+        player.setMaxSpeed(300);
+        player.setDeacceleration(5);
         player.setShapeX(new float[4]);
         player.setShapeY(new float[4]);
         player.setRadius(8);
         player.setRadians(3.1415f / 2);
-        player.setCollidable(true);
         player.setRotationSpeed(5);
         player.setCollidable(true);
         player.setDynamic(true);

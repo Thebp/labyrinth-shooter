@@ -87,8 +87,8 @@ public class PlayerProcessor implements IEntityProcessingService {
 
             player.setX(x);
             player.setY(y);
-            player.setDx(dx);
-            player.setDy(dy);
+            player.setDx(0);
+            player.setDy(0);
             player.setRadians(radians);
             player.setAcceleration(acceleration);
             player.setDeacceleration(deceleration);
