@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package gruppe5.common.player;
+package gruppe5.player;
 
 import gruppe5.common.data.Entity;
 

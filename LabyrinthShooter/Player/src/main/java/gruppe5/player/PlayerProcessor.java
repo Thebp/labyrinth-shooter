@@ -9,7 +9,6 @@ import gruppe5.common.data.Entity;
 import gruppe5.common.data.GameData;
 import gruppe5.common.data.GameKeys;
 import gruppe5.common.data.World;
-import gruppe5.common.player.Player;
 import gruppe5.common.services.IEntityProcessingService;
 import org.openide.util.lookup.ServiceProvider;
 
@@ -36,19 +35,18 @@ public class PlayerProcessor implements IEntityProcessingService {
             float[] shapeY = player.getShapeY();
             float dt = gameData.getDelta();
             int rotationSpeed = player.getRotationSpeed();
-
+            float b = (3.1415f /4);
+            
             if (gameData.getKeys().isDown(GameKeys.LEFT)) {
                 radians += rotationSpeed * dt;
             } else if (gameData.getKeys().isDown(GameKeys.RIGHT)) {
                 radians -= rotationSpeed * dt;
             }
-
-            //Taken from asteroids just to remember to implement it in this project
             //shooting
 //            if(gameData.getKeys().isPressed(GameKeys.SPACE)){
-//                gameData.addEvent(new Event(PLAYER_SHOOT, player.getID()));
+//                
 //            }
-//            
+            //Taken from asteroids just to remember to implement it in this project
 //            if(player.getIsHit() == true){
 //                world.removeEntity(player);
 //                player.setIsHit(false);
@@ -73,30 +71,19 @@ public class PlayerProcessor implements IEntityProcessingService {
             // set position
             x += dx * dt;
             y += dy * dt;
+            
+            shapeX[0] = (float) (player.getX() + Math.cos(radians - b) * player.getRadius());
+            shapeY[0] = (float) (player.getY() + Math.sin(radians - b) * player.getRadius());
 
-            shapeX[0] = (float) (player.getX() + Math.cos(radians + Math.PI * 1) * player.getRadius());
-            shapeY[0] = (float) (player.getY() + Math.sin(radians + Math.PI * 1) * player.getRadius());
+            shapeX[1] = (float) (player.getX() + Math.cos(radians + b) * player.getRadius());
+            shapeY[1] = (float) (player.getY() + Math.sin(radians + b) * player.getRadius());
 
-            shapeX[1] = (float) (player.getX() + Math.cos(radians + Math.PI * 1.25) * player.getRadius());
-            shapeY[1] = (float) (player.getY() + Math.sin(radians + Math.PI * 1.25) * player.getRadius());
+            shapeX[2] = (float) (player.getX() + Math.cos(radians + b * 3) * player.getRadius());
+            shapeY[2] = (float) (player.getY() + Math.sin(radians + b * 3) * player.getRadius());
 
-            shapeX[2] = (float) (player.getX() + Math.cos(radians + Math.PI * 1.5) * player.getRadius());
-            shapeY[2] = (float) (player.getY() + Math.sin(radians + Math.PI * 1.5) * player.getRadius());
+            shapeX[3] = (float) (player.getX() + Math.cos(radians + b * 5) * player.getRadius());
+            shapeY[3] = (float) (player.getY() + Math.sin(radians + b * 5) * player.getRadius());
 
-            shapeX[3] = (float) (player.getX() + Math.cos(radians + Math.PI * 1.75) * player.getRadius());
-            shapeY[3] = (float) (player.getY() + Math.sin(radians + Math.PI * 1.75) * player.getRadius());
-
-            shapeX[4] = (float) (player.getX() + Math.cos(radians + Math.PI * 2) * player.getRadius());
-            shapeY[4] = (float) (player.getY() + Math.sin(radians + Math.PI * 2) * player.getRadius());
-
-            shapeX[5] = (float) (player.getX() + Math.cos(radians + Math.PI * 2.25) * player.getRadius());
-            shapeY[5] = (float) (player.getY() + Math.sin(radians + Math.PI * 2.25) * player.getRadius());
-
-            shapeX[6] = (float) (player.getX() + Math.cos(radians + Math.PI * 2.5) * player.getRadius());
-            shapeY[6] = (float) (player.getY() + Math.sin(radians + Math.PI * 2.5) * player.getRadius());
-
-            shapeX[7] = (float) (player.getX() + Math.cos(radians + Math.PI * 2.75) * player.getRadius());
-            shapeY[7] = (float) (player.getY() + Math.sin(radians + Math.PI * 2.75) * player.getRadius());
 
             player.setX(x);
             player.setY(y);

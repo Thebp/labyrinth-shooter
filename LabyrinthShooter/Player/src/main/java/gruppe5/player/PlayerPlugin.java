@@ -8,7 +8,6 @@ package gruppe5.player;
 import gruppe5.common.data.Entity;
 import gruppe5.common.data.GameData;
 import gruppe5.common.data.World;
-import gruppe5.common.player.Player;
 import gruppe5.common.services.IGamePluginService;
 import org.openide.util.lookup.ServiceProvider;
 
@@ -36,17 +35,20 @@ public class PlayerPlugin implements IGamePluginService{
     }
 
     private Entity createPlayer(GameData gameData) {
-        Entity player = new Entity();
+        Player player = new Player();
 
         player.setPosition(gameData.getDisplayWidth() / 2, gameData.getDisplayHeight() / 2);
         player.setAcceleration(100);
         player.setMaxSpeed(200);
-        player.setDeacceleration(10);
-        player.setShapeX(new float[8]);
-        player.setShapeY(new float[8]);
+        player.setDeacceleration(50);
+        player.setShapeX(new float[4]);
+        player.setShapeY(new float[4]);
         player.setRadius(8);
         player.setRadians(3.1415f / 2);
         player.setCollidable(true);
+        player.setRotationSpeed(5);
+        player.setCollidable(true);
+        player.setDynamic(true);
         //player.setType("Player");
 
         return player;
