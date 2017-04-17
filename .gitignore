@@ -25,13 +25,7 @@ hs_err_pid*
 /LabyrinthShooter/Collision/target/
 /LabyrinthShooter/Bullet/target/
 /LabyrinthShooter/Weapon/target/
+/LabyrinthShooter/Enemy/target/
+/LabyrinthShooter/Player/target/
 *.properties
 *.netbeans_automatic_build
-
-<<<<<<< HEAD
-/LabyrinthShooter/Enemy/target/
-=======
-/LabyrinthShooter/Player/target/
-*.nbm
-LabyrinthShooter/CommonWeapon/target/nbm/CommonWeapon-1.0.0-SNAPSHOT.nbm
->>>>>>> master
