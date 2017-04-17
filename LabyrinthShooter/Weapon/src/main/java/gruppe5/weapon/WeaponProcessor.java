@@ -30,8 +30,10 @@ public class WeaponProcessor implements IEntityProcessingService {
 
     private void moveWeapon(Weapon weapon) {
         Entity owner = weapon.getOwner();
-        weapon.setPosition(owner.getX(), owner.getY());
-        weapon.setRadians(owner.getRadians());
+        if (owner != null) {
+            weapon.setPosition(owner.getX(), owner.getY());
+            weapon.setRadians(owner.getRadians());
+        }
     }
 
     private void drawWeapon(Weapon weapon) {

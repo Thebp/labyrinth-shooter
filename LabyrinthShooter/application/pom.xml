@@ -60,11 +60,7 @@
             <artifactId>Renderer</artifactId>
             <version>${project.version}</version>
         </dependency>
-		<dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>Collision</artifactId>
-            <version>${project.version}</version>
-        </dependency>
+		
 		<dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>Bullet</artifactId>
@@ -82,7 +78,16 @@
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
+<<<<<<< HEAD
             <artifactId>Enemy</artifactId>
+=======
+            <artifactId>Player</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>Collision</artifactId>
+>>>>>>> master
             <version>${project.version}</version>
         </dependency>
     </dependencies>

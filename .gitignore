@@ -28,4 +28,10 @@ hs_err_pid*
 *.properties
 *.netbeans_automatic_build
 
+<<<<<<< HEAD
 /LabyrinthShooter/Enemy/target/
+=======
+/LabyrinthShooter/Player/target/
+*.nbm
+LabyrinthShooter/CommonWeapon/target/nbm/CommonWeapon-1.0.0-SNAPSHOT.nbm
+>>>>>>> master

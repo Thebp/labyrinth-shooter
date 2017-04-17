@@ -70,7 +70,11 @@
         <module>Collision</module>
         <module>Bullet</module>
         <module>Weapon</module>
+<<<<<<< HEAD
         <module>Enemy</module>
+=======
+        <module>Player</module>
+>>>>>>> master
     </modules>
 
     <properties>

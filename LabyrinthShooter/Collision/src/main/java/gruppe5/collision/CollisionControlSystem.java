@@ -37,7 +37,7 @@ public class CollisionControlSystem implements IEntityProcessingService {
         if (shape1 == shape2) {
             return false;
         }
-        if (!shape1.isCollidable()) {
+        if (!shape1.isCollidable() || !shape2.isCollidable()) {
             return false;
         }
         if (!polyCollideMTV(shape2, shape1, mtv, velocity)) {
