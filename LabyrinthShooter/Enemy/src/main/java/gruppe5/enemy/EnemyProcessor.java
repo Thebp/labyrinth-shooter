@@ -27,7 +27,7 @@ public class EnemyProcessor implements IEntityProcessingService {
     public void process(GameData gameData, World world) {
 
         int enemyCount = 1;
-        for (Entity enemy : world.getEntities()) {
+        for (Entity enemy : world.getEntities(Enemy.class)) {
 
             EnemyMovementSystem enemyMovementSystem = new EnemyMovementSystem();
 
