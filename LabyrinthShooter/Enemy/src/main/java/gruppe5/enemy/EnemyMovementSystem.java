@@ -32,22 +32,24 @@ public class EnemyMovementSystem {
                 
         dx += (float) Math.cos(radians) * maxSpeed;
         dy += (float) Math.sin(radians) * maxSpeed;
-        enemy.setDx(dx);
-        enemy.setDy(dy);
+        
         enemy.setPosition(x + dx * dt, y + dy * dt);
+        
+        enemy.setDx(0);
+        enemy.setDy(0);
     }
 
     //Turn 90 degrees left
-    public void turnLeft(Entity enemy) {
+    public void turnLeft(Entity enemy, GameData gameData) {
         float radians = enemy.getRadians();
-        radians += 3.1415f / 2;
+        radians += 3.1415f / 2 * gameData.getDelta();
         enemy.setRadians(radians);
     }
 
     //Turn 90 degrees right
-    public void turnRight(Entity enemy) {
+    public void turnRight(Entity enemy, GameData gameData) {
         float radians = enemy.getRadians();
-        radians -= 3.1415f / 2;
+        radians -= 3.1415f / 2 * gameData.getDelta();
         enemy.setRadians(radians);
     }
 

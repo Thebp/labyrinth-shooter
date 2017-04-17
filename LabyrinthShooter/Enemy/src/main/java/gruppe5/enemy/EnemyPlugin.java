@@ -37,10 +37,10 @@ public class EnemyPlugin implements IGamePluginService {
         //Setters for various features of the Enemy entity
         enemy.setPosition(new Float(gameData.getDisplayWidth() / 2.4), //Temporary location for demo -> Right next to the center
                 new Float(gameData.getDisplayHeight() / 2.2));
-        enemy.setMaxSpeed(2);
-        enemy.setAcceleration(2);
-        enemy.setDeacceleration(5);
-        enemy.setRotationSpeed(1);
+        enemy.setMaxSpeed(50);
+        enemy.setAcceleration(10);
+        enemy.setDeacceleration(15);
+        enemy.setRotationSpeed(20);
         enemy.setRadius(8);
         enemy.setRadians(3.1415f / 1);
         enemy.setCollidable(true);

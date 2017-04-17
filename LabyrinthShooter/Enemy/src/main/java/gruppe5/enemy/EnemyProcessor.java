@@ -76,6 +76,8 @@ public class EnemyProcessor implements IEntityProcessingService {
             //Saving the dx and dy before movement for moveForwards() gets called
             float oldDX = dx;
             float oldDY = dy;
+            float oldX = x;
+            float oldY = y;
 
             //Move forwards
             enemyMovementSystem.moveForwards(enemy, gameData);
@@ -94,7 +96,11 @@ public class EnemyProcessor implements IEntityProcessingService {
 
             //If the location hasn't moved FORWARDS boolean is set to false
             boolean movingForwards = true;
-            if (enemy.getDx() < oldDX || enemy.getDy() < oldDY) {
+            if (oldDX - enemy.getDx() > 1  || oldDY - enemy.getDy() > 1 ) {
+                movingForwards = false;
+            }
+            
+            if (Float.compare(oldX, enemy.getX()) > 30  || Float.compare(oldY, enemy.getY()) > 30  ){
                 movingForwards = false;
             }
 
@@ -104,10 +110,10 @@ public class EnemyProcessor implements IEntityProcessingService {
                 Random rand = new Random();
                 int direction = rand.nextInt(2);
                 if (direction == 0) {
-                    enemyMovementSystem.turnLeft(enemy);
+                    enemyMovementSystem.turnLeft(enemy, gameData);
                 }
                 if (direction == 1) {
-                    enemyMovementSystem.turnRight(enemy);
+                    enemyMovementSystem.turnRight(enemy, gameData);
                 }
             }
 
