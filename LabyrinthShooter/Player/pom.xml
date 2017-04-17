@@ -48,7 +48,7 @@
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>CommonBullet</artifactId>
+            <artifactId>CommonWeapon</artifactId>
             <version>${project.version}</version>
         </dependency>
     </dependencies>

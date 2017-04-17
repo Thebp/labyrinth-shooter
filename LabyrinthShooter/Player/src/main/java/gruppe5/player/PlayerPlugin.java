@@ -17,7 +17,7 @@ import org.openide.util.lookup.ServiceProvider;
  */
 @ServiceProvider(service = IGamePluginService.class)
 
-public class PlayerPlugin implements IGamePluginService{
+public class PlayerPlugin implements IGamePluginService {
 
     @Override
     public void start(GameData gameData, World world) {
@@ -39,7 +39,7 @@ public class PlayerPlugin implements IGamePluginService{
 
         player.setPosition(gameData.getDisplayWidth() / 2, gameData.getDisplayHeight() / 2);
         player.setAcceleration(1000);
-        player.setMaxSpeed(300);
+        player.setMaxSpeed(400);
         player.setDeacceleration(5);
         player.setShapeX(new float[4]);
         player.setShapeY(new float[4]);
@@ -48,9 +48,9 @@ public class PlayerPlugin implements IGamePluginService{
         player.setRotationSpeed(5);
         player.setCollidable(true);
         player.setDynamic(true);
-        //player.setType("Player");
+        player.setLife(3);
 
         return player;
     }
-    
+
 }
