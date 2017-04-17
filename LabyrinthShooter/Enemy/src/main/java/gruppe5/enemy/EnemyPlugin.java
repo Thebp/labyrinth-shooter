@@ -45,6 +45,7 @@ public class EnemyPlugin implements IGamePluginService {
         enemy.setRadians(3.1415f / 1);
         enemy.setCollidable(true);
         enemy.setDynamic(true);
+        enemy.setLife(2);
         
         return enemy;
     }

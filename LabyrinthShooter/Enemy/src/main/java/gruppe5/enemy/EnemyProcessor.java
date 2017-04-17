@@ -34,6 +34,8 @@ public class EnemyProcessor implements IEntityProcessingService {
             //Getters
             float dx = enemy.getDx();
             float dy = enemy.getDy();
+            
+            
 
 
             //Shape     
@@ -72,6 +74,10 @@ public class EnemyProcessor implements IEntityProcessingService {
 //                enemy.setIsHit(false);
 //                
 //            }
+
+            if (enemy.getLife() <= 0) {
+                world.removeEntity(enemy);
+            }
 
             //Saving the dx and dy before movement for moveForwards() gets called
             float oldDX = dx;
