@@ -14,49 +14,39 @@ import gruppe5.common.data.GameData;
  */
 public class EnemyMovementSystem {
 
-    Entity enemy;
-    float y;
-    float x;
-    float dy;
-    float dx;
-    float acceleration;
-    float deacceleration;
-    float maxSpeed;
-    float radians;
-    float rotationspeed;
-    float dt;
+
 
     public void enemyMovementSystem(Entity enemy, GameData gameData) {
 
-        //Getters for movement variables
-        y = enemy.getY();
-        x = enemy.getX();
-        dy = enemy.getDy();
-        dx = enemy.getDx();
-        acceleration = enemy.getAcceleration();
-        deacceleration = enemy.getDeacceleration();
-        maxSpeed = enemy.getMaxSpeed();
-        radians = enemy.getRadians();
-        rotationspeed = enemy.getRotationSpeed();
-        dt = gameData.getDelta();
     }
 
     //Move forward
-    public void moveForwards(Entity enemy) {
-        dx += (float) Math.cos(radians) * acceleration * dt;
-        dy += (float) Math.sin(radians) * acceleration * dt;
+    public void moveForwards(Entity enemy, GameData gameData) {
+        float x = enemy.getX();
+        float y = enemy.getY();
+        float radians = enemy.getRadians();
+        float maxSpeed = enemy.getMaxSpeed();
+        float dt = gameData.getDelta();
+        float dx = enemy.getDx();
+        float dy = enemy.getDy();
+                
+        dx += (float) Math.cos(radians) * maxSpeed;
+        dy += (float) Math.sin(radians) * maxSpeed;
         enemy.setDx(dx);
         enemy.setDy(dy);
+        enemy.setPosition(x + dx * dt, y + dy * dt);
     }
 
     //Turn 90 degrees left
     public void turnLeft(Entity enemy) {
+        float radians = enemy.getRadians();
         radians += 3.1415f / 2;
         enemy.setRadians(radians);
     }
 
     //Turn 90 degrees right
     public void turnRight(Entity enemy) {
+        float radians = enemy.getRadians();
         radians -= 3.1415f / 2;
         enemy.setRadians(radians);
     }

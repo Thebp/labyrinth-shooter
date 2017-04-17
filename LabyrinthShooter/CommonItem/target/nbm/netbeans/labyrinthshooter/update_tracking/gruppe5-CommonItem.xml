@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?><module codename="gruppe5.CommonItem">
-    <module_version install_time="1492444880664" last="true" origin="installer" specification_version="1.0.0">
+    <module_version install_time="1492453499868" last="true" origin="installer" specification_version="1.0.0">
         <file crc="277498131" name="config/Modules/gruppe5-CommonItem.xml"/>
-        <file crc="4130348535" name="modules/gruppe5-CommonItem.jar"/>
-        <file crc="1166371981" name="update_tracking/gruppe5-CommonItem.xml"/>
+        <file crc="1909463408" name="modules/gruppe5-CommonItem.jar"/>
+        <file crc="1328676426" name="update_tracking/gruppe5-CommonItem.xml"/>
     </module_version>
 </module>

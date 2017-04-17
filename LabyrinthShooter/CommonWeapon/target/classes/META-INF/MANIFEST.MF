@@ -3,7 +3,7 @@ OpenIDE-Module-Localizing-Bundle: gruppe5/common/weapon/Bundle.propert
  ies
 OpenIDE-Module-Specification-Version: 1.0.0
 OpenIDE-Module-Implementation-Version: 1.0.0-20170417
-OpenIDE-Module-Build-Version: 201704171601
+OpenIDE-Module-Build-Version: 201704171824
 OpenIDE-Module: gruppe5.CommonWeapon
 OpenIDE-Module-Public-Packages: gruppe5.common.weapon.*
 OpenIDE-Module-Requires: org.openide.modules.ModuleFormat1

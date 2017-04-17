@@ -34,11 +34,7 @@ public class EnemyProcessor implements IEntityProcessingService {
             //Getters
             float dx = enemy.getDx();
             float dy = enemy.getDy();
-            int rotationSpeed = enemy.getRotationSpeed();
-            float dt = gameData.getDelta();
-            float acceleration = enemy.getAcceleration();
-            float deceleration = enemy.getDeacceleration();
-            float maxSpeed = enemy.getMaxSpeed();
+
 
             //Shape     
             float[] shapex = new float[5];
@@ -77,27 +73,28 @@ public class EnemyProcessor implements IEntityProcessingService {
 //                
 //            }
 
-            //Saving the dx and dy before movement for movingForwards() boolean
+            //Saving the dx and dy before movement for moveForwards() gets called
             float oldDX = dx;
             float oldDY = dy;
 
             //Move forwards
-            //enemyMovementSystem.moveForwards(enemy);
+            enemyMovementSystem.moveForwards(enemy, gameData);
+            
 
             //Setters 
-            enemy.setX(x);
-            enemy.setY(y);
+            //enemy.setX(x);
+            //enemy.setY(y);
             //enemy.setDx(dx); //Moved to MovementSystems moveForward method
             //enemy.setDy(dy); //Moved to MovementSystems moveForward method
             //enemy.setRadians(radians); //Moved to MovementSystems Turn methods
-            enemy.setRotationSpeed(rotationSpeed);
-            enemy.setAcceleration(acceleration);
-            enemy.setDeacceleration(deceleration);
-            enemy.setMaxSpeed(maxSpeed);
+//            enemy.setRotationSpeed(rotationSpeed);
+//            enemy.setAcceleration(acceleration);
+//            enemy.setDeacceleration(deceleration);
+//            enemy.setMaxSpeed(maxSpeed);
 
             //If the location hasn't moved FORWARDS boolean is set to false
             boolean movingForwards = true;
-            if (enemy.getDx() <= oldDX || enemy.getDy() <= oldDY) {
+            if (enemy.getDx() < oldDX || enemy.getDy() < oldDY) {
                 movingForwards = false;
             }
 
