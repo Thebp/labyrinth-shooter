@@ -28,3 +28,4 @@ hs_err_pid*
 *.properties
 *.netbeans_automatic_build
 
+/LabyrinthShooter/Enemy/target/

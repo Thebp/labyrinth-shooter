@@ -70,6 +70,7 @@
         <module>Collision</module>
         <module>Bullet</module>
         <module>Weapon</module>
+        <module>Enemy</module>
     </modules>
 
     <properties>
