@@ -27,24 +27,18 @@ public class WeaponPlugin implements IGamePluginService {
     public void start(GameData gameData, World world) {
         System.out.println("WeaponPlugin started.");
         MapSPI mapSPI = Lookup.getDefault().lookup(MapSPI.class);
-
+        
         if (mapSPI != null) {
-            List<MapNode> mapNodes = mapSPI.getMap();
-            if (mapNodes != null) {
-                MapNode node = mapNodes.get(5);
+            for(int i = 0; i < 5; i++) {
+                MapNode node = mapSPI.getRandomSpawnNode();
                 Weapon weapon = new Weapon();
                 weapon.setCollidable(false);
                 weapon.setDynamic(true);
-                weapon.setPosition(gameData.getDisplayWidth() / 2, gameData.getDisplayHeight() / 2);
+                weapon.setPosition(node.getX(), node.getY());
                 weapon.setRadius(12);
+                world.addEntity(weapon);
             }
         }
-        Weapon weapon = new Weapon();
-        weapon.setCollidable(false);
-        weapon.setDynamic(true);
-        weapon.setPosition(gameData.getDisplayWidth() / 2, gameData.getDisplayHeight() / 2);
-        weapon.setRadius(12);
-        world.addEntity(weapon);
     }
 
     @Override

@@ -74,6 +74,7 @@ public class PlayerProcessor implements IEntityProcessingService, PlayerSPI {
                         Weapon weapon = (Weapon) entity;
                         player.removeSubEntity(weapon);
                         weapon.setOwner(null);
+                        //world.removeEntity(weapon);
                     }
                     player.addSubEntity(newWeapon);
                     newWeapon.setOwner(player);
