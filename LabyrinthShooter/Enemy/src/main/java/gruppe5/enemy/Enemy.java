@@ -3,15 +3,14 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package gruppe5.common.bullet;
+package gruppe5.enemy;
 
 import gruppe5.common.data.Entity;
-import gruppe5.common.data.GameData;
 
 /**
  *
- * @author marcn
+ * @author Gyhuji
  */
-public interface BulletSPI {
-    Entity createBullet(Entity creator);
+public class Enemy extends Entity{
+    
 }
