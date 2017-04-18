@@ -111,7 +111,7 @@ public class MapGenerator implements MapSPI, IGameInitService {
         }
 
         // Add wall entities to world
-        for (Entity wall : createWallEntities(scaledMaze)) {
+        for (Entity wall : createWallEntities(maze)) {
             world.addEntity(wall);
         }
 
@@ -131,6 +131,7 @@ public class MapGenerator implements MapSPI, IGameInitService {
     /**
      *
      * @param maze
+     * @param corSize
      * @return
      */
     private ArrayList<Entity> createWallEntities(boolean[][] maze) {
@@ -157,10 +158,10 @@ public class MapGenerator implements MapSPI, IGameInitService {
     private Entity createWallEntity(int mazeX, int mazeY, boolean[] neighbors) {
         Entity wall = new Entity();
 
-        float unit = GameData.UNIT_SIZE;
-
-        float x = mazeX * unit;
-        float y = mazeY * unit;
+        float unitSize = GameData.UNIT_SIZE * NODES_IN_CORRIDOR;
+        
+        float x = mazeX * unitSize;
+        float y = mazeY * unitSize;
 
         wall.setPosition(x, y);
         wall.setDynamic(false);
@@ -169,17 +170,17 @@ public class MapGenerator implements MapSPI, IGameInitService {
         float[] shapex = new float[4];
         float[] shapey = new float[4]; 
         
-        shapex[0] = x - unit/2;
-        shapey[0] = y + unit/2;
+        shapex[0] = x - unitSize/2;
+        shapey[0] = y + unitSize/2;
         
-        shapex[1] = x + unit/2;
-        shapey[1] = y + unit/2;
+        shapex[1] = x + unitSize/2;
+        shapey[1] = y + unitSize/2;
         
-        shapex[2] = x + unit/2;
-        shapey[2] = y - unit/2;
+        shapex[2] = x + unitSize/2;
+        shapey[2] = y - unitSize/2;
         
-        shapex[3] = x - unit/2;
-        shapey[3] = y - unit/2;
+        shapex[3] = x - unitSize/2;
+        shapey[3] = y - unitSize/2;
 
         wall.setShapeX(shapex);
         wall.setShapeY(shapey);
