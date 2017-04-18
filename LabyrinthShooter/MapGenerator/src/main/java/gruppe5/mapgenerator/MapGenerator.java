@@ -179,6 +179,7 @@ public class MapGenerator implements MapSPI, IGameInitService {
         wall.setPosition(x, y);
         wall.setDynamic(false);
         wall.setCollidable(true);
+        wall.setImagePath("MapGenerator/target/MapGenerator-1.0.0-SNAPSHOT.jar!/assets/images/ship.png");
 
         float[] shapex = new float[4];
         float[] shapey = new float[4]; 
