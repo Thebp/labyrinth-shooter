@@ -9,6 +9,7 @@ import gruppe5.common.data.Entity;
 import gruppe5.common.data.GameData;
 import gruppe5.common.data.GameKeys;
 import gruppe5.common.data.World;
+import gruppe5.common.player.PlayerSPI;
 import gruppe5.common.services.IEntityProcessingService;
 import gruppe5.common.weapon.Weapon;
 import gruppe5.common.weapon.WeaponSPI;
@@ -21,7 +22,7 @@ import org.openide.util.lookup.ServiceProvider;
  */
 @ServiceProvider(service = IEntityProcessingService.class)
 
-public class PlayerProcessor implements IEntityProcessingService {
+public class PlayerProcessor implements IEntityProcessingService, PlayerSPI {
 
     @Override
     public void process(GameData gameData, World world) {
@@ -118,5 +119,13 @@ public class PlayerProcessor implements IEntityProcessingService {
             player.setShapeY(shapeY);
 
         }
+    }
+
+    @Override
+    public Entity getPlayer(World world) {
+        for(Entity player : world.getEntities(Player.class)) {
+            return player;
+        }
+        return null;
     }
 }
