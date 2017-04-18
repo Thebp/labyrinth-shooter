@@ -9,7 +9,7 @@ import gruppe5.common.data.Entity;
 import gruppe5.common.data.GameData;
 import gruppe5.common.data.World;
 import gruppe5.common.map.*;
-import gruppe5.common.services.IGamePluginService;
+import gruppe5.common.services.IGameInitService;
 import gruppe5.mapgenerator.algorithms.RandDivisionMaze;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,32 +18,63 @@ import org.openide.util.lookup.ServiceProvider;
 import org.openide.util.lookup.ServiceProviders;
 
 @ServiceProviders(value = {
-    @ServiceProvider(service = IGamePluginService.class),
+    @ServiceProvider(service = IGameInitService.class),
     @ServiceProvider(service = MapSPI.class)
 })
 /**
  *
  * @author nick
  */
-public class MapGenerator implements MapSPI, IGamePluginService {
+public class MapGenerator implements MapSPI, IGameInitService {
 
     public static final int NODES_IN_CORRIDOR = 3; // Must be odd to have a center node
     public static final boolean SHOW_NODES = false; // For debugging, if true entities for nodes will be created
 
     private Random rand; // Used for seed generation
+    
+    // Used for MapSPI
     private List<MapNode> nodeList;
+    private List<MapNode> centerNodeList;
+    private List<MapNode> availableSpawnNodes;
 
     @Override
     public List<MapNode> getMap() {
-        if (nodeList != null) {
+        if (nodeList != null) 
             return nodeList;
-        }
-        System.out.println("MapGenerator.getMap(): NodeList not initialized.");
+        System.out.println("MapGenerator.getMap(): MapGenerator not initialized.");
+        return null;
+    }
+    
+    @Override
+    public List<MapNode> getCenterMapNodes() {
+        if (centerNodeList != null) 
+            return centerNodeList;
+        System.out.println("MapGenerator.getCenterMapNodes(): MapGenerator not initialized.");
         return null;
     }
 
     @Override
+    public MapNode getRandomSpawnNode() {
+        if (availableSpawnNodes == null) {
+            System.out.println("MapGenerator.getRandomSpawnNode(): MapGenerator not initialized.");
+            return null;
+        }
+        
+        // Get random MapNode
+        MapNode randNode = availableSpawnNodes.get(rand.nextInt(availableSpawnNodes.size()));
+        // Remove node from list only if it isn't the last available node
+        if (availableSpawnNodes.size() > 1)
+            availableSpawnNodes.remove(randNode);
+        else
+            System.out.println("MapGenerator: Available spawn nodes depleted.");
+        
+        return randNode;
+    }
+
+    @Override
     public void start(GameData gameData, World world) {
+        System.out.println("MapPlugin started");
+        
         rand = new Random();
         RandDivisionMaze generator = new RandDivisionMaze();
 
@@ -66,6 +97,18 @@ public class MapGenerator implements MapSPI, IGamePluginService {
 
         // Create MapNodes required by MapSPI
         nodeList = createNodeList(scaledMaze);
+        centerNodeList = new ArrayList();
+        availableSpawnNodes = new ArrayList();
+        // Fill centerNodeList and availableSpawnNodes
+        for (MapNode node : nodeList) {
+            if (node.isMiddle()) {
+                centerNodeList.add(node);
+                // If node only has one neighbouring center node, it is added to spawn node list
+                if (((Node)node).getNeighbouringCenterNodes().size() == 1) {
+                    availableSpawnNodes.add(node);
+                }
+            }
+        }
 
         // Add wall entities to world
         for (Entity wall : createWallEntities(scaledMaze)) {

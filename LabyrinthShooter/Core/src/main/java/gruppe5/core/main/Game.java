@@ -12,6 +12,7 @@ import gruppe5.common.data.Entity;
 import gruppe5.common.data.GameData;
 import gruppe5.common.data.World;
 import gruppe5.common.services.IEntityProcessingService;
+import gruppe5.common.services.IGameInitService;
 import gruppe5.common.services.IGamePluginService;
 import gruppe5.common.services.IRenderService;
 import gruppe5.core.managers.GameInputProcessor;
@@ -32,7 +33,9 @@ public class Game implements ApplicationListener {
     private World world = new World();
     private final Lookup lookup = Lookup.getDefault();
     private List<IGamePluginService> gamePlugins = new CopyOnWriteArrayList<>();
-    private Lookup.Result<IGamePluginService> result;
+    private List<IGameInitService> gameInits = new CopyOnWriteArrayList<>();
+    private Lookup.Result<IGamePluginService> gamePluginResult;
+    private Lookup.Result<IGameInitService> gameInitResult;
 
     @Override
     public void create() {  
@@ -49,11 +52,19 @@ public class Game implements ApplicationListener {
 
         Gdx.input.setInputProcessor(new GameInputProcessor(gameData));
         
-        result = lookup.lookupResult(IGamePluginService.class);
-        result.addLookupListener(lookupListener);
-        result.allItems();
+        gameInitResult = lookup.lookupResult(IGameInitService.class);
+        gameInitResult.allItems();
+        
+        gamePluginResult = lookup.lookupResult(IGamePluginService.class);
+        gamePluginResult.addLookupListener(lookupListener);
+        gamePluginResult.allItems();
 
-        for (IGamePluginService plugin : result.allInstances()) {
+        for (IGameInitService initService : gameInitResult.allInstances()) {
+            initService.start(gameData, world);
+            gameInits.add(initService);
+        }
+        
+        for (IGamePluginService plugin : gamePluginResult.allInstances()) {
             plugin.start(gameData, world);
             gamePlugins.add(plugin);
         }
@@ -140,7 +151,7 @@ public class Game implements ApplicationListener {
         @Override
         public void resultChanged(LookupEvent le) {
 
-            Collection<? extends IGamePluginService> updated = result.allInstances();
+            Collection<? extends IGamePluginService> updated = gamePluginResult.allInstances();
 
             for (IGamePluginService us : updated) {
                 // Newly installed modules
