@@ -45,7 +45,7 @@ public class PlayerPlugin implements IGamePluginService {
         player.setShapeY(new float[4]);
         player.setRadius(8);
         player.setRadians(3.1415f / 2);
-        player.setRotationSpeed(5);
+        player.setRotationSpeed(3);
         player.setCollidable(true);
         player.setDynamic(true);
         player.setLife(3);
