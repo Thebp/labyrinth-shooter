@@ -36,6 +36,8 @@ public class MapGenerator implements MapSPI, IGameInitService {
     private List<MapNode> nodeList;
     private List<MapNode> centerNodeList;
     private List<MapNode> availableSpawnNodes;
+    
+    private List<Entity> wallEntities; // Saved wall entities to be removed by stop()
 
     @Override
     public List<MapNode> getMap() {
@@ -88,9 +90,9 @@ public class MapGenerator implements MapSPI, IGameInitService {
         boolean[][] scaledMaze = scaleMaze(maze, NODES_IN_CORRIDOR);
 
         // Prints out the mini-version of the maze to console
-        for (int i = 0; i < maze.length; i++) {
-            for (int j = 0; j < maze[i].length; j++) {
-                System.out.print(maze[i][j] ? "@@" : "  ");
+        for (boolean[] maze1 : maze) {
+            for (int j = 0; j < maze1.length; j++) {
+                System.out.print(maze1[j] ? "@@" : "  ");
             }
             System.out.println();
         }
@@ -99,6 +101,7 @@ public class MapGenerator implements MapSPI, IGameInitService {
         nodeList = createNodeList(scaledMaze);
         centerNodeList = new ArrayList();
         availableSpawnNodes = new ArrayList();
+        
         // Fill centerNodeList and availableSpawnNodes
         for (MapNode node : nodeList) {
             if (node.isMiddle()) {
@@ -110,8 +113,9 @@ public class MapGenerator implements MapSPI, IGameInitService {
             }
         }
 
+        wallEntities = createWallEntities(maze);
         // Add wall entities to world
-        for (Entity wall : createWallEntities(maze)) {
+        for (Entity wall : wallEntities) {
             world.addEntity(wall);
         }
 
@@ -125,7 +129,16 @@ public class MapGenerator implements MapSPI, IGameInitService {
 
     @Override
     public void stop(GameData gameData, World world) {
-
+        System.out.println("MapPlugin stopped.");
+        
+        for (Entity wall : wallEntities) {
+            world.removeEntity(wall);
+        }
+        wallEntities = null;
+        
+        nodeList = null;
+        centerNodeList = null;
+        availableSpawnNodes = null;
     }
 
     /**
@@ -166,6 +179,7 @@ public class MapGenerator implements MapSPI, IGameInitService {
         wall.setPosition(x, y);
         wall.setDynamic(false);
         wall.setCollidable(true);
+        wall.setImagePath("MapGenerator/target/MapGenerator-1.0.0-SNAPSHOT.jar!/assets/images/ship.png");
 
         float[] shapex = new float[4];
         float[] shapey = new float[4]; 
