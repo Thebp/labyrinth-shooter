@@ -165,7 +165,7 @@ public class MapGenerator implements MapSPI, IGamePluginService {
         float[] shapey;
         if (n.isMiddle()) {
             shapex = new float[6];
-            shapey = new float[6]
+            shapey = new float[6];
         } else {
             shapex = new float[4];
             shapey = new float[4];
