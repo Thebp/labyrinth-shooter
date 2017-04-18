@@ -2,10 +2,13 @@ package gruppe5.core.main;
 
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import gruppe5.common.data.Entity;
@@ -17,7 +20,10 @@ import gruppe5.common.services.IGameInitService;
 import gruppe5.common.services.IGamePluginService;
 import gruppe5.common.services.IRenderService;
 import gruppe5.common.player.PlayerSPI;
+import gruppe5.common.sprites.SpriteSPI;
+import gruppe5.core.managers.AssetsJarFileResolver;
 import gruppe5.core.managers.GameInputProcessor;
+import java.io.File;
 import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -30,6 +36,7 @@ public class Game implements ApplicationListener {
     private ShapeRenderer sr;
     private BitmapFont bitmapfont;
     private SpriteBatch spriteBatch;
+    private Sprite sprite;
     private static OrthographicCamera cam;
     private final GameData gameData = new GameData();
     private World world = new World();
@@ -43,27 +50,30 @@ public class Game implements ApplicationListener {
     private final float displayHeight = 400;
     private final int worldWidth = 2000;
     private final int worldHeight = 2000;
-    
+    private AssetsJarFileResolver jfhr;
+    private AssetManager am;
+    private Texture texture;
+
     @Override
     public void create() {
-        
+
         gameData.setDisplayWidth(worldWidth);
         gameData.setDisplayHeight(worldHeight);
 
         cam = new OrthographicCamera(displayWidth, displayHeight);
         cam.position.set(cam.viewportWidth / 2f, cam.viewportHeight / 2f, 0);
         cam.update();
-        
+
         sr = new ShapeRenderer();
         bitmapfont = new BitmapFont();
         bitmapfont.setScale(.50f, .50f);
         spriteBatch = new SpriteBatch();
 
         Gdx.input.setInputProcessor(new GameInputProcessor(gameData));
-        
+
         gameInitResult = lookup.lookupResult(IGameInitService.class);
         gameInitResult.allItems();
-        
+
         gamePluginResult = lookup.lookupResult(IGamePluginService.class);
         gamePluginResult.addLookupListener(lookupListener);
         gamePluginResult.allItems();
@@ -72,7 +82,7 @@ public class Game implements ApplicationListener {
             initService.start(gameData, world);
             gameInits.add(initService);
         }
-        
+
         for (IGamePluginService plugin : gamePluginResult.allInstances()) {
             plugin.start(gameData, world);
             gamePlugins.add(plugin);
@@ -80,6 +90,11 @@ public class Game implements ApplicationListener {
 //        for (IRenderService renderService : getRenderServices()) {
 //            renderService.create(gameData, world);
 //        }
+
+        sprite = new Sprite();
+
+        jfhr = new AssetsJarFileResolver();
+        am = new AssetManager(jfhr);
     }
 
     @Override
@@ -89,13 +104,13 @@ public class Game implements ApplicationListener {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         gameData.setDelta(Gdx.graphics.getDeltaTime());
-        
+
         update();
-        
+
         updateCam();
-        
+
         draw();
-        
+
         gameData.getKeys().update();
     }
 
@@ -103,26 +118,24 @@ public class Game implements ApplicationListener {
         for (IEntityProcessingService entityProcessorService : getEntityProcessingServices()) {
             entityProcessorService.process(gameData, world);
         }
-        if(gameData.getKeys().isPressed(GameKeys.SHIFT))
-        {
-            if(cam.viewportWidth == displayWidth){
+        if (gameData.getKeys().isPressed(GameKeys.SHIFT)) {
+            if (cam.viewportWidth == displayWidth) {
                 cam.viewportWidth = worldWidth;
                 cam.viewportHeight = worldHeight;
-            }
-            else{
+            } else {
                 cam.viewportWidth = displayWidth;
                 cam.viewportHeight = displayHeight;
             }
         }
     }
-    
-    private Entity getPlayer(){
+
+    private Entity getPlayer() {
         PlayerSPI playerSPI = Lookup.getDefault().lookup(PlayerSPI.class);
         return playerSPI.getPlayer(world);
     }
-    
-    private void updateCam(){
-        
+
+    private void updateCam() {
+
         cam.position.set(getPlayer().getX(), getPlayer().getY(), 0);
         cam.update();
         spriteBatch.setProjectionMatrix(cam.combined);
@@ -149,16 +162,39 @@ public class Game implements ApplicationListener {
             }
 
             sr.end();
+            
+            
+            if (entity.getImagePath() != null) {
+            SpriteSPI spriteSPI = Lookup.getDefault().lookup(SpriteSPI.class);
+            String url = spriteSPI.getSpriteUrl(entity);
+            //am.load("C:/Users/Daniel/Documents/GitHub/labyrinth-shooter/LabyrinthShooter/Player/target/Player-1.0.0-SNAPSHOT.jar!/assets/images/ship.png", Texture.class);
+            am.load(url, Texture.class);
+            am.finishLoading();
+            //texture = am.get("C:/Users/Daniel/Documents/GitHub/labyrinth-shooter/LabyrinthShooter/Player/target/Player-1.0.0-SNAPSHOT.jar!/assets/images/ship.png", Texture.class);
+            texture = am.get(url, Texture.class);
+//                am.load("C:/Users/Daniel/Documents/GitHub/labyrinth-shooter/LabyrinthShooter/Player/target/Player-1.0.0-SNAPSHOT.jar!/assets/images/ship.png", Texture.class);
+//                am.finishLoading();
+//                texture = am.get("C:/Users/Daniel/Documents/GitHub/labyrinth-shooter/LabyrinthShooter/Player/target/Player-1.0.0-SNAPSHOT.jar!/assets/images/ship.png", Texture.class);
+                sprite = new Sprite(texture);
+                sprite.setTexture(texture);
+                spriteBatch.begin();
+                sprite.setSize(entity.getRadius(), entity.getRadius());
+                sprite.setPosition(entity.getX() - (entity.getRadius() / 2), entity.getY() - (entity.getRadius() / 2));
+                sprite.draw(spriteBatch);
+                spriteBatch.end();
+            }
+
         }
         drawFont();
+
     }
-    
-    public void drawFont(){
+
+    public void drawFont() {
         spriteBatch.begin();
         bitmapfont.setColor(Color.GREEN);
         bitmapfont.drawMultiLine(spriteBatch, "LABYRINTH SHOOTER" + "\n" + "FPS: "
-        + Gdx.graphics.getFramesPerSecond() + "\n" + "Entites: " + world.getEntities().size(),
-        getPlayer().getX() - 180, getPlayer().getY() + 180);
+                + Gdx.graphics.getFramesPerSecond() + "\n" + "Entites: " + world.getEntities().size(),
+                getPlayer().getX() - 180, getPlayer().getY() + 180);
         spriteBatch.end();
     }
 
@@ -177,7 +213,7 @@ public class Game implements ApplicationListener {
     @Override
     public void dispose() {
     }
-    
+
     private Collection<? extends IEntityProcessingService> getEntityProcessingServices() {
         return lookup.lookupAll(IEntityProcessingService.class);
     }
@@ -185,7 +221,7 @@ public class Game implements ApplicationListener {
     private Collection<? extends IRenderService> getRenderServices() {
         return lookup.lookupAll(IRenderService.class);
     }
-    
+
     private final LookupListener lookupListener = new LookupListener() {
         @Override
         public void resultChanged(LookupEvent le) {

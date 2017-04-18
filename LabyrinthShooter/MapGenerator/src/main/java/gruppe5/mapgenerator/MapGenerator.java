@@ -159,6 +159,7 @@ public class MapGenerator implements MapSPI, IGameInitService {
         Entity wall = new Entity();
 
         float wallSize = GameData.UNIT_SIZE * NODES_IN_CORRIDOR;
+        wall.setRadius(wallSize);
         
         float x = mazeX * wallSize + GameData.UNIT_SIZE;
         float y = mazeY * wallSize + GameData.UNIT_SIZE;
