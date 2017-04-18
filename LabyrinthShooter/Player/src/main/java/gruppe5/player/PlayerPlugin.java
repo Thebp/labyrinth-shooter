@@ -8,7 +8,10 @@ package gruppe5.player;
 import gruppe5.common.data.Entity;
 import gruppe5.common.data.GameData;
 import gruppe5.common.data.World;
+import gruppe5.common.map.MapNode;
+import gruppe5.common.map.MapSPI;
 import gruppe5.common.services.IGamePluginService;
+import org.openide.util.Lookup;
 import org.openide.util.lookup.ServiceProvider;
 
 /**
@@ -21,6 +24,7 @@ public class PlayerPlugin implements IGamePluginService {
 
     @Override
     public void start(GameData gameData, World world) {
+        
         Entity player = createPlayer(gameData);
         world.addEntity(player);
         System.out.println("Playerplugin started");
@@ -35,9 +39,10 @@ public class PlayerPlugin implements IGamePluginService {
     }
 
     private Entity createPlayer(GameData gameData) {
+        MapSPI mapSPI = Lookup.getDefault().lookup(MapSPI.class);
         Player player = new Player();
-
-        player.setPosition(gameData.getDisplayWidth() / 2, gameData.getDisplayHeight() / 2);
+        MapNode spawnPoint = mapSPI.getRandomSpawnNode();
+        player.setPosition(spawnPoint.getX(),spawnPoint.getY());
         player.setAcceleration(1000);
         player.setMaxSpeed(100);
         player.setDeacceleration(5);
