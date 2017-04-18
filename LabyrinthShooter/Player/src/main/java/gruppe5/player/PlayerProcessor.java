@@ -15,12 +15,17 @@ import gruppe5.common.weapon.Weapon;
 import gruppe5.common.weapon.WeaponSPI;
 import org.openide.util.Lookup;
 import org.openide.util.lookup.ServiceProvider;
+import org.openide.util.lookup.ServiceProviders;
 
 /**
  *
  * @author Christian
  */
-@ServiceProvider(service = IEntityProcessingService.class)
+@ServiceProviders(value = {
+    @ServiceProvider(service = IEntityProcessingService.class),
+    @ServiceProvider(service = PlayerSPI.class)
+})
+
 
 public class PlayerProcessor implements IEntityProcessingService, PlayerSPI {
 
