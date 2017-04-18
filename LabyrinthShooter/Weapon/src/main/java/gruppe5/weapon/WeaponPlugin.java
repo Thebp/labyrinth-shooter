@@ -25,7 +25,7 @@ public class WeaponPlugin implements IGamePluginService {
 
     @Override
     public void start(GameData gameData, World world) {
-        System.out.println("WeaponPlugin started.");
+        System.out.println("WeaponPlugin started");
         MapSPI mapSPI = Lookup.getDefault().lookup(MapSPI.class);
         
         if (mapSPI != null) {
