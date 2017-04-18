@@ -28,7 +28,7 @@ import org.openide.util.lookup.ServiceProviders;
 public class MapGenerator implements MapSPI, IGameInitService {
 
     public static final int NODES_IN_CORRIDOR = 3; // Must be odd to have a center node
-    public static final boolean SHOW_NODES = false; // For debugging, if true entities for nodes will be created
+    public static final boolean SHOW_NODES = true; // For debugging, if true entities for nodes will be created
 
     private Random rand; // Used for seed generation
     
@@ -158,10 +158,10 @@ public class MapGenerator implements MapSPI, IGameInitService {
     private Entity createWallEntity(int mazeX, int mazeY, boolean[] neighbors) {
         Entity wall = new Entity();
 
-        float unitSize = GameData.UNIT_SIZE * NODES_IN_CORRIDOR;
+        float wallSize = GameData.UNIT_SIZE * NODES_IN_CORRIDOR;
         
-        float x = mazeX * unitSize;
-        float y = mazeY * unitSize;
+        float x = mazeX * wallSize + GameData.UNIT_SIZE;
+        float y = mazeY * wallSize + GameData.UNIT_SIZE;
 
         wall.setPosition(x, y);
         wall.setDynamic(false);
@@ -170,17 +170,17 @@ public class MapGenerator implements MapSPI, IGameInitService {
         float[] shapex = new float[4];
         float[] shapey = new float[4]; 
         
-        shapex[0] = x - unitSize/2;
-        shapey[0] = y + unitSize/2;
+        shapex[0] = x - wallSize/2;
+        shapey[0] = y + wallSize/2;
         
-        shapex[1] = x + unitSize/2;
-        shapey[1] = y + unitSize/2;
+        shapex[1] = x + wallSize/2;
+        shapey[1] = y + wallSize/2;
         
-        shapex[2] = x + unitSize/2;
-        shapey[2] = y - unitSize/2;
+        shapex[2] = x + wallSize/2;
+        shapey[2] = y - wallSize/2;
         
-        shapex[3] = x - unitSize/2;
-        shapey[3] = y - unitSize/2;
+        shapex[3] = x - wallSize/2;
+        shapey[3] = y - wallSize/2;
 
         wall.setShapeX(shapex);
         wall.setShapeY(shapey);
