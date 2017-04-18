@@ -44,6 +44,8 @@ public class MapGenerator implements MapSPI, IGamePluginService {
 
     @Override
     public void start(GameData gameData, World world) {
+        System.out.println("MapPlugin started");
+        
         rand = new Random();
         RandDivisionMaze generator = new RandDivisionMaze();
 
