@@ -2,8 +2,11 @@ package gruppe5.core.main;
 
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import gruppe5.common.data.Entity;
 import gruppe5.common.data.GameData;
@@ -22,6 +25,8 @@ import org.openide.util.LookupListener;
 public class Game implements ApplicationListener {
 
     private ShapeRenderer sr;
+    private BitmapFont bitmapfont;
+    private SpriteBatch spriteBatch;
     private static OrthographicCamera cam;
     private final GameData gameData = new GameData();
     private World world = new World();
@@ -39,6 +44,8 @@ public class Game implements ApplicationListener {
         cam.update();
         
         sr = new ShapeRenderer();
+        bitmapfont = new BitmapFont();
+        spriteBatch = new SpriteBatch();
 
         Gdx.input.setInputProcessor(new GameInputProcessor(gameData));
         
@@ -96,6 +103,13 @@ public class Game implements ApplicationListener {
 
             sr.end();
         }
+        
+        spriteBatch.begin();
+
+
+            bitmapfont.setColor(Color.GREEN);
+            bitmapfont.drawMultiLine(spriteBatch, "LABYRINTH SHOOTER" + "\n" + "FPS: " + Gdx.graphics.getFramesPerSecond() + "\n" + "Entites: " + world.getEntities().size(), 50, gameData.getDisplayHeight()-10);
+            spriteBatch.end();
     }
 
     @Override
