@@ -14,6 +14,7 @@ import gruppe5.common.data.World;
 import gruppe5.common.services.IEntityProcessingService;
 import gruppe5.common.services.IGamePluginService;
 import gruppe5.common.services.IRenderService;
+import gruppe5.common.player.PlayerSPI;
 import gruppe5.core.managers.GameInputProcessor;
 import java.util.Collection;
 import java.util.List;
@@ -38,9 +39,13 @@ public class Game implements ApplicationListener {
     public void create() {  
         gameData.setDisplayWidth(Gdx.graphics.getWidth());
         gameData.setDisplayHeight(Gdx.graphics.getHeight());
+        
+        float w = 400;
+        float h = 400;
 
-        cam = new OrthographicCamera(gameData.getDisplayWidth(), gameData.getDisplayHeight());
-        cam.translate(gameData.getDisplayWidth() / 2, gameData.getDisplayHeight() / 2);
+        cam = new OrthographicCamera(w, h);
+        //cam.translate(gameData.getDisplayWidth() / 2, gameData.getDisplayHeight() / 2);
+        cam.position.set(cam.viewportWidth / 2f, cam.viewportHeight / 2f, 0);
         cam.update();
         
         sr = new ShapeRenderer();
@@ -71,6 +76,9 @@ public class Game implements ApplicationListener {
         gameData.setDelta(Gdx.graphics.getDeltaTime());
         
         update();
+        
+        updateCam();
+        
         draw();
         
         gameData.getKeys().update();
@@ -80,6 +88,14 @@ public class Game implements ApplicationListener {
         for (IEntityProcessingService entityProcessorService : getEntityProcessingServices()) {
             entityProcessorService.process(gameData, world);
         }
+    }
+    
+    private void updateCam(){
+        PlayerSPI playerSPI = Lookup.getDefault().lookup(PlayerSPI.class);
+        cam.position.set(playerSPI.getPlayer().getX(), playerSPI.getPlayer().getY(), 0);
+        cam.update();
+        spriteBatch.setProjectionMatrix(cam.combined);
+        sr.setProjectionMatrix(cam.combined);
     }
 
     private void draw() {
