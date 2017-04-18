@@ -28,7 +28,7 @@ import org.openide.util.lookup.ServiceProviders;
 public class MapGenerator implements MapSPI, IGameInitService {
 
     public static final int NODES_IN_CORRIDOR = 3; // Must be odd to have a center node
-    public static final boolean SHOW_NODES = true; // For debugging, if true entities for nodes will be created
+    public static final boolean SHOW_NODES = false; // For debugging, if true entities for nodes will be created
 
     private Random rand; // Used for seed generation
     

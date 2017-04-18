@@ -9,7 +9,10 @@ import gruppe5.common.data.Entity;
 
 import gruppe5.common.data.GameData;
 import gruppe5.common.data.World;
+import gruppe5.common.map.MapNode;
+import gruppe5.common.map.MapSPI;
 import gruppe5.common.services.IGamePluginService;
+import org.openide.util.Lookup;
 import org.openide.util.lookup.ServiceProvider;
 
 /**
@@ -33,10 +36,13 @@ public class EnemyPlugin implements IGamePluginService {
 
     private Entity createEnemy(GameData gameData) {
         enemy = new Enemy();
-
+        MapSPI mapSPI = Lookup.getDefault().lookup(MapSPI.class);
+        
+        MapNode spawnlocation = mapSPI.getRandomSpawnNode();
+        
         //Setters for various features of the Enemy entity
-        enemy.setPosition(new Float(gameData.getDisplayWidth() / 2.4), //Temporary location for demo -> Right next to the center
-                new Float(gameData.getDisplayHeight() / 2.2));
+        enemy.setPosition(spawnlocation.getX(), 
+                spawnlocation.getY());
         enemy.setMaxSpeed(50);
         enemy.setAcceleration(10);
         enemy.setDeacceleration(15);

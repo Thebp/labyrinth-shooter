@@ -44,6 +44,12 @@
             <version>RELEASE82</version>
             <type>jar</type>
         </dependency>
+        <dependency>
+            <groupId>gruppe5</groupId>
+            <artifactId>CommonMap</artifactId>
+            <version>1.0.0-SNAPSHOT</version>
+            <type>jar</type>
+        </dependency>
     </dependencies>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
