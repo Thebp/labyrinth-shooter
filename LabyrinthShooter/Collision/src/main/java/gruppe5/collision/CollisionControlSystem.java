@@ -116,15 +116,18 @@ public class CollisionControlSystem implements IEntityProcessingService {
     //  checks whether poly1 and poly2 collides using SAT + MTV
     private boolean polyCollideMTV(Entity p1, Entity p2, Vector2 mtv, Vector2 velocity) {
 
-        Vector2[] p1normals = new Vector2[getVertices(p1).length];
-        Vector2[] p2normals = new Vector2[getVertices(p2).length];
-        for (int i = 0; i < getVertices(p1).length; i++) {
-            int j = (i + 1) % getVertices(p1).length;
-            p1normals[i] = get2dnormal(getVertices(p1)[i].x, getVertices(p1)[i].y, getVertices(p1)[j].x, getVertices(p1)[j].y, true);
+        Vector2[] p1Vertices = getVertices(p1);
+        Vector2[] p2Vertices = getVertices(p2);
+
+        Vector2[] p1normals = new Vector2[p1Vertices.length];
+        Vector2[] p2normals = new Vector2[p2Vertices.length];
+        for (int i = 0; i < p1Vertices.length; i++) {
+            int j = (i + 1) % p1Vertices.length;
+            p1normals[i] = get2dnormal(p1Vertices[i].x, p1Vertices[i].y, p1Vertices[j].x, p1Vertices[j].y, true);
         }
-        for (int i = 0; i < getVertices(p2).length; i++) {
-            int j = (i + 1) % getVertices(p2).length;
-            p2normals[i] = get2dnormal(getVertices(p2)[i].x, getVertices(p2)[i].y, getVertices(p2)[j].x, getVertices(p2)[j].y, true);
+        for (int i = 0; i < p2Vertices.length; i++) {
+            int j = (i + 1) % p2Vertices.length;
+            p2normals[i] = get2dnormal(p2Vertices[i].x, p2Vertices[i].y, p2Vertices[j].x, p2Vertices[j].y, true);
         }
         Projection proj1;
         Projection proj2;
