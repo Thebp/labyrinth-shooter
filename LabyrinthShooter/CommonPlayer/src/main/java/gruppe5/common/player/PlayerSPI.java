@@ -6,11 +6,12 @@
 package gruppe5.common.player;
 
 import gruppe5.common.data.Entity;
+import gruppe5.common.data.World;
 
 /**
  *
  * @author marcn
  */
 public interface PlayerSPI {
-    Entity getPlayer();
+    Entity getPlayer(World world);
 }
