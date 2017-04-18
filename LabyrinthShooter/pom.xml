@@ -74,7 +74,7 @@
         <module>Enemy</module>
 
         <module>Player</module>
-
+        <module>HUD</module>
     </modules>
 
     <properties>
