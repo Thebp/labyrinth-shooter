@@ -85,19 +85,8 @@ public class PlayerProcessor implements IEntityProcessingService {
 //            }
             //accelerating
             if (gameData.getKeys().isDown(GameKeys.UP)) {
-                dx += Math.cos(radians) * acceleration * dt;
-                dy += Math.sin(radians) * acceleration * dt;
-            }
-
-            // deceleration
-            float vec = (float) Math.sqrt(dx * dx + dy * dy);
-            if (vec > 0) {
-                dx -= (dx / vec) * deceleration * dt;
-                dy -= (dy / vec) * deceleration * dt;
-            }
-            if (vec > maxSpeed) {
-                dx = (dx / vec) * maxSpeed;
-                dy = (dy / vec) * maxSpeed;
+                dx = (float) Math.cos(radians) * maxSpeed;
+                dy = (float) Math.sin(radians) * maxSpeed;
             }
 
             // set position
