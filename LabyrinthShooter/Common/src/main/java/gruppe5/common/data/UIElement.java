@@ -16,7 +16,8 @@ public class UIElement {
     private final UUID ID = UUID.randomUUID();
     private VolatileImage image;
     private float x;
-
+    private float y;
+    
     public VolatileImage getImage() {
         return image;
     }
@@ -40,7 +41,7 @@ public class UIElement {
     public void setY(float y) {
         this.y = y;
     }
-    private float y;
+   
     
     public String getID() {
         return ID.toString();
