@@ -110,7 +110,7 @@
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>CommonSprites</artifactId>
+            <artifactId>CommonResources</artifactId>
             <version>${project.version}</version>
         </dependency>
     </dependencies>

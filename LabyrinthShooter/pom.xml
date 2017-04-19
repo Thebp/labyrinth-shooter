@@ -74,8 +74,8 @@
         <module>Enemy</module>
 
         <module>Player</module>
-        <module>DynamicSpriteManager</module>
-        <module>CommonSprites</module>
+        <module>CommonResources</module>
+        <module>ResourceManager</module>
     </modules>
 
     <properties>

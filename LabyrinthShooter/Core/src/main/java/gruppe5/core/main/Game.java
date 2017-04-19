@@ -20,10 +20,9 @@ import gruppe5.common.services.IGameInitService;
 import gruppe5.common.services.IGamePluginService;
 import gruppe5.common.services.IRenderService;
 import gruppe5.common.player.PlayerSPI;
-import gruppe5.common.sprites.SpriteSPI;
+import gruppe5.common.resources.ResourceSPI;
 import gruppe5.core.managers.AssetsJarFileResolver;
 import gruppe5.core.managers.GameInputProcessor;
-import java.io.File;
 import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -110,7 +109,7 @@ public class Game implements ApplicationListener {
         updateCam();
 
         draw();
-
+        
         gameData.getKeys().update();
     }
 
@@ -118,6 +117,10 @@ public class Game implements ApplicationListener {
         for (IEntityProcessingService entityProcessorService : getEntityProcessingServices()) {
             entityProcessorService.process(gameData, world);
         }
+        zoomCam();
+    }
+
+    private void zoomCam() {
         if (gameData.getKeys().isPressed(GameKeys.SHIFT)) {
             if (cam.viewportWidth == displayWidth) {
                 cam.viewportWidth = worldWidth;
@@ -135,7 +138,6 @@ public class Game implements ApplicationListener {
     }
 
     private void updateCam() {
-
         cam.position.set(getPlayer().getX(), getPlayer().getY(), 0);
         cam.update();
         spriteBatch.setProjectionMatrix(cam.combined);
@@ -162,34 +164,35 @@ public class Game implements ApplicationListener {
             }
 
             sr.end();
-            
-            
-            if (entity.getImagePath() != null) {
-            SpriteSPI spriteSPI = Lookup.getDefault().lookup(SpriteSPI.class);
-            String url = spriteSPI.getSpriteUrl(entity);
-            //am.load("C:/Users/Daniel/Documents/GitHub/labyrinth-shooter/LabyrinthShooter/Player/target/Player-1.0.0-SNAPSHOT.jar!/assets/images/ship.png", Texture.class);
-            am.load(url, Texture.class);
-            am.finishLoading();
-            //texture = am.get("C:/Users/Daniel/Documents/GitHub/labyrinth-shooter/LabyrinthShooter/Player/target/Player-1.0.0-SNAPSHOT.jar!/assets/images/ship.png", Texture.class);
-            texture = am.get(url, Texture.class);
-//                am.load("C:/Users/Daniel/Documents/GitHub/labyrinth-shooter/LabyrinthShooter/Player/target/Player-1.0.0-SNAPSHOT.jar!/assets/images/ship.png", Texture.class);
-//                am.finishLoading();
-//                texture = am.get("C:/Users/Daniel/Documents/GitHub/labyrinth-shooter/LabyrinthShooter/Player/target/Player-1.0.0-SNAPSHOT.jar!/assets/images/ship.png", Texture.class);
-                sprite = new Sprite(texture);
-                sprite.setTexture(texture);
-                spriteBatch.begin();
-                sprite.setSize(entity.getRadius(), entity.getRadius());
-                sprite.setPosition(entity.getX() - (entity.getRadius() / 2), entity.getY() - (entity.getRadius() / 2));
-                sprite.draw(spriteBatch);
-                spriteBatch.end();
-            }
+
+            drawSprite(entity);
 
         }
         drawFont();
 
     }
 
-    public void drawFont() {
+    private void drawSprite(Entity entity) {
+        if (entity.getImagePath() != null) {
+            //uses ResourceSPI that takes entity.getImagePath as argument (string url).
+            ResourceSPI spriteSPI = Lookup.getDefault().lookup(ResourceSPI.class);
+            String url = spriteSPI.getResourceUrl(entity.getImagePath());
+            
+            am.load(url, Texture.class);
+            am.finishLoading();
+            texture = am.get(url, Texture.class);
+            sprite = new Sprite(texture);
+            spriteBatch.begin();
+            sprite.setSize(entity.getRadius(), entity.getRadius());
+            sprite.setPosition(entity.getX() - (entity.getRadius() / 2), entity.getY() - (entity.getRadius() / 2));
+            sprite.setOrigin(sprite.getWidth() / 2, sprite.getHeight() / 2);
+            sprite.setRotation((float) Math.toDegrees(entity.getRadians()));
+            sprite.draw(spriteBatch);
+            spriteBatch.end();
+        }
+    }
+
+    private void drawFont() {
         spriteBatch.begin();
         bitmapfont.setColor(Color.GREEN);
         bitmapfont.drawMultiLine(spriteBatch, "LABYRINTH SHOOTER" + "\n" + "FPS: "

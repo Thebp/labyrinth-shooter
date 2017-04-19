@@ -94,7 +94,7 @@
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>DynamicSpriteManager</artifactId>
+            <artifactId>ResourceManager</artifactId>
             <version>${project.version}</version>
         </dependency>
     </dependencies>
