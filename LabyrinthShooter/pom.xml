@@ -74,7 +74,7 @@
         <module>Enemy</module>
 
         <module>Player</module>
-
+        <module>CommonAudio</module>
     </modules>
 
     <properties>
