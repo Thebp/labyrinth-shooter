@@ -11,6 +11,7 @@ import gruppe5.common.data.World;
 import gruppe5.common.map.MapNode;
 import gruppe5.common.map.MapSPI;
 import gruppe5.common.services.IGamePluginService;
+import java.io.File;
 import org.openide.util.Lookup;
 import org.openide.util.lookup.ServiceProvider;
 
@@ -28,6 +29,7 @@ public class PlayerPlugin implements IGamePluginService {
         Entity player = createPlayer(gameData);
         world.addEntity(player);
         System.out.println("Playerplugin started");
+        System.out.println(new File("").getAbsolutePath());
     }
 
     @Override
@@ -54,6 +56,7 @@ public class PlayerPlugin implements IGamePluginService {
         player.setCollidable(true);
         player.setDynamic(true);
         player.setLife(3);
+        player.setImagePath("Player/target/Player-1.0.0-SNAPSHOT.jar!/assets/images/ship.png");
 
         return player;
     }
