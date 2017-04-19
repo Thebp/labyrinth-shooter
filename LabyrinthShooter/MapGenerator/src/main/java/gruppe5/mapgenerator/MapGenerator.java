@@ -180,7 +180,15 @@ public class MapGenerator implements MapSPI, IGameInitService {
         wall.setPosition(x, y);
         wall.setDynamic(false);
         wall.setCollidable(true);
-        wall.setImagePath("MapGenerator/target/MapGenerator-1.0.0-SNAPSHOT.jar!/assets/images/wall01.png");
+        
+        // Set image depending on wall's neighbors
+        String imagePath = "MapGenerator/target/MapGenerator-1.0.0-SNAPSHOT.jar!/assets/images/wall";
+        if (!neighbors[0]) imagePath += "_up";
+        if (!neighbors[2]) imagePath += "_right";
+        if (!neighbors[4]) imagePath += "_down";
+        if (!neighbors[6]) imagePath += "_left";
+        imagePath += ".png";
+        wall.setImagePath(imagePath);
 
         float[] shapex = new float[4];
         float[] shapey = new float[4]; 
