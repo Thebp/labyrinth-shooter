@@ -70,11 +70,11 @@
         <module>Collision</module>
         <module>Bullet</module>
         <module>Weapon</module>
-
         <module>Enemy</module>
-
         <module>Player</module>
         <module>HUD</module>
+        <module>CommonResources</module>
+        <module>ResourceManager</module>
     </modules>
 
     <properties>

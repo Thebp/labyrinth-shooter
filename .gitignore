@@ -30,3 +30,7 @@ hs_err_pid*
 *.properties
 *.netbeans_automatic_build
 /LabyrinthShooter/HUD/target/
+/LabyrinthShooter/DynamicSpriteManager/target/
+/LabyrinthShooter/CommonSprites/target/
+/LabyrinthShooter/CommonResources/target/
+/LabyrinthShooter/ResourceManager/target/
