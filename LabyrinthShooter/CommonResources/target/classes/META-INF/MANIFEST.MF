@@ -2,8 +2,8 @@ Manifest-Version: 1.0
 OpenIDE-Module-Localizing-Bundle: gruppe5/commonsprites/Bundle.propert
  ies
 OpenIDE-Module-Specification-Version: 1.0.0
-OpenIDE-Module-Implementation-Version: 1.0.0-20170419
-OpenIDE-Module-Build-Version: 201704191626
+OpenIDE-Module-Implementation-Version: 1.0.0-20170420
+OpenIDE-Module-Build-Version: 201704200016
 OpenIDE-Module: gruppe5.CommonResources
 OpenIDE-Module-Public-Packages: gruppe5.common.resources.*
 OpenIDE-Module-Requires: org.openide.modules.ModuleFormat1

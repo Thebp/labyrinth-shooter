@@ -5,7 +5,7 @@
  */
 package gruppe5.common.data;
 
-import java.awt.image.VolatileImage;
+import java.awt.image.BufferedImage;
 import java.util.UUID;
 
 /**
@@ -14,16 +14,25 @@ import java.util.UUID;
  */
 public class UIElement {
     private final UUID ID = UUID.randomUUID();
-    private VolatileImage image;
+    private BufferedImage image;
+    private int len;
     private float x;
     private float y;
     
-    public VolatileImage getImage() {
+    public BufferedImage getImage() {
         return image;
     }
 
-    public void setImage(VolatileImage image) {
+    public void setImage(BufferedImage image) {
         this.image = image;
+    }
+    
+    public int getLen() {
+        return len;
+    } 
+    
+    public void setLen(int len) {
+        this.len = len;
     }
 
     public float getX() {
@@ -41,7 +50,6 @@ public class UIElement {
     public void setY(float y) {
         this.y = y;
     }
-   
     
     public String getID() {
         return ID.toString();

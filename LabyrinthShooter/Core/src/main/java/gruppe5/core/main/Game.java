@@ -6,6 +6,7 @@ import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -14,6 +15,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import gruppe5.common.data.Entity;
 import gruppe5.common.data.GameData;
 import gruppe5.common.data.GameKeys;
+import gruppe5.common.data.UIElement;
 import gruppe5.common.data.World;
 import gruppe5.common.services.IEntityProcessingService;
 import gruppe5.common.services.IGameInitService;
@@ -21,8 +23,11 @@ import gruppe5.common.services.IGamePluginService;
 import gruppe5.common.services.IRenderService;
 import gruppe5.common.player.PlayerSPI;
 import gruppe5.common.resources.ResourceSPI;
+import gruppe5.common.services.IUIService;
 import gruppe5.core.managers.AssetsJarFileResolver;
 import gruppe5.core.managers.GameInputProcessor;
+import java.awt.image.BufferedImage;
+import java.awt.image.DataBufferByte;
 import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -117,6 +122,9 @@ public class Game implements ApplicationListener {
         for (IEntityProcessingService entityProcessorService : getEntityProcessingServices()) {
             entityProcessorService.process(gameData, world);
         }
+        for (IUIService uiService : getUIServices()) {
+            uiService.process(gameData, world);
+        }
         zoomCam();
     }
 
@@ -168,8 +176,12 @@ public class Game implements ApplicationListener {
             drawSprite(entity);
 
         }
+        
+        for (UIElement element : gameData.getUIElements()) {
+            drawUIElement(element);
+        }
+        
         drawFont();
-
     }
 
     private void drawSprite(Entity entity) {
@@ -200,6 +212,25 @@ public class Game implements ApplicationListener {
                 getPlayer().getX() - 180, getPlayer().getY() + 180);
         spriteBatch.end();
     }
+    
+    private void drawUIElement(UIElement element) {
+        if (element.getImage() != null) {
+            BufferedImage image = element.getImage();
+            Pixmap pixmap = new Pixmap(image.getWidth(), image.getHeight(), Pixmap.Format.RGBA8888);
+            byte[] pixels = ((DataBufferByte)image.getRaster().getDataBuffer()).getData();
+            for (int i = 0; i < pixels.length; i++)
+                for (int j = 0; j < pixels.length; j++)
+                    //pixmap.drawPixel(i, j, Color.WHITE.toIntBits());
+            pixmap.dispose();
+            
+            Texture uiTexture = new Texture(pixmap, Pixmap.Format.RGBA8888, false);
+            pixmap.dispose();
+            
+            spriteBatch.begin();
+            spriteBatch.draw(uiTexture, element.getX(), element.getY());
+            spriteBatch.end();
+        }
+    }
 
     @Override
     public void resize(int width, int height) {
@@ -223,6 +254,10 @@ public class Game implements ApplicationListener {
 
     private Collection<? extends IRenderService> getRenderServices() {
         return lookup.lookupAll(IRenderService.class);
+    }
+    
+    private Collection<? extends IUIService> getUIServices() {
+        return lookup.lookupAll(IUIService.class);
     }
 
     private final LookupListener lookupListener = new LookupListener() {
