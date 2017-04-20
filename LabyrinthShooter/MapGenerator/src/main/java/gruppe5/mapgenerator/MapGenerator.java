@@ -180,7 +180,17 @@ public class MapGenerator implements MapSPI, IGameInitService {
         wall.setPosition(x, y);
         wall.setDynamic(false);
         wall.setCollidable(true);
-        wall.setImagePath("MapGenerator/target/MapGenerator-1.0.0-SNAPSHOT.jar!/assets/images/ship.png");
+        wall.setRadius(wallSize);
+        wall.setRadians(0); // Up
+        
+        // Set image depending on wall's neighbors
+        String imagePath = "MapGenerator/target/MapGenerator-1.0.0-SNAPSHOT.jar!/assets/images/wall";
+        if (!neighbors[0]) imagePath += "_up";
+        if (!neighbors[2]) imagePath += "_right";
+        if (!neighbors[4]) imagePath += "_down";
+        if (!neighbors[6]) imagePath += "_left";
+        imagePath += ".png";
+        wall.setImagePath(imagePath);
 
         float[] shapex = new float[4];
         float[] shapey = new float[4]; 
@@ -410,10 +420,13 @@ public class MapGenerator implements MapSPI, IGameInitService {
      * @return The specified maze value or false if out of bounds
      */
     private boolean safelyGetValue(boolean[][] maze, int x, int y) {
-        if (x > 0 && y > 0 && x < maze.length && y < maze[x].length) {
+        if (x > 0 && y > 0 && x < maze.length && y < maze[x].length) 
             return maze[x][y];
-        }
-        return false;
+        else if (x >= maze.length || x < 0) 
+            return false;
+        else if (y >= maze[x].length || y < 0) 
+            return false;
+        return true;
     }
 
     /**
