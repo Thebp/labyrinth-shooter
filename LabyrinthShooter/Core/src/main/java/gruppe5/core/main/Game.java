@@ -57,6 +57,7 @@ public class Game implements ApplicationListener, AudioSPI {
     private AssetsJarFileResolver jfhr;
     private AssetManager am;
     private Texture texture;
+    private Sound newsound;
 
     @Override
     public void create() {
@@ -260,6 +261,9 @@ public class Game implements ApplicationListener, AudioSPI {
         if(entity.getSoundPath() != null){
             ResourceSPI soundSPI = Lookup.getDefault().lookup(ResourceSPI.class);
             soundURL = soundSPI.getResourceUrl(entity.getSoundPath());
+            am.load(soundURL, Sound.class);
+            am.finishLoading();
+            newsound = am.get(soundURL, Sound.class);
             Sound sound = Gdx.audio.newSound(Gdx.files.internal(soundURL));
             sound.play();
             
