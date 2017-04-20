@@ -261,6 +261,8 @@ public class Game implements ApplicationListener, AudioSPI {
             ResourceSPI soundSPI = Lookup.getDefault().lookup(ResourceSPI.class);
             soundURL = soundSPI.getResourceUrl(entity.getSoundPath());
             Sound sound = Gdx.audio.newSound(Gdx.files.internal(soundURL));
+            sound.play();
+            
         }
     }
 }
