@@ -14,6 +14,7 @@ public class Entity implements Serializable {
     private boolean collidable;
     private boolean dynamic;
     private String imagePath;
+    private String soundPath;
     private float x;
     private float y;
     private float dx;
@@ -228,5 +229,14 @@ public class Entity implements Serializable {
     public void setRotationSpeed(int rotationSpeed) {
         this.rotationSpeed = rotationSpeed;
     }
+
+    public String getSoundPath() {
+        return soundPath;
+    }
+
+    public void setSoundPath(String soundPath) {
+        this.soundPath = soundPath;
+    }
+    
 
 }

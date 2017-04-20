@@ -3,6 +3,7 @@ package gruppe5.core.main;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -11,6 +12,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import gruppe5.common.audio.AudioSPI;
 import gruppe5.common.data.Entity;
 import gruppe5.common.data.GameData;
 import gruppe5.common.data.GameKeys;
@@ -29,8 +31,11 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import org.openide.util.Lookup;
 import org.openide.util.LookupEvent;
 import org.openide.util.LookupListener;
+import org.openide.util.lookup.ServiceProvider;
 
-public class Game implements ApplicationListener {
+@ServiceProvider(service = AudioSPI.class)
+
+public class Game implements ApplicationListener, AudioSPI {
 
     private ShapeRenderer sr;
     private BitmapFont bitmapfont;
@@ -249,4 +254,13 @@ public class Game implements ApplicationListener {
         }
 
     };
+
+    @Override
+    public void playAudio(String soundURL, Entity entity) {
+        if(entity.getSoundPath() != null){
+            ResourceSPI soundSPI = Lookup.getDefault().lookup(ResourceSPI.class);
+            soundURL = soundSPI.getResourceUrl(entity.getSoundPath());
+            Sound sound = Gdx.audio.newSound(Gdx.files.internal(soundURL));
+        }
+    }
 }

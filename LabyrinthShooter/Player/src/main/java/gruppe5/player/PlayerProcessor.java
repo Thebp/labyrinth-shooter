@@ -5,6 +5,7 @@
  */
 package gruppe5.player;
 
+import gruppe5.common.audio.AudioSPI;
 import gruppe5.common.data.Entity;
 import gruppe5.common.data.GameData;
 import gruppe5.common.data.GameKeys;
@@ -45,13 +46,14 @@ public class PlayerProcessor implements IEntityProcessingService, PlayerSPI {
             float dt = gameData.getDelta();
             int rotationSpeed = player.getRotationSpeed();
             float b = (3.1415f / 4);
+             
 
             if (gameData.getKeys().isDown(GameKeys.LEFT)) {
                 radians += rotationSpeed * dt;
             } else if (gameData.getKeys().isDown(GameKeys.RIGHT)) {
                 radians -= rotationSpeed * dt;
             }
-
+            AudioSPI audioSPI  = Lookup.getDefault().lookup(AudioSPI.class);
             WeaponSPI weaponSPI = Lookup.getDefault().lookup(WeaponSPI.class);
             //shooting
             if (gameData.getKeys().isPressed(GameKeys.SPACE) && weaponSPI != null) {
@@ -62,6 +64,7 @@ public class PlayerProcessor implements IEntityProcessingService, PlayerSPI {
                 }
                 if(weapon != null){
                     weaponSPI.shoot(world, weapon);
+                    audioSPI.playAudio(player.getSoundPath(), player);
                 }
             }
 
