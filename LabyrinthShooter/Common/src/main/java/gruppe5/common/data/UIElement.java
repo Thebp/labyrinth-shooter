@@ -15,7 +15,6 @@ import java.util.UUID;
 public class UIElement {
     private final UUID ID = UUID.randomUUID();
     private BufferedImage image;
-    private int len;
     private float x;
     private float y;
     
@@ -27,14 +26,6 @@ public class UIElement {
         this.image = image;
     }
     
-    public int getLen() {
-        return len;
-    } 
-    
-    public void setLen(int len) {
-        this.len = len;
-    }
-
     public float getX() {
         return x;
     }

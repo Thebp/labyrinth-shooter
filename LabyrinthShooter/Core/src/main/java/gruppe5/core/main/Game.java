@@ -6,12 +6,13 @@ import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.utils.BufferUtils;
 import gruppe5.common.data.Entity;
 import gruppe5.common.data.GameData;
 import gruppe5.common.data.GameKeys;
@@ -27,10 +28,13 @@ import gruppe5.common.services.IUIService;
 import gruppe5.core.managers.AssetsJarFileResolver;
 import gruppe5.core.managers.GameInputProcessor;
 import java.awt.image.BufferedImage;
-import java.awt.image.DataBufferByte;
+import java.awt.image.DataBufferInt;
+import java.nio.IntBuffer;
 import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL12;
 import org.openide.util.Lookup;
 import org.openide.util.LookupEvent;
 import org.openide.util.LookupListener;
@@ -40,6 +44,7 @@ public class Game implements ApplicationListener {
     private ShapeRenderer sr;
     private BitmapFont bitmapfont;
     private SpriteBatch spriteBatch;
+    private SpriteBatch uiBatch; // For drawing UI elements, no ProjectionMatrix
     private Sprite sprite;
     private static OrthographicCamera cam;
     private final GameData gameData = new GameData();
@@ -47,8 +52,10 @@ public class Game implements ApplicationListener {
     private final Lookup lookup = Lookup.getDefault();
     private List<IGamePluginService> gamePlugins = new CopyOnWriteArrayList<>();
     private List<IGameInitService> gameInits = new CopyOnWriteArrayList<>();
+    private List<IUIService> uiServices = new CopyOnWriteArrayList<>();
     private Lookup.Result<IGamePluginService> gamePluginResult;
     private Lookup.Result<IGameInitService> gameInitResult;
+    private Lookup.Result<IUIService> uiServiceResult;
     private Lookup.Result<IGamePluginService> result;
     private final float displayWidth = 400;
     private final float displayHeight = 400;
@@ -72,7 +79,8 @@ public class Game implements ApplicationListener {
         bitmapfont = new BitmapFont();
         bitmapfont.setScale(.50f, .50f);
         spriteBatch = new SpriteBatch();
-
+        uiBatch = new SpriteBatch();
+        
         Gdx.input.setInputProcessor(new GameInputProcessor(gameData));
 
         gameInitResult = lookup.lookupResult(IGameInitService.class);
@@ -81,15 +89,21 @@ public class Game implements ApplicationListener {
         gamePluginResult = lookup.lookupResult(IGamePluginService.class);
         gamePluginResult.addLookupListener(lookupListener);
         gamePluginResult.allItems();
+        
+        uiServiceResult = lookup.lookupResult(IUIService.class);
+        uiServiceResult.allItems();
 
         for (IGameInitService initService : gameInitResult.allInstances()) {
             initService.start(gameData, world);
             gameInits.add(initService);
         }
-
         for (IGamePluginService plugin : gamePluginResult.allInstances()) {
             plugin.start(gameData, world);
             gamePlugins.add(plugin);
+        }
+        for (IUIService uiService : uiServiceResult.allInstances()) {
+            uiService.start(gameData, world);
+            uiServices.add(uiService);
         }
 //        for (IRenderService renderService : getRenderServices()) {
 //            renderService.create(gameData, world);
@@ -216,19 +230,32 @@ public class Game implements ApplicationListener {
     private void drawUIElement(UIElement element) {
         if (element.getImage() != null) {
             BufferedImage image = element.getImage();
-            Pixmap pixmap = new Pixmap(image.getWidth(), image.getHeight(), Pixmap.Format.RGBA8888);
-            byte[] pixels = ((DataBufferByte)image.getRaster().getDataBuffer()).getData();
-            for (int i = 0; i < pixels.length; i++)
-                for (int j = 0; j < pixels.length; j++)
-                    //pixmap.drawPixel(i, j, Color.WHITE.toIntBits());
-            pixmap.dispose();
+            // Create texture that BufferedImage should be drawn onto
+            Texture tex = new Texture(image.getWidth(), image.getHeight(), Format.RGBA8888);
             
-            Texture uiTexture = new Texture(pixmap, Pixmap.Format.RGBA8888, false);
-            pixmap.dispose();
+            int[] pixels = ((DataBufferInt)image.getRaster().getDataBuffer()).getData();
+            IntBuffer buffer = BufferUtils.newIntBuffer(image.getWidth() * image.getHeight());
             
-            spriteBatch.begin();
-            spriteBatch.draw(uiTexture, element.getX(), element.getY());
-            spriteBatch.end();
+            // Bind texture to the currently active texture unit
+            tex.bind(); 
+            
+            // Load pixels into buffer
+            buffer.rewind();
+            buffer.put(pixels);
+            buffer.flip();
+            
+            // Upload buffer to texture unit
+            Gdx.gl.glTexSubImage2D(GL11.GL_TEXTURE_2D, 0, 0, 0, 
+                    image.getWidth(), image.getHeight(), GL12.GL_BGRA, 
+                    GL12.GL_UNSIGNED_INT_8_8_8_8_REV, buffer);
+            
+            // Draw texture
+            uiBatch.begin();
+            // Height is subtracted from Y, so that the position corresponds to the image's top left corner
+            uiBatch.draw(tex, element.getX(), element.getY() - image.getHeight(), image.getWidth(), image.getHeight());
+            uiBatch.end();
+            
+            tex.dispose();
         }
     }
 

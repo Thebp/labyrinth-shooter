@@ -2,8 +2,8 @@ Manifest-Version: 1.0
 OpenIDE-Module-Localizing-Bundle: gruppe5/dynamicspritemanager/Bundle.
  properties
 OpenIDE-Module-Specification-Version: 1.0.0
-OpenIDE-Module-Implementation-Version: 1.0.0-20170420
-OpenIDE-Module-Build-Version: 201704200016
+OpenIDE-Module-Implementation-Version: 1.0.0-20170421
+OpenIDE-Module-Build-Version: 201704210035
 OpenIDE-Module: gruppe5.ResourceManager
 OpenIDE-Module-Public-Packages: -
 OpenIDE-Module-Requires: org.openide.modules.ModuleFormat1

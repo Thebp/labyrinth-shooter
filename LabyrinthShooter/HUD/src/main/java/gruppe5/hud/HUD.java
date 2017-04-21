@@ -11,16 +11,10 @@ import gruppe5.common.data.UIElement;
 import gruppe5.common.data.World;
 import gruppe5.common.player.PlayerSPI;
 import gruppe5.common.services.IUIService;
-import java.awt.AlphaComposite;
-import java.awt.BasicStroke;
-import java.awt.Color;
 import java.awt.Graphics2D;
-import java.awt.geom.Ellipse2D;
 import java.awt.image.BufferedImage;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.io.InputStream;
 import javax.imageio.ImageIO;
 import org.openide.util.Lookup;
 import org.openide.util.lookup.ServiceProvider;
@@ -31,56 +25,79 @@ import org.openide.util.lookup.ServiceProvider;
  */
 @ServiceProvider(service = IUIService.class)
 public class HUD implements IUIService {
-    UIElement healthbar;
+
+    private static final String HEART_REL_PATH = "/assets/images/heart_32.png";
+
+    private BufferedImage heart; // Holds heart sprite
+    private int heartWidth;
     
+    private UIElement healthbar;
+    private int prevPlayerLife; // Holds previous player life
+
     @Override
-    public void process(GameData gameData, World world) {
-        if (healthbar != null) {
-            gameData.removeUIElement(healthbar);
+    public void start(GameData gameData, World world) {
+        // Load heart image
+        try {
+            InputStream in = getClass().getResourceAsStream(HEART_REL_PATH);
+            heart = ImageIO.read(in);
+            heartWidth = heart.getWidth() + 10;
+        } catch (IOException ex) {
+            System.out.println("HUD.process(): Error when reading image '" + HEART_REL_PATH + "' :\n" + ex);
         }
         
+        healthbar = new UIElement();
+        gameData.addUIElement(healthbar);
+    }
+
+    @Override
+    public void stop(GameData gameData, World world) {
+        gameData.removeUIElement(healthbar);
+        healthbar = null;
+        prevPlayerLife = 0;
+    }
+
+    @Override
+    public void process(GameData gameData, World world) {
+        if (healthbar == null) {
+            System.out.println("HUD has not been initialized.");
+            return;
+        }
+        
+        // Get player
         PlayerSPI playerSPI = Lookup.getDefault().lookup(PlayerSPI.class);
         if (playerSPI == null) {
-            System.out.println("HUD: PlayerSPI not found.");
+            System.out.println("HUD: PlayerSPI module not found.");
             return;
         }
         Entity player = playerSPI.getPlayer(world);
+        int playerLife = player.getLife();
         
-        healthbar = new UIElement();
-        healthbar.setX(player.getX() + 100);
-        healthbar.setY(player.getY() + 100);
-        BufferedImage image = drawHealthbar(player.getLife());
-        healthbar.setImage(image);
-        healthbar.setLen(200);
-        
-        gameData.addUIElement(healthbar);
+        // Only draw healthbar if player life has changed
+        if (playerLife != prevPlayerLife) {
+            prevPlayerLife = player.getLife();
+            healthbar.setX(1000 - heartWidth*playerLife);
+            healthbar.setY(790);
+            healthbar.setImage(drawPlayerHealthbar(player.getLife()));
+        }
     }
-    
-    private BufferedImage drawHealthbar(int life) {
-        BufferedImage image = new BufferedImage(200, 200, BufferedImage.TYPE_4BYTE_ABGR);
-        
-        Graphics2D g2d = image.createGraphics();
-        
-        g2d.setComposite(AlphaComposite.Src);
-        g2d.setColor(Color.red);
-        g2d.setStroke(new BasicStroke(1));
-        g2d.drawRect(10, 10, 100, 100);
-        g2d.dispose();
-        
-        return image;
-    }
-    
-    private byte[] toByteArray(BufferedImage image) {
-        byte[] byteImage = null;
-        
-        try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
-            ImageIO.write(image, "BMP", baos);
-            baos.flush();
-            byteImage = baos.toByteArray();
-        } catch (IOException ex) {
-            System.out.println("HUD.toByteArray(): " + ex);
+
+    private BufferedImage drawPlayerHealthbar(int playerLife) {
+        if (playerLife <= 0) {
+            // Return empty image if player has no life
+            return new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB);
         }
         
-        return byteImage;
+        BufferedImage image = new BufferedImage(heartWidth * playerLife, heart.getHeight(), BufferedImage.TYPE_INT_ARGB);
+        Graphics2D g2d = image.createGraphics();
+
+        // Draw heart for each life onto image
+        for (int i = 0; i < playerLife; i++) {
+            g2d.drawImage(heart, i * heartWidth, 0, null);
+        }
+
+        g2d.dispose();
+
+        return image;
     }
+
 }
