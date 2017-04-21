@@ -80,9 +80,9 @@ public class MapGenerator implements MapSPI, IGameInitService {
         rand = new Random();
         RandDivisionMaze generator = new RandDivisionMaze();
 
-        // Calculate the unit dimensions of the maze given the game width and height
-        int mazeWidth = (int) Math.floor(gameData.getDisplayWidth() / GameData.UNIT_SIZE / NODES_IN_CORRIDOR);
-        int mazeHeight = (int) Math.floor(gameData.getDisplayHeight() / GameData.UNIT_SIZE / NODES_IN_CORRIDOR);
+        // Calculate the unit dimensions of the maze given the world width and height
+        int mazeWidth = (int) Math.floor(gameData.getWorldWidth() / GameData.UNIT_SIZE / NODES_IN_CORRIDOR);
+        int mazeHeight = (int) Math.floor(gameData.getWorldHeight() / GameData.UNIT_SIZE / NODES_IN_CORRIDOR);
 
         // Generate a minimalistic version of maze
         boolean[][] maze = generator.generate(mazeWidth, mazeHeight, rand.nextInt());
@@ -180,6 +180,8 @@ public class MapGenerator implements MapSPI, IGameInitService {
         wall.setPosition(x, y);
         wall.setDynamic(false);
         wall.setCollidable(true);
+        wall.setRadius(wallSize + 1);
+        wall.setRadians(0); // Up
         
         // Set image depending on wall's neighbors
         String imagePath = "MapGenerator/target/MapGenerator-1.0.0-SNAPSHOT.jar!/assets/images/wall";
@@ -418,10 +420,13 @@ public class MapGenerator implements MapSPI, IGameInitService {
      * @return The specified maze value or false if out of bounds
      */
     private boolean safelyGetValue(boolean[][] maze, int x, int y) {
-        if (x > 0 && y > 0 && x < maze.length && y < maze[x].length) {
+        if (x > 0 && y > 0 && x < maze.length && y < maze[x].length) 
             return maze[x][y];
-        }
-        return false;
+        else if (x >= maze.length || x < 0) 
+            return false;
+        else if (y >= maze[x].length || y < 0) 
+            return false;
+        return true;
     }
 
     /**

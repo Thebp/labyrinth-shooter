@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?><module codename="gruppe5.ResourceManager">
+    <module_version install_time="1492734937544" last="true" origin="installer" specification_version="1.0.0">
+        <file crc="3571834493" name="config/Modules/gruppe5-ResourceManager.xml"/>
+        <file crc="1015876392" name="modules/ext/gruppe5.ResourceManager/com-badlogicgames-gdx/gdx.jar"/>
+        <file crc="3003379449" name="modules/gruppe5-ResourceManager.jar"/>
+    </module_version>
+</module>

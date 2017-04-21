@@ -10,9 +10,10 @@ import gruppe5.common.data.World;
 
 /**
  *
- * @author nick
+ * @author Nick
  */
-public interface IGameInitService {
+public interface IUIService {
     void start(GameData gameData, World world);
     void stop(GameData gameData, World world);
+    void process(GameData gameData, World world);
 }
