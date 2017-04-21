@@ -13,7 +13,5 @@ import gruppe5.common.data.World;
  * @author Nick
  */
 public interface IUIService {
-    void start(GameData gameData, World world);
-    void stop(GameData gameData, World world);
     void process(GameData gameData, World world);
 }

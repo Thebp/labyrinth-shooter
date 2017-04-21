@@ -10,6 +10,7 @@ import gruppe5.common.data.GameData;
 import gruppe5.common.data.UIElement;
 import gruppe5.common.data.World;
 import gruppe5.common.player.PlayerSPI;
+import gruppe5.common.services.IGamePluginService;
 import gruppe5.common.services.IUIService;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
@@ -18,13 +19,17 @@ import java.io.InputStream;
 import javax.imageio.ImageIO;
 import org.openide.util.Lookup;
 import org.openide.util.lookup.ServiceProvider;
+import org.openide.util.lookup.ServiceProviders;
 
 /**
  *
  * @author Nick
  */
-@ServiceProvider(service = IUIService.class)
-public class HUD implements IUIService {
+@ServiceProviders(value = {
+    @ServiceProvider(service = IUIService.class),
+    @ServiceProvider(service = IGamePluginService.class)
+})
+public class HUD implements IUIService, IGamePluginService {
 
     private static final String HEART_REL_PATH = "/assets/images/heart_32.png";
 
@@ -102,5 +107,4 @@ public class HUD implements IUIService {
 
         return image;
     }
-
 }
