@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?><module codename="gruppe5.CommonResources">
-    <module_version install_time="1492734929237" last="true" origin="installer" specification_version="1.0.0">
-        <file crc="1952363098" name="config/Modules/gruppe5-CommonResources.xml"/>
-        <file crc="1015876392" name="modules/ext/gruppe5.CommonResources/com-badlogicgames-gdx/gdx.jar"/>
-        <file crc="2143012593" name="modules/gruppe5-CommonResources.jar"/>
-    </module_version>
-</module>

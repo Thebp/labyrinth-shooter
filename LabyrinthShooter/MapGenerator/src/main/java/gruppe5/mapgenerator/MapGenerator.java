@@ -180,7 +180,7 @@ public class MapGenerator implements MapSPI, IGameInitService {
         wall.setPosition(x, y);
         wall.setDynamic(false);
         wall.setCollidable(true);
-        wall.setRadius(wallSize);
+        wall.setRadius(wallSize + 1);
         wall.setRadians(0); // Up
         
         // Set image depending on wall's neighbors
