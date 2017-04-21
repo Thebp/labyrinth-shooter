@@ -6,14 +6,17 @@ import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.utils.BufferUtils;
 import gruppe5.common.data.Entity;
 import gruppe5.common.data.GameData;
 import gruppe5.common.data.GameKeys;
+import gruppe5.common.data.UIElement;
 import gruppe5.common.data.World;
 import gruppe5.common.services.IEntityProcessingService;
 import gruppe5.common.services.IGameInitService;
@@ -21,11 +24,17 @@ import gruppe5.common.services.IGamePluginService;
 import gruppe5.common.services.IRenderService;
 import gruppe5.common.player.PlayerSPI;
 import gruppe5.common.resources.ResourceSPI;
+import gruppe5.common.services.IUIService;
 import gruppe5.core.managers.AssetsJarFileResolver;
 import gruppe5.core.managers.GameInputProcessor;
+import java.awt.image.BufferedImage;
+import java.awt.image.DataBufferInt;
+import java.nio.IntBuffer;
 import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL12;
 import org.openide.util.Lookup;
 import org.openide.util.LookupEvent;
 import org.openide.util.LookupListener;
@@ -35,6 +44,7 @@ public class Game implements ApplicationListener {
     private ShapeRenderer sr;
     private BitmapFont bitmapfont;
     private SpriteBatch spriteBatch;
+    private SpriteBatch uiBatch; // For drawing UI elements, no ProjectionMatrix
     private Sprite sprite;
     private static OrthographicCamera cam;
     private final GameData gameData = new GameData();
@@ -42,8 +52,10 @@ public class Game implements ApplicationListener {
     private final Lookup lookup = Lookup.getDefault();
     private List<IGamePluginService> gamePlugins = new CopyOnWriteArrayList<>();
     private List<IGameInitService> gameInits = new CopyOnWriteArrayList<>();
+    private List<IUIService> uiServices = new CopyOnWriteArrayList<>();
     private Lookup.Result<IGamePluginService> gamePluginResult;
     private Lookup.Result<IGameInitService> gameInitResult;
+    private Lookup.Result<IUIService> uiServiceResult;
     private Lookup.Result<IGamePluginService> result;
     private final float displayWidth = 400;
     private final float displayHeight = 400;
@@ -56,9 +68,12 @@ public class Game implements ApplicationListener {
     @Override
     public void create() {
 
-        gameData.setDisplayWidth(worldWidth);
-        gameData.setDisplayHeight(worldHeight);
+        gameData.setWorldWidth(worldWidth);
+        gameData.setWorldHeight(worldHeight);
 
+        gameData.setDisplayWidth(1000);
+        gameData.setDisplayHeight(800);
+        
         cam = new OrthographicCamera(displayWidth, displayHeight);
         cam.position.set(cam.viewportWidth / 2f, cam.viewportHeight / 2f, 0);
         cam.update();
@@ -67,7 +82,8 @@ public class Game implements ApplicationListener {
         bitmapfont = new BitmapFont();
         bitmapfont.setScale(.50f, .50f);
         spriteBatch = new SpriteBatch();
-
+        uiBatch = new SpriteBatch();
+        
         Gdx.input.setInputProcessor(new GameInputProcessor(gameData));
 
         gameInitResult = lookup.lookupResult(IGameInitService.class);
@@ -76,15 +92,21 @@ public class Game implements ApplicationListener {
         gamePluginResult = lookup.lookupResult(IGamePluginService.class);
         gamePluginResult.addLookupListener(lookupListener);
         gamePluginResult.allItems();
+        
+        uiServiceResult = lookup.lookupResult(IUIService.class);
+        uiServiceResult.allItems();
 
         for (IGameInitService initService : gameInitResult.allInstances()) {
             initService.start(gameData, world);
             gameInits.add(initService);
         }
-
         for (IGamePluginService plugin : gamePluginResult.allInstances()) {
             plugin.start(gameData, world);
             gamePlugins.add(plugin);
+        }
+        for (IUIService uiService : uiServiceResult.allInstances()) {
+            uiService.start(gameData, world);
+            uiServices.add(uiService);
         }
 //        for (IRenderService renderService : getRenderServices()) {
 //            renderService.create(gameData, world);
@@ -116,6 +138,9 @@ public class Game implements ApplicationListener {
     private void update() {
         for (IEntityProcessingService entityProcessorService : getEntityProcessingServices()) {
             entityProcessorService.process(gameData, world);
+        }
+        for (IUIService uiService : getUIServices()) {
+            uiService.process(gameData, world);
         }
         zoomCam();
     }
@@ -168,8 +193,12 @@ public class Game implements ApplicationListener {
             drawSprite(entity);
 
         }
+        
+        for (UIElement element : gameData.getUIElements()) {
+            drawUIElement(element);
+        }
+        
         drawFont();
-
     }
 
     private void drawSprite(Entity entity) {
@@ -200,6 +229,38 @@ public class Game implements ApplicationListener {
                 getPlayer().getX() - 180, getPlayer().getY() + 180);
         spriteBatch.end();
     }
+    
+    private void drawUIElement(UIElement element) {
+        if (element.getImage() != null) {
+            BufferedImage image = element.getImage();
+            // Create texture that BufferedImage should be drawn onto
+            Texture tex = new Texture(image.getWidth(), image.getHeight(), Format.RGBA8888);
+            
+            int[] pixels = ((DataBufferInt)image.getRaster().getDataBuffer()).getData();
+            IntBuffer buffer = BufferUtils.newIntBuffer(image.getWidth() * image.getHeight());
+            
+            // Bind texture to the currently active texture unit
+            tex.bind(); 
+            
+            // Load pixels into buffer
+            buffer.rewind();
+            buffer.put(pixels);
+            buffer.flip();
+            
+            // Upload buffer to texture unit
+            Gdx.gl.glTexSubImage2D(GL11.GL_TEXTURE_2D, 0, 0, 0, 
+                    image.getWidth(), image.getHeight(), GL12.GL_BGRA, 
+                    GL12.GL_UNSIGNED_INT_8_8_8_8_REV, buffer);
+            
+            // Draw texture
+            uiBatch.begin();
+            // Height is subtracted from Y, so that the position corresponds to the image's top left corner
+            uiBatch.draw(tex, element.getX(), element.getY() - image.getHeight(), image.getWidth(), image.getHeight());
+            uiBatch.end();
+            
+            tex.dispose();
+        }
+    }
 
     @Override
     public void resize(int width, int height) {
@@ -223,6 +284,10 @@ public class Game implements ApplicationListener {
 
     private Collection<? extends IRenderService> getRenderServices() {
         return lookup.lookupAll(IRenderService.class);
+    }
+    
+    private Collection<? extends IUIService> getUIServices() {
+        return lookup.lookupAll(IUIService.class);
     }
 
     private final LookupListener lookupListener = new LookupListener() {
