@@ -57,7 +57,7 @@ public class PlayerPlugin implements IGamePluginService {
         player.setDynamic(true);
         player.setLife(3);
         player.setImagePath("Player/target/Player-1.0.0-SNAPSHOT.jar!/assets/images/ship.png");
-        player.setSoundPath("Player/target/Player-1.0.0-SNAPSHOT.jar!/assets/sound/playerdeath.mp3");
+        player.setSoundPath("Player/target/Player-1.0.0-SNAPSHOT.jar!/assets/sound/playerdeath.ogg");
 
         return player;
     }

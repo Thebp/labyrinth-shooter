@@ -3,6 +3,7 @@ package gruppe5.core.main;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
@@ -58,6 +59,7 @@ public class Game implements ApplicationListener, AudioSPI {
     private AssetManager am;
     private Texture texture;
     private Sound newsound;
+    private Music music;
 
     @Override
     public void create() {
@@ -100,6 +102,15 @@ public class Game implements ApplicationListener, AudioSPI {
 
         jfhr = new AssetsJarFileResolver();
         am = new AssetManager(jfhr);
+        
+        ResourceSPI musicSPI = Lookup.getDefault().lookup(ResourceSPI.class);
+        String musicURL = musicSPI.getResourceUrl("Core/target/Core-1.0.0-SNAPSHOT.jar!/assets/sound/music.ogg");
+        am.load(musicURL, Music.class);
+        am.finishLoading();
+
+        music = am.get(musicURL, Music.class);
+        music.setLooping(true);
+        music.play();
     }
 
     @Override
@@ -259,14 +270,16 @@ public class Game implements ApplicationListener, AudioSPI {
     @Override
     public void playAudio(String soundURL, Entity entity) {
         if(entity.getSoundPath() != null){
+            if(newsound == null){
+            AssetsJarFileResolver ajfr = new AssetsJarFileResolver();
+            AssetManager soundManager = new AssetManager(ajfr);
             ResourceSPI soundSPI = Lookup.getDefault().lookup(ResourceSPI.class);
             soundURL = soundSPI.getResourceUrl(entity.getSoundPath());
-            am.load(soundURL, Sound.class);
-            am.finishLoading();
-            newsound = am.get(soundURL, Sound.class);
-            Sound sound = Gdx.audio.newSound(Gdx.files.internal(soundURL));
-            sound.play();
-            
+            soundManager.load(soundURL, Sound.class);
+            soundManager.finishLoading();
+            newsound = soundManager.get(soundURL, Sound.class);
+            }
+            newsound.play();
         }
     }
 }
