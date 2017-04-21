@@ -28,19 +28,19 @@ public class HUD implements IUIService {
 
     private static final String HEART_REL_PATH = "/assets/images/heart_32.png";
 
-    private BufferedImage heart; // Holds heart sprite
-    private int heartWidth;
+    private BufferedImage heart; // Holds a single heart sprite
+    
     
     private UIElement healthbar;
     private int prevPlayerLife; // Holds previous player life
 
     @Override
     public void start(GameData gameData, World world) {
+        System.out.println("HUD started");
         // Load heart image
         try {
             InputStream in = getClass().getResourceAsStream(HEART_REL_PATH);
             heart = ImageIO.read(in);
-            heartWidth = heart.getWidth() + 10;
         } catch (IOException ex) {
             System.out.println("HUD.process(): Error when reading image '" + HEART_REL_PATH + "' :\n" + ex);
         }
@@ -51,6 +51,7 @@ public class HUD implements IUIService {
 
     @Override
     public void stop(GameData gameData, World world) {
+        System.out.println("HUD stopped");
         gameData.removeUIElement(healthbar);
         healthbar = null;
         prevPlayerLife = 0;
@@ -74,10 +75,11 @@ public class HUD implements IUIService {
         
         // Only draw healthbar if player life has changed
         if (playerLife != prevPlayerLife) {
-            prevPlayerLife = player.getLife();
-            healthbar.setX(1000 - heartWidth*playerLife);
-            healthbar.setY(790);
+            prevPlayerLife = playerLife;
+            BufferedImage image = drawPlayerHealthbar(playerLife);
             healthbar.setImage(drawPlayerHealthbar(player.getLife()));
+            healthbar.setX(gameData.getDisplayWidth() - image.getWidth());
+            healthbar.setY(gameData.getDisplayHeight() - 10);
         }
     }
 
@@ -86,8 +88,9 @@ public class HUD implements IUIService {
             // Return empty image if player has no life
             return new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB);
         }
-        
+        int heartWidth = heart.getWidth() + 10;
         BufferedImage image = new BufferedImage(heartWidth * playerLife, heart.getHeight(), BufferedImage.TYPE_INT_ARGB);
+        
         Graphics2D g2d = image.createGraphics();
 
         // Draw heart for each life onto image

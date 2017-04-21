@@ -68,9 +68,12 @@ public class Game implements ApplicationListener {
     @Override
     public void create() {
 
-        gameData.setDisplayWidth(worldWidth);
-        gameData.setDisplayHeight(worldHeight);
+        gameData.setWorldWidth(worldWidth);
+        gameData.setWorldHeight(worldHeight);
 
+        gameData.setDisplayWidth(1000);
+        gameData.setDisplayHeight(800);
+        
         cam = new OrthographicCamera(displayWidth, displayHeight);
         cam.position.set(cam.viewportWidth / 2f, cam.viewportHeight / 2f, 0);
         cam.update();

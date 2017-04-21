@@ -80,9 +80,9 @@ public class MapGenerator implements MapSPI, IGameInitService {
         rand = new Random();
         RandDivisionMaze generator = new RandDivisionMaze();
 
-        // Calculate the unit dimensions of the maze given the game width and height
-        int mazeWidth = (int) Math.floor(gameData.getDisplayWidth() / GameData.UNIT_SIZE / NODES_IN_CORRIDOR);
-        int mazeHeight = (int) Math.floor(gameData.getDisplayHeight() / GameData.UNIT_SIZE / NODES_IN_CORRIDOR);
+        // Calculate the unit dimensions of the maze given the world width and height
+        int mazeWidth = (int) Math.floor(gameData.getWorldWidth() / GameData.UNIT_SIZE / NODES_IN_CORRIDOR);
+        int mazeHeight = (int) Math.floor(gameData.getWorldHeight() / GameData.UNIT_SIZE / NODES_IN_CORRIDOR);
 
         // Generate a minimalistic version of maze
         boolean[][] maze = generator.generate(mazeWidth, mazeHeight, rand.nextInt());
