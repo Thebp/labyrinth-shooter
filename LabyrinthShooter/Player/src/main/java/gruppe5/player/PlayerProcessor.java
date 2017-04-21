@@ -80,11 +80,6 @@ public class PlayerProcessor implements IEntityProcessingService, PlayerSPI {
                     newWeapon.setOwner(player);
                 }
             }
-
-            if (player.isHit()) {
-                player.setLife(player.getLife() - 1);
-                player.setIsHit(false);
-            }
             //Taken from asteroids just to remember to implement it in this project
 //            if(player.getIsHit() == true){
 //                world.removeEntity(player);

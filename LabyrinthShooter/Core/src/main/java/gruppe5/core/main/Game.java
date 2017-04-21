@@ -52,10 +52,8 @@ public class Game implements ApplicationListener {
     private final Lookup lookup = Lookup.getDefault();
     private List<IGamePluginService> gamePlugins = new CopyOnWriteArrayList<>();
     private List<IGameInitService> gameInits = new CopyOnWriteArrayList<>();
-    private List<IUIService> uiServices = new CopyOnWriteArrayList<>();
     private Lookup.Result<IGamePluginService> gamePluginResult;
     private Lookup.Result<IGameInitService> gameInitResult;
-    private Lookup.Result<IUIService> uiServiceResult;
     private Lookup.Result<IGamePluginService> result;
     private final float displayWidth = 400;
     private final float displayHeight = 400;
@@ -92,9 +90,6 @@ public class Game implements ApplicationListener {
         gamePluginResult = lookup.lookupResult(IGamePluginService.class);
         gamePluginResult.addLookupListener(lookupListener);
         gamePluginResult.allItems();
-        
-        uiServiceResult = lookup.lookupResult(IUIService.class);
-        uiServiceResult.allItems();
 
         for (IGameInitService initService : gameInitResult.allInstances()) {
             initService.start(gameData, world);
@@ -103,10 +98,6 @@ public class Game implements ApplicationListener {
         for (IGamePluginService plugin : gamePluginResult.allInstances()) {
             plugin.start(gameData, world);
             gamePlugins.add(plugin);
-        }
-        for (IUIService uiService : uiServiceResult.allInstances()) {
-            uiService.start(gameData, world);
-            uiServices.add(uiService);
         }
 //        for (IRenderService renderService : getRenderServices()) {
 //            renderService.create(gameData, world);
