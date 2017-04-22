@@ -37,6 +37,7 @@ public class MapGenerator implements MapSPI, IGameInitService {
     private List<MapNode> centerNodeList;
     private List<MapNode> availableSpawnNodes;
     
+    private List<Entity> mazeEntities;
 
     @Override
     public List<MapNode> getMap() {
@@ -154,7 +155,7 @@ public class MapGenerator implements MapSPI, IGameInitService {
                 if (maze[x][y]) {
                     entities.add(createWallEntity(x, y, neighbors(maze, x, y)));
                 } else {
-                    entities.add(createFloorEntity(x, y));
+                    //entities.add(createFloorEntity(x, y));
                 }
             }
         }
@@ -208,7 +209,7 @@ public class MapGenerator implements MapSPI, IGameInitService {
         wall.setRadians(0); // Up
         
         // Set image depending on wall's neighbors
-        String imagePath = "MapGenerator/target/MapGenerator-1.0.0-SNAPSHOT.jar!/assets/images/wall";
+        String imagePath = "MapGenerator/target/MapGenerator-1.0.0-SNAPSHOT.jar!/assets/images/wall_tiles/wall";
         if (!neighbors[0]) imagePath += "_up";
         if (!neighbors[2]) imagePath += "_right";
         if (!neighbors[4]) imagePath += "_down";
