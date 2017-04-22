@@ -155,7 +155,7 @@ public class MapGenerator implements MapSPI, IGameInitService {
                 if (maze[x][y]) {
                     entities.add(createWallEntity(x, y, neighbors(maze, x, y)));
                 } else {
-                    //entities.add(createFloorEntity(x, y));
+                    entities.add(createFloorEntity(x, y));
                 }
             }
         }
@@ -180,9 +180,10 @@ public class MapGenerator implements MapSPI, IGameInitService {
         floor.setPosition(x, y);
         floor.setDynamic(false);
         floor.setCollidable(false);
+        floor.setIsBackground(true);
         floor.setRadius(floorSize + 1);
         floor.setRadians(0);
-        floor.setImagePath("MapGenerator/target/MapGenerator-1.0.0-SNAPSHOT.jar!/assets/images/floor.png");
+        floor.setImagePath("MapGenerator/target/MapGenerator-1.0.0-SNAPSHOT.jar!/assets/images/floor_ground/floor.png");
         
         return floor;
     }
