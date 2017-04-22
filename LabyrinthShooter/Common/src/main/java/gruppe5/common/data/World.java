@@ -42,6 +42,26 @@ public class World {
         }
         return r;
     }
+    
+    public List<Entity> getBackgroundEntities() {
+        List<Entity> backgroundEntities = new ArrayList();
+        for (Entity e : getEntities()) {
+            if (e.isBackground()) {
+                backgroundEntities.add(e);
+            }
+        }
+        return backgroundEntities;
+    }
+    
+    public List<Entity> getForegroundEntities() {
+        List<Entity> foregroundEntities = new ArrayList();
+        for (Entity e : getEntities()) {
+            if (!e.isBackground()) {
+                foregroundEntities.add(e);
+            }
+        }
+        return foregroundEntities;
+    }
 
     public Entity getEntity(String ID) {
         return entityMap.get(ID);

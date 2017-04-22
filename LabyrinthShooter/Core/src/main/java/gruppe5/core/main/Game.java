@@ -30,6 +30,7 @@ import gruppe5.core.managers.GameInputProcessor;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
 import java.nio.IntBuffer;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -164,7 +165,12 @@ public class Game implements ApplicationListener {
 //        for (IRenderService renderService : getRenderServices()) {
 //            renderService.render(gameData, world);
 //        }
-        for (Entity entity : world.getEntities()) {
+        
+        for (Entity entity : world.getBackgroundEntities()) {
+            drawSprite(entity);
+        }
+        
+        for (Entity entity : world.getForegroundEntities()) {
             sr.setColor(1, 1, 1, 1);
 
             sr.begin(ShapeRenderer.ShapeType.Line);
@@ -182,7 +188,6 @@ public class Game implements ApplicationListener {
             sr.end();
 
             drawSprite(entity);
-
         }
         
         for (UIElement element : gameData.getUIElements()) {
