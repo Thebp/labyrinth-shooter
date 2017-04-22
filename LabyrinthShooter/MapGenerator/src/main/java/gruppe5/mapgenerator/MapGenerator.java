@@ -37,7 +37,7 @@ public class MapGenerator implements MapSPI, IGameInitService {
     private List<MapNode> centerNodeList;
     private List<MapNode> availableSpawnNodes;
     
-    private List<Entity> wallEntities; // Saved wall entities to be removed by stop()
+    private List<Entity> mazeEntities;
 
     @Override
     public List<MapNode> getMap() {
@@ -113,12 +113,12 @@ public class MapGenerator implements MapSPI, IGameInitService {
             }
         }
 
-        wallEntities = createWallEntities(maze);
+        mazeEntities = createMazeEntities(maze);
         // Add wall entities to world
-        for (Entity wall : wallEntities) {
-            world.addEntity(wall);
+        for (Entity entity : mazeEntities) {
+            world.addEntity(entity);
         }
-
+        
         // Add node entities to world if enabled
         if (SHOW_NODES) {
             for (MapNode n : nodeList) {
@@ -131,36 +131,62 @@ public class MapGenerator implements MapSPI, IGameInitService {
     public void stop(GameData gameData, World world) {
         System.out.println("MapPlugin stopped.");
         
-        for (Entity wall : wallEntities) {
-            world.removeEntity(wall);
+        for (Entity entity : mazeEntities) {
+            world.removeEntity(entity);
         }
-        wallEntities = null;
+        mazeEntities = null;
         
         nodeList = null;
         centerNodeList = null;
         availableSpawnNodes = null;
     }
-
+    
     /**
      *
      * @param maze
      * @param corSize
      * @return
      */
-    private ArrayList<Entity> createWallEntities(boolean[][] maze) {
-        ArrayList<Entity> walls = new ArrayList();
+    private ArrayList<Entity> createMazeEntities(boolean[][] maze) {
+        ArrayList<Entity> entities = new ArrayList();
 
         for (int x = 0; x < maze.length; x++) {
             for (int y = 0; y < maze[x].length; y++) {
                 if (maze[x][y]) {
-                    walls.add(createWallEntity(x, y, neighbors(maze, x, y)));
+                    entities.add(createWallEntity(x, y, neighbors(maze, x, y)));
+                } else {
+                    //entities.add(createFloorEntity(x, y));
                 }
             }
         }
 
-        return walls;
+        return entities;
     }
 
+    /**
+     * 
+     * @param mazeX
+     * @param mazeY
+     * @return 
+     */
+    private Entity createFloorEntity(int mazeX, int mazeY) {
+        Entity floor = new Entity();
+        
+        float floorSize = GameData.UNIT_SIZE * NODES_IN_CORRIDOR;
+      
+        float x = mazeX * floorSize + GameData.UNIT_SIZE;
+        float y = mazeY * floorSize + GameData.UNIT_SIZE;
+        
+        floor.setPosition(x, y);
+        floor.setDynamic(false);
+        floor.setCollidable(false);
+        floor.setRadius(floorSize + 1);
+        floor.setRadians(0);
+        floor.setImagePath("MapGenerator/target/MapGenerator-1.0.0-SNAPSHOT.jar!/assets/images/floor.png");
+        
+        return floor;
+    }
+    
     /**
      *
      * @param mazeX
@@ -172,7 +198,6 @@ public class MapGenerator implements MapSPI, IGameInitService {
         Entity wall = new Entity();
 
         float wallSize = GameData.UNIT_SIZE * NODES_IN_CORRIDOR;
-        wall.setRadius(wallSize);
         
         float x = mazeX * wallSize + GameData.UNIT_SIZE;
         float y = mazeY * wallSize + GameData.UNIT_SIZE;
@@ -184,7 +209,7 @@ public class MapGenerator implements MapSPI, IGameInitService {
         wall.setRadians(0); // Up
         
         // Set image depending on wall's neighbors
-        String imagePath = "MapGenerator/target/MapGenerator-1.0.0-SNAPSHOT.jar!/assets/images/wall";
+        String imagePath = "MapGenerator/target/MapGenerator-1.0.0-SNAPSHOT.jar!/assets/images/wall_tiles/wall";
         if (!neighbors[0]) imagePath += "_up";
         if (!neighbors[2]) imagePath += "_right";
         if (!neighbors[4]) imagePath += "_down";
