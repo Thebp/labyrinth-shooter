@@ -14,6 +14,7 @@ public class Entity implements Serializable {
     private boolean collidable;
     private boolean dynamic;
     private String imagePath;
+    private boolean isBackground = false;
     private float x;
     private float y;
     private float dx;
@@ -45,6 +46,14 @@ public class Entity implements Serializable {
 
     public void setImagePath(String imagePath) {
         this.imagePath = imagePath;
+    }
+    
+    public boolean isBackground() {
+        return isBackground;
+    }
+    
+    public void setIsBackground(boolean isBackground) {
+        this.isBackground = isBackground;
     }
 
     public String addSubEntity(Entity entity) {
