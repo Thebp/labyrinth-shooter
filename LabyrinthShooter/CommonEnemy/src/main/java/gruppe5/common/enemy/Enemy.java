@@ -6,7 +6,7 @@
 package gruppe5.common.enemy;
 
 import gruppe5.common.data.Entity;
-import gruppe5.common.map.MapNode;
+import gruppe5.common.node.MapNode;
 
 /**
  *
