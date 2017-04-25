@@ -2,6 +2,7 @@ package gruppe5.core.main;
 
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
@@ -12,6 +13,8 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.BufferUtils;
 import gruppe5.common.data.Entity;
 import gruppe5.common.data.GameData;
@@ -49,6 +52,7 @@ public class Game implements ApplicationListener {
     private Sprite sprite;
     private static OrthographicCamera cam;
     private final GameData gameData = new GameData();
+    Vector3 mousePosition = new Vector3();
     private World world = new World();
     private final Lookup lookup = Lookup.getDefault();
     private List<IGamePluginService> gamePlugins = new CopyOnWriteArrayList<>();
@@ -121,10 +125,19 @@ public class Game implements ApplicationListener {
         update();
 
         updateCam();
+        
+        getMouseInput();
 
         draw();
         
         gameData.getKeys().update();
+    }
+    
+    private void getMouseInput(){
+            mousePosition.set(Gdx.input.getX(), Gdx.input.getY(),0);
+            cam.unproject(mousePosition);
+            gameData.setMouseX((int) mousePosition.x);
+            gameData.setMouseY((int) mousePosition.y);
     }
 
     private void update() {

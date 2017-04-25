@@ -12,10 +12,28 @@ public class GameData {
     private int displayHeight;
     private int worldWidth;
     private int worldHeight;
+    private int mouseX;
+    private int mouseY;
     private final GameKeys keys = new GameKeys();
     private List<Event> events = new CopyOnWriteArrayList<>();
     private List<UIElement> uiElements = new CopyOnWriteArrayList<>();
     public static final float UNIT_SIZE = 25;
+
+    public int getMouseX() {
+        return mouseX;
+    }
+
+    public void setMouseX(int mouseX) {
+        this.mouseX = mouseX;
+    }
+
+    public int getMouseY() {
+        return mouseY;
+    }
+
+    public void setMouseY(int mouseY) {
+        this.mouseY = mouseY;
+    }
 
     public void addEvent(Event e) {
         events.add(e);

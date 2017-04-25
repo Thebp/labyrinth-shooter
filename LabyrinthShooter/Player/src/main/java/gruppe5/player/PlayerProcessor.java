@@ -46,12 +46,6 @@ public class PlayerProcessor implements IEntityProcessingService, PlayerSPI {
             int rotationSpeed = player.getRotationSpeed();
             float b = (3.1415f / 4);
 
-            if (gameData.getKeys().isDown(GameKeys.LEFT)) {
-                radians += rotationSpeed * dt;
-            } else if (gameData.getKeys().isDown(GameKeys.RIGHT)) {
-                radians -= rotationSpeed * dt;
-            }
-
             WeaponSPI weaponSPI = Lookup.getDefault().lookup(WeaponSPI.class);
             //shooting
             if (gameData.getKeys().isPressed(GameKeys.SPACE) && weaponSPI != null) {
@@ -80,32 +74,63 @@ public class PlayerProcessor implements IEntityProcessingService, PlayerSPI {
                     newWeapon.setOwner(player);
                 }
             }
+            double diffx = gameData.getMouseX() - player.getX();
+            double diffy = gameData.getMouseY() - player.getY();
+//            double diffx = player.getX() - gameData.getMouseX();
+//            double diffy = player.getY() - gameData.getMouseY();
+            radians = (float) Math.atan2(diffy, diffx);
             //Taken from asteroids just to remember to implement it in this project
 //            if(player.getIsHit() == true){
 //                world.removeEntity(player);
 //                player.setIsHit(false);
 //            }
-            //accelerating
+            //Movement
+//            if (gameData.getKeys().isDown(GameKeys.UP)) {
+//                dx = (float) Math.cos(radians) * maxSpeed;
+//                dy = (float) Math.sin(radians) * maxSpeed;
+//            }
+//            if (gameData.getKeys().isDown(GameKeys.LEFT)) {
+//                radians += rotationSpeed * dt;
+//            } else if (gameData.getKeys().isDown(GameKeys.RIGHT)) {
+//                radians -= rotationSpeed * dt;
+//            }
             if (gameData.getKeys().isDown(GameKeys.UP)) {
-                dx = (float) Math.cos(radians) * maxSpeed;
-                dy = (float) Math.sin(radians) * maxSpeed;
-            }
+                    dy += 100;
+                    if(gameData.getKeys().isDown(GameKeys.RIGHT)){
+                        dx += 100;
+                    }
+                    if(gameData.getKeys().isDown(GameKeys.LEFT)){
+                        dx -= 100;
+                    }
+                }else if(gameData.getKeys().isDown(GameKeys.DOWN)){
+                    dy -= 100;
+                    if(gameData.getKeys().isDown(GameKeys.RIGHT)){
+                        dx += 100;
+                    }
+                    if(gameData.getKeys().isDown(GameKeys.LEFT)){
+                        dx -= 100;
+                    }
+                }else if (gameData.getKeys().isDown(GameKeys.LEFT)) {
+                    dx -= 100;
+                } else if (gameData.getKeys().isDown(GameKeys.RIGHT)) {
+                    dx += 100;
+                }
 
             // set position
             x += dx * dt;
             y += dy * dt;
 
-            shapeX[0] = (float) (player.getX() + Math.cos(radians - b) * player.getRadius());
-            shapeY[0] = (float) (player.getY() + Math.sin(radians - b) * player.getRadius());
-
-            shapeX[1] = (float) (player.getX() + Math.cos(radians + b) * player.getRadius());
-            shapeY[1] = (float) (player.getY() + Math.sin(radians + b) * player.getRadius());
-
-            shapeX[2] = (float) (player.getX() + Math.cos(radians + b * 3) * player.getRadius());
-            shapeY[2] = (float) (player.getY() + Math.sin(radians + b * 3) * player.getRadius());
-
-            shapeX[3] = (float) (player.getX() + Math.cos(radians + b * 5) * player.getRadius());
-            shapeY[3] = (float) (player.getY() + Math.sin(radians + b * 5) * player.getRadius());
+//            shapeX[0] = (float) (player.getX() + Math.cos(radians - b) * player.getRadius());
+//            shapeY[0] = (float) (player.getY() + Math.sin(radians - b) * player.getRadius());
+//
+//            shapeX[1] = (float) (player.getX() + Math.cos(radians + b) * player.getRadius());
+//            shapeY[1] = (float) (player.getY() + Math.sin(radians + b) * player.getRadius());
+//
+//            shapeX[2] = (float) (player.getX() + Math.cos(radians + b * 3) * player.getRadius());
+//            shapeY[2] = (float) (player.getY() + Math.sin(radians + b * 3) * player.getRadius());
+//
+//            shapeX[3] = (float) (player.getX() + Math.cos(radians + b * 5) * player.getRadius());
+//            shapeY[3] = (float) (player.getY() + Math.sin(radians + b * 5) * player.getRadius());
 
             player.setX(x);
             player.setY(y);

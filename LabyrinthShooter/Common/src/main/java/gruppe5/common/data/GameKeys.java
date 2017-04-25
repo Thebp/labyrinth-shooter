@@ -14,6 +14,10 @@ public class GameKeys {
     public static final int ESCAPE = 5;
     public static final int SPACE = 6;
     public static final int SHIFT = 7;
+//    public static final int W = 0;
+//    public static final int A = 1;
+//    public static final int S = 2;
+//    public static final int D = 3;
 
     public GameKeys() {
         keys = new boolean[NUM_KEYS];
