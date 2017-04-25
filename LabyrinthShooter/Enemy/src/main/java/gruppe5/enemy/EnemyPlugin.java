@@ -60,6 +60,7 @@ public class EnemyPlugin implements IGamePluginService {
         enemy.setLife(2);
         enemy.setSoundPath("Enemy/target/Enemy-1.0.0-SNAPSHOT.jar!/assets/sound/enemydeath.ogg");
         enemy.setNextNode(spawnlocation.getNeighbours().get(0));
+        
         return enemy;
     }
 
