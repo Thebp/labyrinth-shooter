@@ -124,7 +124,5 @@ public class Node implements MapNode {
     public MapNode getParent() {
         return parent; //To change body of generated methods, choose Tools | Templates.
     }
-    
-    
 
 }

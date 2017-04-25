@@ -10,12 +10,12 @@ import gruppe5.common.data.Entity;
 import gruppe5.common.data.GameData;
 import gruppe5.common.data.World;
 import gruppe5.common.node.MapNode;
+import gruppe5.common.node.Node;
 import gruppe5.common.map.MapSPI;
 import gruppe5.common.player.PlayerSPI;
 import gruppe5.common.services.IEntityProcessingService;
 import java.util.Collections;
 import java.util.List;
-import java.util.PriorityQueue;
 import org.openide.util.Lookup;
 import org.openide.util.lookup.ServiceProvider;
 
@@ -29,6 +29,7 @@ public class EnemyAIProcessor implements IEntityProcessingService {
     private MapSPI mapSPI = null;
     private MapNode mapNode = null;
     private PlayerSPI playerSPI = null;
+    private Node Node = null;
 
     @Override
     public void process(GameData gameData, World world) {
@@ -199,6 +200,13 @@ public class EnemyAIProcessor implements IEntityProcessingService {
             return 14 * yDis + 10 * (xDis - yDis);
         }
         return 14 * xDis + 10 * (yDis - xDis);
+    }
+    
+    private MapNode getEnemyPosition(Enemy enemy){
+        Node enemyPosition = null;
+        enemyPosition.setX(enemy.getX());
+        enemyPosition.setY(enemy.getY());
+        return enemyPosition;
     }
 
     private MapNode getEnemyPosition(Enemy enemy){
