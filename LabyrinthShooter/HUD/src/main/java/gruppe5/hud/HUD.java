@@ -31,9 +31,9 @@ import org.openide.util.lookup.ServiceProviders;
 })
 public class HUD implements IUIService, IGamePluginService {
 
-    private static final String HEART_REL_PATH = "/assets/images/heart_32.png";
-
-    private BufferedImage heart; // Holds a single heart sprite
+    private static final String HEART_REL_PATH = "/assets/images/heart_64.png";
+    private static final int HEART_SIZE = 42; // Used for scaling of heart
+    private BufferedImage heart; // Holds the heart sprite
     
     
     private UIElement healthbar;
@@ -93,14 +93,15 @@ public class HUD implements IUIService, IGamePluginService {
             // Return empty image if player has no life
             return new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB);
         }
-        int heartWidth = heart.getWidth() + 10;
-        BufferedImage image = new BufferedImage(heartWidth * playerLife, heart.getHeight(), BufferedImage.TYPE_INT_ARGB);
+        int heartWidth = HEART_SIZE + 10;
+        int heartHeight = HEART_SIZE;
+        BufferedImage image = new BufferedImage(heartWidth * playerLife, heartHeight, BufferedImage.TYPE_INT_ARGB);
         
         Graphics2D g2d = image.createGraphics();
 
         // Draw heart for each life onto image
         for (int i = 0; i < playerLife; i++) {
-            g2d.drawImage(heart, i * heartWidth, 0, null);
+            g2d.drawImage(heart, i * heartWidth, 0, HEART_SIZE, HEART_SIZE, null);
         }
 
         g2d.dispose();
