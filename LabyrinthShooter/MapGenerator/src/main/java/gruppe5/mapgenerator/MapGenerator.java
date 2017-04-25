@@ -32,8 +32,12 @@ public class MapGenerator implements MapSPI, IGameInitService {
     public static final int NODES_IN_CORRIDOR = 3; // Must be odd to have a center node
     /** For debugging, if true entities for nodes will be created and 
      * other info will be shown */
-    public static final boolean DEBUG_ENABLED = false; 
-
+    public static final boolean DEBUG_ENABLED = true;
+    
+    // Number of floor effect images in assets
+    private static final int NUM_FLOOR_EFFECTS = 3;
+    private static final int FLOOR_EFFECT_CHANCE = 10; // 1/chance
+    
     private Random rand; // Used for seed generation
     
     // Used for MapSPI
@@ -125,11 +129,18 @@ public class MapGenerator implements MapSPI, IGameInitService {
         
         // Add node entities to world if enabled
         if (DEBUG_ENABLED) {
+            System.out.println("MapGenerator debug info:");
             for (MapNode n : nodeList) {
                 world.addEntity(createNodeEntity(n));
                 // Print out debug info
                 if (n.getNeighbours().size() <= 1) 
                     System.out.println("Node " + n + " has " + n.getNeighbours().size() + " neighbours!");
+                
+                // Check that all nodes neighbors are contained in nodeList
+                for (MapNode neighbor : n.getNeighbours()) {
+                    if (!nodeList.contains(neighbor))
+                        System.out.println("Node " + neighbor + " is not contained in nodeList");
+                }
             }
         }
     }
@@ -190,7 +201,12 @@ public class MapGenerator implements MapSPI, IGameInitService {
         floor.setIsBackground(true);
         floor.setRadius(floorSize + 1);
         floor.setRadians(0);
-        floor.setImagePath("MapGenerator/target/MapGenerator-1.0.0-SNAPSHOT.jar!/assets/images/floor_ground/floor.png");
+        String path = "MapGenerator/target/MapGenerator-1.0.0-SNAPSHOT.jar!/assets/images/floor_ground/floor";
+        if (rand.nextInt(FLOOR_EFFECT_CHANCE) == 0) {
+            path += "_effect" + (rand.nextInt(NUM_FLOOR_EFFECTS) + 1);
+        }
+        path += ".png";
+        floor.setImagePath(path);
         
         return floor;
     }
@@ -389,8 +405,7 @@ public class MapGenerator implements MapSPI, IGameInitService {
                 iterateCenterNodes(child, nodeList, maze, x + 1, y);
                 iterateCenterNodes(child, nodeList, maze, x, y - 1);
                 iterateCenterNodes(child, nodeList, maze, x, y + 1);
-            } else// If nodeList already contains this node but it is not linked to its parent
-            {
+            } else { // If nodeList already contains this node but it is not linked to its parent
                 if (!parent.getNeighbours().contains(child)) {
                     parent.getNeighbours().add(child);
                 }
