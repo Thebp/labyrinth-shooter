@@ -67,7 +67,6 @@ public class GameInputProcessor extends InputAdapter implements InputProcessor {
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
         gameData.getKeys().setKey(GameKeys.SPACE, true);
-        System.out.println("test");
         return super.touchDown(screenX, screenY, pointer, button); //To change body of generated methods, choose Tools | Templates.
     }  
 
