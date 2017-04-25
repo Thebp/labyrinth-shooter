@@ -76,16 +76,17 @@ public class EnemyAIProcessor implements IEntityProcessingService {
             float radians = (float) Math.atan2(dy, dx);
             enemy.setRadians(radians);
 
-            MapNode closestNode = enemy.getNextNode();
+            MapNode nextNode = enemy.getNextNode();
+            MapNode closestNode = nextNode;
             float closestDistance = (float) Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2));
 
             if (enemy.getX() == closestNode.getX() && enemy.getY() == closestNode.getY()) {
-                for (MapNode mapNode : closestNode.getNeighbours()) {
+                for (MapNode mapNode : nextNode.getNeighbours()) {
                     float xDiff = player.getX() - mapNode.getX();
                     float yDiff = player.getY() - mapNode.getY();
                     float nodeDistance = (float) Math.sqrt(Math.pow(xDiff, 2) + Math.pow(yDiff, 2));
                     
-                    if(nodeDistance < closestDistance) {
+                    if(nodeDistance < closestDistance && mapNode.getNeighbours().size() > 0) {
                         closestDistance = nodeDistance;
                         closestNode = mapNode;
                     }
@@ -120,8 +121,9 @@ public class EnemyAIProcessor implements IEntityProcessingService {
 
             float xDiff = Math.abs(x - nextNode.getX());
             float yDiff = Math.abs(y - nextNode.getY());
+            float distance = (float) Math.sqrt(Math.pow(xDiff, 2) + Math.pow(yDiff, 2));
 
-            if (xDiff < 5 && yDiff < 5) {
+            if (distance < 1) {
                 enemy.setPosition(nextNode.getX(), nextNode.getY());
             } else {
                 enemy.setPosition(enemy.getX() + dx * dt, enemy.getY() + dy * dt);
