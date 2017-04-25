@@ -67,9 +67,6 @@ public class Game implements ApplicationListener {
 
     @Override
     public void create() {
-        gameData.setWorldWidth(worldWidth);
-        gameData.setWorldHeight(worldHeight);
-
         world.setWorldWidth(worldWidth);
         world.setWorldHeight(worldHeight);
 
