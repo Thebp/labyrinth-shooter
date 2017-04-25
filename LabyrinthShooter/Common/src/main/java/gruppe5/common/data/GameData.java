@@ -14,11 +14,20 @@ public class GameData {
     private int worldHeight;
     private int mouseX;
     private int mouseY;
+    private boolean noclip;
     private final GameKeys keys = new GameKeys();
     private List<Event> events = new CopyOnWriteArrayList<>();
     private List<UIElement> uiElements = new CopyOnWriteArrayList<>();
     public static final float UNIT_SIZE = 25;
 
+    public boolean isNoclip() {
+        return noclip;
+    }
+
+    public void setNoclip(boolean noclip) {
+        this.noclip = noclip;
+    }
+    
     public int getMouseX() {
         return mouseX;
     }

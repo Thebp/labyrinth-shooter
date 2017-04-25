@@ -67,7 +67,6 @@ public class Game implements ApplicationListener {
 
     @Override
     public void create() {
-
         gameData.setWorldWidth(worldWidth);
         gameData.setWorldHeight(worldHeight);
 
@@ -145,6 +144,7 @@ public class Game implements ApplicationListener {
             uiService.process(gameData, world);
         }
         zoomCam();
+        
     }
 
     private void zoomCam() {
