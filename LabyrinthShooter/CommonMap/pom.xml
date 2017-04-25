@@ -18,6 +18,7 @@
                     <useOSGiDependencies>true</useOSGiDependencies>
                     <publicPackages>
                         <publicPackage>gruppe5.common.map</publicPackage>
+                        <publicPackage>gruppe5.common.node</publicPackage>
                     </publicPackages>
                 </configuration>
             </plugin>

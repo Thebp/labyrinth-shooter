@@ -5,6 +5,7 @@
  */
 package gruppe5.common.map;
 
+import gruppe5.common.node.MapNode;
 import java.util.List;
 
 /**

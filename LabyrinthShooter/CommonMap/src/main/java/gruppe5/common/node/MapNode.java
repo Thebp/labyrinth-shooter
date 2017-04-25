@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package gruppe5.common.map;
+package gruppe5.common.node;
 
 import java.util.List;
 
