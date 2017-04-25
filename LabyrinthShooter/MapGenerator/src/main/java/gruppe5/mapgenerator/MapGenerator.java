@@ -20,7 +20,8 @@ import org.openide.util.lookup.ServiceProvider;
 import org.openide.util.lookup.ServiceProviders;
 
 @ServiceProviders(value = {
-    @ServiceProvider(service = IGameInitService.class),
+    @ServiceProvider(service = IGameInitService.class)
+    ,
     @ServiceProvider(service = MapSPI.class)
 })
 /**
@@ -28,37 +29,42 @@ import org.openide.util.lookup.ServiceProviders;
  * @author nick
  */
 public class MapGenerator implements MapSPI, IGameInitService {
-
+    /**
+     * For debugging, if true entities for nodes will be created and other info
+     * will be shown
+     */
+    public static final boolean DEBUG_ENABLED = false;
+    
     public static final int NODES_IN_CORRIDOR = 3; // Must be odd to have a center node
-    /** For debugging, if true entities for nodes will be created and 
-     * other info will be shown */
-    public static final boolean DEBUG_ENABLED = true;
     
-    // Number of floor effect images in assets
-    private static final int NUM_FLOOR_EFFECTS = 3;
+    // Random sprite chances
+    private static final int WALL_CRACK_CHANCE = 15; // 1/chance
+    private static final int NUM_FLOOR_EFFECTS = 3; // Number of floor effect images in assets
     private static final int FLOOR_EFFECT_CHANCE = 10; // 1/chance
-    
+
     private Random rand; // Used for seed generation
-    
+
     // Used for MapSPI
     private List<MapNode> nodeList;
     private List<MapNode> centerNodeList;
     private List<MapNode> availableSpawnNodes;
-    
+
     private List<Entity> mazeEntities;
 
     @Override
     public List<MapNode> getMap() {
-        if (nodeList != null) 
+        if (nodeList != null) {
             return nodeList;
+        }
         System.out.println("MapGenerator.getMap(): MapGenerator not initialized.");
         return null;
     }
-    
+
     @Override
     public List<MapNode> getCenterMapNodes() {
-        if (centerNodeList != null) 
+        if (centerNodeList != null) {
             return centerNodeList;
+        }
         System.out.println("MapGenerator.getCenterMapNodes(): MapGenerator not initialized.");
         return null;
     }
@@ -69,22 +75,23 @@ public class MapGenerator implements MapSPI, IGameInitService {
             System.out.println("MapGenerator.getRandomSpawnNode(): MapGenerator not initialized.");
             return null;
         }
-        
+
         // Get random MapNode
         MapNode randNode = availableSpawnNodes.get(rand.nextInt(availableSpawnNodes.size()));
         // Remove node from list only if it isn't the last available node
-        if (availableSpawnNodes.size() > 1)
+        if (availableSpawnNodes.size() > 1) {
             availableSpawnNodes.remove(randNode);
-        else
+        } else {
             System.out.println("MapGenerator: Available spawn nodes depleted.");
-        
+        }
+
         return randNode;
     }
 
     @Override
     public void start(GameData gameData, World world) {
         System.out.println("MapPlugin started");
-        
+
         rand = new Random();
         RandDivisionMaze generator = new RandDivisionMaze();
 
@@ -109,13 +116,13 @@ public class MapGenerator implements MapSPI, IGameInitService {
         nodeList = createNodeList(scaledMaze);
         centerNodeList = new ArrayList();
         availableSpawnNodes = new ArrayList();
-        
+
         // Fill centerNodeList and availableSpawnNodes
         for (MapNode node : nodeList) {
             if (node.isMiddle()) {
                 centerNodeList.add(node);
                 // If node only has one neighbouring center node, it is added to spawn node list
-                if (((Node)node).getNeighbouringCenterNodes().size() == 1) {
+                if (((Node) node).getNeighbouringCenterNodes().size() == 1) {
                     availableSpawnNodes.add(node);
                 }
             }
@@ -126,39 +133,55 @@ public class MapGenerator implements MapSPI, IGameInitService {
         for (Entity entity : mazeEntities) {
             world.addEntity(entity);
         }
-        
-        // Add node entities to world if enabled
+
+        // Debug nodes if enabled
         if (DEBUG_ENABLED) {
-            System.out.println("MapGenerator debug info:");
-            for (MapNode n : nodeList) {
-                world.addEntity(createNodeEntity(n));
-                // Print out debug info
-                if (n.getNeighbours().size() <= 1) 
-                    System.out.println("Node " + n + " has " + n.getNeighbours().size() + " neighbours!");
-                
-                // Check that all nodes neighbors are contained in nodeList
-                for (MapNode neighbor : n.getNeighbours()) {
-                    if (!nodeList.contains(neighbor))
-                        System.out.println("Node " + neighbor + " is not contained in nodeList");
-                }
-            }
+            debugNodes(world);
         }
     }
 
     @Override
     public void stop(GameData gameData, World world) {
         System.out.println("MapPlugin stopped.");
-        
+
         for (Entity entity : mazeEntities) {
             world.removeEntity(entity);
         }
         mazeEntities = null;
-        
+
         nodeList = null;
         centerNodeList = null;
         availableSpawnNodes = null;
     }
-    
+
+    private void debugNodes(World world) {
+        System.out.println("Starting MapNode debugging...");
+        
+        for (MapNode n : nodeList) {
+            // Spawn node entities into world
+            world.addEntity(createNodeEntity(n));
+
+            // Print out debug info
+            if (n.getNeighbours().size() <= 1) {
+                System.out.println("- Node " + n + " has " + n.getNeighbours().size() + " neighbours!");
+            }
+
+            // Check that all nodes neighbors are contained in nodeList
+            for (MapNode neighbor : n.getNeighbours()) {
+                if (!nodeList.contains(neighbor)) {
+                    System.out.println("- Node " + neighbor + " is not contained in nodeList!");
+                }
+            }
+
+            // Check that duplicates aren't contained in nodeList
+            for (MapNode other : nodeList) {
+                if (n.equals(other) && nodeList.indexOf(n) != nodeList.indexOf(other)) {
+                    System.out.println("- Node " + n + " has a duplicate!");
+                }
+            }
+        }
+    }
+
     /**
      *
      * @param maze
@@ -182,19 +205,19 @@ public class MapGenerator implements MapSPI, IGameInitService {
     }
 
     /**
-     * 
+     *
      * @param mazeX
      * @param mazeY
-     * @return 
+     * @return
      */
     private Entity createFloorEntity(int mazeX, int mazeY) {
         Entity floor = new Entity();
-        
+
         float floorSize = GameData.UNIT_SIZE * NODES_IN_CORRIDOR;
-      
+
         float x = mazeX * floorSize + GameData.UNIT_SIZE;
         float y = mazeY * floorSize + GameData.UNIT_SIZE;
-        
+
         floor.setPosition(x, y);
         floor.setDynamic(false);
         floor.setCollidable(false);
@@ -207,10 +230,10 @@ public class MapGenerator implements MapSPI, IGameInitService {
         }
         path += ".png";
         floor.setImagePath(path);
-        
+
         return floor;
     }
-    
+
     /**
      *
      * @param mazeX
@@ -222,7 +245,7 @@ public class MapGenerator implements MapSPI, IGameInitService {
         Entity wall = new Entity();
 
         float wallSize = GameData.UNIT_SIZE * NODES_IN_CORRIDOR;
-        
+
         float x = mazeX * wallSize + GameData.UNIT_SIZE;
         float y = mazeY * wallSize + GameData.UNIT_SIZE;
 
@@ -231,30 +254,43 @@ public class MapGenerator implements MapSPI, IGameInitService {
         wall.setCollidable(true);
         wall.setRadius(wallSize + 1);
         wall.setRadians(0); // Up
-        
+
         // Set image depending on wall's neighbors
         String imagePath = "MapGenerator/target/MapGenerator-1.0.0-SNAPSHOT.jar!/assets/images/wall_tiles/wall";
-        if (!neighbors[0]) imagePath += "_up";
-        if (!neighbors[2]) imagePath += "_right";
-        if (!neighbors[4]) imagePath += "_down";
-        if (!neighbors[6]) imagePath += "_left";
+        if (!neighbors[0]) {
+            imagePath += "_up";
+        }
+        if (!neighbors[2]) {
+            imagePath += "_right";
+        }
+        if (!neighbors[4]) {
+            imagePath += "_down";
+        }
+        if (!neighbors[6]) {
+            imagePath += "_left";
+        }
+        
+        // Apply crack chance
+        if (rand.nextInt(WALL_CRACK_CHANCE) == 0)
+            imagePath += "_cracked";
+        
         imagePath += ".png";
         wall.setImagePath(imagePath);
 
         float[] shapex = new float[4];
-        float[] shapey = new float[4]; 
-        
-        shapex[0] = x - wallSize/2;
-        shapey[0] = y + wallSize/2;
-        
-        shapex[1] = x + wallSize/2;
-        shapey[1] = y + wallSize/2;
-        
-        shapex[2] = x + wallSize/2;
-        shapey[2] = y - wallSize/2;
-        
-        shapex[3] = x - wallSize/2;
-        shapey[3] = y - wallSize/2;
+        float[] shapey = new float[4];
+
+        shapex[0] = x - wallSize / 2;
+        shapey[0] = y + wallSize / 2;
+
+        shapex[1] = x + wallSize / 2;
+        shapey[1] = y + wallSize / 2;
+
+        shapex[2] = x + wallSize / 2;
+        shapey[2] = y - wallSize / 2;
+
+        shapex[3] = x - wallSize / 2;
+        shapey[3] = y - wallSize / 2;
 
         wall.setShapeX(shapex);
         wall.setShapeY(shapey);
@@ -277,6 +313,41 @@ public class MapGenerator implements MapSPI, IGameInitService {
         node.setPosition(x, y);
         node.setCollidable(false);
         node.setDynamic(false);
+        node.setRadius(GameData.UNIT_SIZE);
+
+        // load sprite
+        boolean[] neighbors = new boolean[4];
+        for (MapNode neighbor : n.getNeighbours()) {
+            if (neighbor.getX() == n.getX() && neighbor.getY() > n.getY()) {
+                neighbors[0] = true;
+            }
+            if (neighbor.getY() == n.getY() && neighbor.getX() > n.getX()) {
+                neighbors[1] = true;
+            }
+            if (neighbor.getX() == n.getX() && neighbor.getY() < n.getY()) {
+                neighbors[2] = true;
+            }
+            if (neighbor.getY() == n.getY() && neighbor.getX() < n.getX()) {
+                neighbors[3] = true;
+            }
+        }
+
+        String imagePath = "MapGenerator/target/MapGenerator-1.0.0-SNAPSHOT.jar!/assets/images/node/node";
+        if (neighbors[0]) {
+            imagePath += "_up";
+        }
+        if (neighbors[1]) {
+            imagePath += "_right";
+        }
+        if (neighbors[2]) {
+            imagePath += "_down";
+        }
+        if (neighbors[3]) {
+            imagePath += "_left";
+        }
+
+        imagePath += ".png";
+        node.setImagePath(imagePath);
 
         float[] shapex;
         float[] shapey;
@@ -468,12 +539,13 @@ public class MapGenerator implements MapSPI, IGameInitService {
      * @return The specified maze value or false if out of bounds
      */
     private boolean safelyGetValue(boolean[][] maze, int x, int y) {
-        if (x > 0 && y > 0 && x < maze.length && y < maze[x].length) 
+        if (x > 0 && y > 0 && x < maze.length && y < maze[x].length) {
             return maze[x][y];
-        else if (x >= maze.length || x < 0) 
+        } else if (x >= maze.length || x < 0) {
             return false;
-        else if (y >= maze[x].length || y < 0) 
+        } else if (y >= maze[x].length || y < 0) {
             return false;
+        }
         return true;
     }
 
