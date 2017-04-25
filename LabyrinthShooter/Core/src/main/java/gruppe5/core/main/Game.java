@@ -70,6 +70,9 @@ public class Game implements ApplicationListener {
         gameData.setWorldWidth(worldWidth);
         gameData.setWorldHeight(worldHeight);
 
+        world.setWorldWidth(worldWidth);
+        world.setWorldHeight(worldHeight);
+
         gameData.setDisplayWidth(1000);
         gameData.setDisplayHeight(800);
 
@@ -202,7 +205,6 @@ public class Game implements ApplicationListener {
             drawUIElement(element);
         }
 
-        drawFont();
     }
 
     private void drawSprite(Entity entity, Entity player) {
@@ -227,16 +229,7 @@ public class Game implements ApplicationListener {
             }
         }
     }
-
-    private void drawFont() {
-        spriteBatch.begin();
-        bitmapfont.setColor(Color.GREEN);
-        bitmapfont.drawMultiLine(spriteBatch, "LABYRINTH SHOOTER" + "\n" + "FPS: "
-                + Gdx.graphics.getFramesPerSecond() + "\n" + "Entites: " + world.getEntities().size(),
-                getPlayer().getX() - 180, getPlayer().getY() + 180);
-        spriteBatch.end();
-    }
-
+	
     private void drawUIElement(UIElement element) {
         if (element.getImage() != null) {
             BufferedImage image = element.getImage();

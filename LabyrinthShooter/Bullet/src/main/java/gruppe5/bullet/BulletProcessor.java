@@ -56,18 +56,19 @@ public class BulletProcessor implements IEntityProcessingService {
         float x = bullet.getX();
         float y = bullet.getY();
         float radians = bullet.getRadians();
+        float size = bullet.getRadius()/3;
 
-        shapex[0] = (float) (x - 4);
+        shapex[0] = (float) (x - size);
         shapey[0] = (float) (y);
 
         shapex[1] = (float) (x);
-        shapey[1] = (float) (y + 4);
+        shapey[1] = (float) (y + size);
 
-        shapex[2] = (float) (x + 4);
+        shapex[2] = (float) (x + size);
         shapey[2] = (float) (y);
 
         shapex[3] = (float) (x);
-        shapey[3] = (float) (y - 4);
+        shapey[3] = (float) (y - size);
 
         bullet.setShapeX(shapex);
         bullet.setShapeY(shapey);

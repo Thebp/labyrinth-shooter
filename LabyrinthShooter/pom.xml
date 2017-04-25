@@ -75,6 +75,7 @@
         <module>HUD</module>
         <module>CommonResources</module>
         <module>ResourceManager</module>
+        <module>FPSCounter</module>
     </modules>
 
     <properties>

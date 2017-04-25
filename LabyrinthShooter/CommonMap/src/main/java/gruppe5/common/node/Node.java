@@ -3,9 +3,8 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package gruppe5.mapgenerator;
+package gruppe5.common.node;
 
-import gruppe5.common.map.MapNode;
 import java.util.ArrayList;
 import java.util.List;
 

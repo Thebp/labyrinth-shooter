@@ -15,6 +15,7 @@ public class GameData {
     private int mouseX;
     private int mouseY;
     private boolean noclip;
+
     private final GameKeys keys = new GameKeys();
     private List<Event> events = new CopyOnWriteArrayList<>();
     private List<UIElement> uiElements = new CopyOnWriteArrayList<>();
@@ -94,22 +95,6 @@ public class GameData {
 
     public int getDisplayHeight() {
         return displayHeight;
-    }
-    
-    public int getWorldWidth() {
-        return worldWidth;
-    }
-
-    public void setWorldWidth(int worldWidth) {
-        this.worldWidth = worldWidth;
-    }
-
-    public int getWorldHeight() {
-        return worldHeight;
-    }
-
-    public void setWorldHeight(int worldHeight) {
-        this.worldHeight = worldHeight;
     }
 
     public <E extends Event> List<Event> getEvents(Class<E> type, String sourceID) {
