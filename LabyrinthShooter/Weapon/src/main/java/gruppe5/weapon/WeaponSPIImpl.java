@@ -27,7 +27,13 @@ public class WeaponSPIImpl implements WeaponSPI{
             float xDiff = Math.abs(weapon.getX() - entity.getX());
             float yDiff = Math.abs(weapon.getY() - entity.getY());
             if(xDiff < 50 && yDiff < 50) {
-                return weapon;
+                Entity oldWeapon = null;
+                for(Entity entityWeapon : entity.getEntities(Weapon.class)) {
+                    oldWeapon = entityWeapon;
+                }
+                if(oldWeapon != weapon) {
+                    return weapon;
+                }
             }
         }
         return null;

@@ -5,6 +5,8 @@
  */
 package gruppe5.mapgenerator;
 
+import gruppe5.common.node.MapNode;
+import gruppe5.common.node.Node;
 import gruppe5.common.data.Entity;
 import gruppe5.common.data.GameData;
 import gruppe5.common.data.World;
@@ -28,7 +30,9 @@ import org.openide.util.lookup.ServiceProviders;
 public class MapGenerator implements MapSPI, IGameInitService {
 
     public static final int NODES_IN_CORRIDOR = 3; // Must be odd to have a center node
-    public static final boolean SHOW_NODES = false; // For debugging, if true entities for nodes will be created
+    /** For debugging, if true entities for nodes will be created and 
+     * other info will be shown */
+    public static final boolean DEBUG_ENABLED = false; 
 
     private Random rand; // Used for seed generation
     
@@ -37,7 +41,7 @@ public class MapGenerator implements MapSPI, IGameInitService {
     private List<MapNode> centerNodeList;
     private List<MapNode> availableSpawnNodes;
     
-    private List<Entity> wallEntities; // Saved wall entities to be removed by stop()
+    private List<Entity> mazeEntities;
 
     @Override
     public List<MapNode> getMap() {
@@ -80,9 +84,9 @@ public class MapGenerator implements MapSPI, IGameInitService {
         rand = new Random();
         RandDivisionMaze generator = new RandDivisionMaze();
 
-        // Calculate the unit dimensions of the maze given the game width and height
-        int mazeWidth = (int) Math.floor(gameData.getDisplayWidth() / GameData.UNIT_SIZE / NODES_IN_CORRIDOR);
-        int mazeHeight = (int) Math.floor(gameData.getDisplayHeight() / GameData.UNIT_SIZE / NODES_IN_CORRIDOR);
+        // Calculate the unit dimensions of the maze given the world width and height
+        int mazeWidth = (int) Math.floor(world.getWorldWidth() / GameData.UNIT_SIZE / NODES_IN_CORRIDOR);
+        int mazeHeight = (int) Math.floor(world.getWorldHeight() / GameData.UNIT_SIZE / NODES_IN_CORRIDOR);
 
         // Generate a minimalistic version of maze
         boolean[][] maze = generator.generate(mazeWidth, mazeHeight, rand.nextInt());
@@ -113,16 +117,19 @@ public class MapGenerator implements MapSPI, IGameInitService {
             }
         }
 
-        wallEntities = createWallEntities(maze);
+        mazeEntities = createMazeEntities(maze);
         // Add wall entities to world
-        for (Entity wall : wallEntities) {
-            world.addEntity(wall);
+        for (Entity entity : mazeEntities) {
+            world.addEntity(entity);
         }
-
+        
         // Add node entities to world if enabled
-        if (SHOW_NODES) {
+        if (DEBUG_ENABLED) {
             for (MapNode n : nodeList) {
                 world.addEntity(createNodeEntity(n));
+                // Print out debug info
+                if (n.getNeighbours().size() <= 1) 
+                    System.out.println("Node " + n + " has " + n.getNeighbours().size() + " neighbours!");
             }
         }
     }
@@ -131,36 +138,63 @@ public class MapGenerator implements MapSPI, IGameInitService {
     public void stop(GameData gameData, World world) {
         System.out.println("MapPlugin stopped.");
         
-        for (Entity wall : wallEntities) {
-            world.removeEntity(wall);
+        for (Entity entity : mazeEntities) {
+            world.removeEntity(entity);
         }
-        wallEntities = null;
+        mazeEntities = null;
         
         nodeList = null;
         centerNodeList = null;
         availableSpawnNodes = null;
     }
-
+    
     /**
      *
      * @param maze
      * @param corSize
      * @return
      */
-    private ArrayList<Entity> createWallEntities(boolean[][] maze) {
-        ArrayList<Entity> walls = new ArrayList();
+    private ArrayList<Entity> createMazeEntities(boolean[][] maze) {
+        ArrayList<Entity> entities = new ArrayList();
 
         for (int x = 0; x < maze.length; x++) {
             for (int y = 0; y < maze[x].length; y++) {
                 if (maze[x][y]) {
-                    walls.add(createWallEntity(x, y, neighbors(maze, x, y)));
+                    entities.add(createWallEntity(x, y, neighbors(maze, x, y)));
+                } else {
+                    entities.add(createFloorEntity(x, y));
                 }
             }
         }
 
-        return walls;
+        return entities;
     }
 
+    /**
+     * 
+     * @param mazeX
+     * @param mazeY
+     * @return 
+     */
+    private Entity createFloorEntity(int mazeX, int mazeY) {
+        Entity floor = new Entity();
+        
+        float floorSize = GameData.UNIT_SIZE * NODES_IN_CORRIDOR;
+      
+        float x = mazeX * floorSize + GameData.UNIT_SIZE;
+        float y = mazeY * floorSize + GameData.UNIT_SIZE;
+        
+        floor.setPosition(x, y);
+        floor.setDynamic(false);
+        floor.setCollidable(false);
+        floor.setIsBackground(true);
+        floor.setRadius(floorSize + 1);
+        floor.setRadians(0);
+        floor.setImagePath("MapGenerator/target/MapGenerator-1.0.0-SNAPSHOT.jar!/assets/images/floor_ground/floor.png");
+        
+        return floor;
+    }
+    
     /**
      *
      * @param mazeX
@@ -172,7 +206,6 @@ public class MapGenerator implements MapSPI, IGameInitService {
         Entity wall = new Entity();
 
         float wallSize = GameData.UNIT_SIZE * NODES_IN_CORRIDOR;
-        wall.setRadius(wallSize);
         
         float x = mazeX * wallSize + GameData.UNIT_SIZE;
         float y = mazeY * wallSize + GameData.UNIT_SIZE;
@@ -180,11 +213,11 @@ public class MapGenerator implements MapSPI, IGameInitService {
         wall.setPosition(x, y);
         wall.setDynamic(false);
         wall.setCollidable(true);
-        wall.setRadius(wallSize);
+        wall.setRadius(wallSize + 1);
         wall.setRadians(0); // Up
         
         // Set image depending on wall's neighbors
-        String imagePath = "MapGenerator/target/MapGenerator-1.0.0-SNAPSHOT.jar!/assets/images/wall";
+        String imagePath = "MapGenerator/target/MapGenerator-1.0.0-SNAPSHOT.jar!/assets/images/wall_tiles/wall";
         if (!neighbors[0]) imagePath += "_up";
         if (!neighbors[2]) imagePath += "_right";
         if (!neighbors[4]) imagePath += "_down";

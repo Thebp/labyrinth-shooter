@@ -13,6 +13,24 @@ import java.util.concurrent.ConcurrentHashMap;
 public class World {
 
     private final Map<String, Entity> entityMap = new ConcurrentHashMap<>();
+    private int worldWidth;
+    private int worldHeight;
+
+    public int getWorldWidth() {
+        return worldWidth;
+    }
+
+    public void setWorldWidth(int worldWidth) {
+        this.worldWidth = worldWidth;
+    }
+
+    public int getWorldHeight() {
+        return worldHeight;
+    }
+
+    public void setWorldHeight(int worldHeight) {
+        this.worldHeight = worldHeight;
+    }
 
     public String addEntity(Entity entity) {
         entityMap.put(entity.getID(), entity);
@@ -41,6 +59,26 @@ public class World {
             }
         }
         return r;
+    }
+    
+    public List<Entity> getBackgroundEntities() {
+        List<Entity> backgroundEntities = new ArrayList();
+        for (Entity e : getEntities()) {
+            if (e.isBackground()) {
+                backgroundEntities.add(e);
+            }
+        }
+        return backgroundEntities;
+    }
+    
+    public List<Entity> getForegroundEntities() {
+        List<Entity> foregroundEntities = new ArrayList();
+        for (Entity e : getEntities()) {
+            if (!e.isBackground()) {
+                foregroundEntities.add(e);
+            }
+        }
+        return foregroundEntities;
     }
 
     public Entity getEntity(String ID) {

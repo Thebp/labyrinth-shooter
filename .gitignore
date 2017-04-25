@@ -29,8 +29,10 @@ hs_err_pid*
 /LabyrinthShooter/Player/target/
 *.properties
 *.netbeans_automatic_build
+/LabyrinthShooter/HUD/target/
 /LabyrinthShooter/DynamicSpriteManager/target/
 /LabyrinthShooter/CommonSprites/target/
 /LabyrinthShooter/CommonResources/target/
 /LabyrinthShooter/ResourceManager/target/
+/LabyrinthShooter/FPSCounter/target//LabyrinthShooter/ResourceManager/target/
 /LabyrinthShooter/CommonAudio/target/

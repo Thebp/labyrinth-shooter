@@ -8,15 +8,18 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.utils.BufferUtils;
 import gruppe5.common.audio.AudioSPI;
 import gruppe5.common.data.Entity;
 import gruppe5.common.data.GameData;
 import gruppe5.common.data.GameKeys;
+import gruppe5.common.data.UIElement;
 import gruppe5.common.data.World;
 import gruppe5.common.services.IEntityProcessingService;
 import gruppe5.common.services.IGameInitService;
@@ -24,12 +27,19 @@ import gruppe5.common.services.IGamePluginService;
 import gruppe5.common.services.IRenderService;
 import gruppe5.common.player.PlayerSPI;
 import gruppe5.common.resources.ResourceSPI;
+import gruppe5.common.services.IUIService;
 import gruppe5.core.managers.AssetsJarFileResolver;
 import gruppe5.core.managers.GameInputProcessor;
+import java.awt.image.BufferedImage;
+import java.awt.image.DataBufferInt;
+import java.nio.IntBuffer;
+import java.util.ArrayList;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL12;
 import org.openide.util.Lookup;
 import org.openide.util.LookupEvent;
 import org.openide.util.LookupListener;
@@ -42,6 +52,7 @@ public class Game implements ApplicationListener, AudioSPI {
     private ShapeRenderer sr;
     private BitmapFont bitmapfont;
     private SpriteBatch spriteBatch;
+    private SpriteBatch uiBatch; // For drawing UI elements, no ProjectionMatrix
     private Sprite sprite;
     private static OrthographicCamera cam;
     private final GameData gameData = new GameData();
@@ -65,9 +76,12 @@ public class Game implements ApplicationListener, AudioSPI {
     @Override
     public void create() {
 
-        gameData.setDisplayWidth(worldWidth);
-        gameData.setDisplayHeight(worldHeight);
+        world.setWorldWidth(worldWidth);
+        world.setWorldHeight(worldHeight);
 
+        gameData.setDisplayWidth(1000);
+        gameData.setDisplayHeight(800);
+        
         cam = new OrthographicCamera(displayWidth, displayHeight);
         cam.position.set(cam.viewportWidth / 2f, cam.viewportHeight / 2f, 0);
         cam.update();
@@ -76,7 +90,8 @@ public class Game implements ApplicationListener, AudioSPI {
         bitmapfont = new BitmapFont();
         bitmapfont.setScale(.50f, .50f);
         spriteBatch = new SpriteBatch();
-
+        uiBatch = new SpriteBatch();
+        
         Gdx.input.setInputProcessor(new GameInputProcessor(gameData));
 
         gameInitResult = lookup.lookupResult(IGameInitService.class);
@@ -90,7 +105,6 @@ public class Game implements ApplicationListener, AudioSPI {
             initService.start(gameData, world);
             gameInits.add(initService);
         }
-
         for (IGamePluginService plugin : gamePluginResult.allInstances()) {
             plugin.start(gameData, world);
             gamePlugins.add(plugin);
@@ -135,6 +149,9 @@ public class Game implements ApplicationListener, AudioSPI {
         for (IEntityProcessingService entityProcessorService : getEntityProcessingServices()) {
             entityProcessorService.process(gameData, world);
         }
+        for (IUIService uiService : getUIServices()) {
+            uiService.process(gameData, world);
+        }
         zoomCam();
     }
 
@@ -166,7 +183,12 @@ public class Game implements ApplicationListener, AudioSPI {
 //        for (IRenderService renderService : getRenderServices()) {
 //            renderService.render(gameData, world);
 //        }
-        for (Entity entity : world.getEntities()) {
+        
+        for (Entity entity : world.getBackgroundEntities()) {
+            drawSprite(entity);
+        }
+        
+        for (Entity entity : world.getForegroundEntities()) {
             //float distance = (float) Math.sqrt(Math.pow(entity.getX() - getPlayer().getX(), 2) + Math.pow(entity.getY() - getPlayer().getY(), 2));
             //if (distance < 300) {
             sr.setColor(1, 1, 1, 1);
@@ -186,10 +208,13 @@ public class Game implements ApplicationListener, AudioSPI {
             sr.end();
 
             drawSprite(entity);
-
             //}
             drawFont();
 
+        }
+        
+        for (UIElement element : gameData.getUIElements()) {
+            drawUIElement(element);
         }
     }
 
@@ -212,14 +237,37 @@ public class Game implements ApplicationListener, AudioSPI {
             spriteBatch.end();
         }
     }
-
-    private void drawFont() {
-        spriteBatch.begin();
-        bitmapfont.setColor(Color.GREEN);
-        bitmapfont.drawMultiLine(spriteBatch, "LABYRINTH SHOOTER" + "\n" + "FPS: "
-                + Gdx.graphics.getFramesPerSecond() + "\n" + "Entites: " + world.getEntities().size(),
-                getPlayer().getX() - 180, getPlayer().getY() + 180);
-        spriteBatch.end();
+    
+    private void drawUIElement(UIElement element) {
+        if (element.getImage() != null) {
+            BufferedImage image = element.getImage();
+            // Create texture that BufferedImage should be drawn onto
+            Texture tex = new Texture(image.getWidth(), image.getHeight(), Format.RGBA8888);
+            
+            int[] pixels = ((DataBufferInt)image.getRaster().getDataBuffer()).getData();
+            IntBuffer buffer = BufferUtils.newIntBuffer(image.getWidth() * image.getHeight());
+            
+            // Bind texture to the currently active texture unit
+            tex.bind(); 
+            
+            // Load pixels into buffer
+            buffer.rewind();
+            buffer.put(pixels);
+            buffer.flip();
+            
+            // Upload buffer to texture unit
+            Gdx.gl.glTexSubImage2D(GL11.GL_TEXTURE_2D, 0, 0, 0, 
+                    image.getWidth(), image.getHeight(), GL12.GL_BGRA, 
+                    GL12.GL_UNSIGNED_INT_8_8_8_8_REV, buffer);
+            
+            // Draw texture
+            uiBatch.begin();
+            // Height is subtracted from Y, so that the position corresponds to the image's top left corner
+            uiBatch.draw(tex, element.getX(), element.getY() - image.getHeight(), image.getWidth(), image.getHeight());
+            uiBatch.end();
+            
+            tex.dispose();
+        }
     }
 
     @Override
@@ -244,6 +292,10 @@ public class Game implements ApplicationListener, AudioSPI {
 
     private Collection<? extends IRenderService> getRenderServices() {
         return lookup.lookupAll(IRenderService.class);
+    }
+    
+    private Collection<? extends IUIService> getUIServices() {
+        return lookup.lookupAll(IUIService.class);
     }
 
     private final LookupListener lookupListener = new LookupListener() {

@@ -12,6 +12,7 @@ public class GameData {
     private int displayHeight;
     private final GameKeys keys = new GameKeys();
     private List<Event> events = new CopyOnWriteArrayList<>();
+    private List<UIElement> uiElements = new CopyOnWriteArrayList<>();
     public static final float UNIT_SIZE = 25;
 
     public void addEvent(Event e) {
@@ -24,6 +25,18 @@ public class GameData {
 
     public List<Event> getEvents() {
         return events;
+    }
+    
+    public void addUIElement(UIElement element) {
+        uiElements.add(element);
+    }
+    
+    public void removeUIElement(UIElement element) {
+        uiElements.remove(element);
+    }
+    
+    public List<UIElement> getUIElements() {
+        return uiElements;
     }
 
     public GameKeys getKeys() {
