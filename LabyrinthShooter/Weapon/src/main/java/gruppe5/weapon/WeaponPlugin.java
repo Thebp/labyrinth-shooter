@@ -8,11 +8,10 @@ package gruppe5.weapon;
 import gruppe5.common.data.Entity;
 import gruppe5.common.data.GameData;
 import gruppe5.common.data.World;
-import gruppe5.common.map.MapNode;
+import gruppe5.common.node.MapNode;
 import gruppe5.common.map.MapSPI;
 import gruppe5.common.services.IGamePluginService;
 import gruppe5.common.weapon.Weapon;
-import java.util.List;
 import org.openide.util.Lookup;
 import org.openide.util.lookup.ServiceProvider;
 
@@ -35,7 +34,8 @@ public class WeaponPlugin implements IGamePluginService {
                 weapon.setCollidable(false);
                 weapon.setDynamic(true);
                 weapon.setPosition(node.getX(), node.getY());
-                weapon.setRadius(12);
+                weapon.setRadius(GameData.UNIT_SIZE);
+                weapon.setImagePath("Weapon/target/Weapon-1.0.0-SNAPSHOT.jar!/assets/images/weapon01.png");
                 world.addEntity(weapon);
             }
         }

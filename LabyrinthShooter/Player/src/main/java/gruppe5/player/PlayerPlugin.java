@@ -8,7 +8,7 @@ package gruppe5.player;
 import gruppe5.common.data.Entity;
 import gruppe5.common.data.GameData;
 import gruppe5.common.data.World;
-import gruppe5.common.map.MapNode;
+import gruppe5.common.node.MapNode;
 import gruppe5.common.map.MapSPI;
 import gruppe5.common.services.IGamePluginService;
 import java.io.File;

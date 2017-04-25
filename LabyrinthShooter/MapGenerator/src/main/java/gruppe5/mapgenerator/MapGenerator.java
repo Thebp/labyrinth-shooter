@@ -5,6 +5,8 @@
  */
 package gruppe5.mapgenerator;
 
+import gruppe5.common.node.MapNode;
+import gruppe5.common.node.Node;
 import gruppe5.common.data.Entity;
 import gruppe5.common.data.GameData;
 import gruppe5.common.data.World;
@@ -28,7 +30,9 @@ import org.openide.util.lookup.ServiceProviders;
 public class MapGenerator implements MapSPI, IGameInitService {
 
     public static final int NODES_IN_CORRIDOR = 3; // Must be odd to have a center node
-    public static final boolean SHOW_NODES = false; // For debugging, if true entities for nodes will be created
+    /** For debugging, if true entities for nodes will be created and 
+     * other info will be shown */
+    public static final boolean DEBUG_ENABLED = false; 
 
     private Random rand; // Used for seed generation
     
@@ -81,8 +85,8 @@ public class MapGenerator implements MapSPI, IGameInitService {
         RandDivisionMaze generator = new RandDivisionMaze();
 
         // Calculate the unit dimensions of the maze given the world width and height
-        int mazeWidth = (int) Math.floor(gameData.getWorldWidth() / GameData.UNIT_SIZE / NODES_IN_CORRIDOR);
-        int mazeHeight = (int) Math.floor(gameData.getWorldHeight() / GameData.UNIT_SIZE / NODES_IN_CORRIDOR);
+        int mazeWidth = (int) Math.floor(world.getWorldWidth() / GameData.UNIT_SIZE / NODES_IN_CORRIDOR);
+        int mazeHeight = (int) Math.floor(world.getWorldHeight() / GameData.UNIT_SIZE / NODES_IN_CORRIDOR);
 
         // Generate a minimalistic version of maze
         boolean[][] maze = generator.generate(mazeWidth, mazeHeight, rand.nextInt());
@@ -120,9 +124,12 @@ public class MapGenerator implements MapSPI, IGameInitService {
         }
         
         // Add node entities to world if enabled
-        if (SHOW_NODES) {
+        if (DEBUG_ENABLED) {
             for (MapNode n : nodeList) {
                 world.addEntity(createNodeEntity(n));
+                // Print out debug info
+                if (n.getNeighbours().size() <= 1) 
+                    System.out.println("Node " + n + " has " + n.getNeighbours().size() + " neighbours!");
             }
         }
     }
