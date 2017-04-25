@@ -11,6 +11,7 @@ import gruppe5.common.data.GameData;
 import gruppe5.common.data.World;
 import gruppe5.common.map.MapNode;
 import gruppe5.common.map.MapSPI;
+import gruppe5.common.player.PlayerSPI;
 import gruppe5.common.services.IEntityProcessingService;
 import java.util.List;
 import java.util.PriorityQueue;
@@ -26,15 +27,18 @@ public class EnemyAIProcessor implements IEntityProcessingService {
 
     private MapSPI mapSPI = null;
     private MapNode mapNode = null;
+    private PlayerSPI playerSPI = null;
 
     @Override
     public void process(GameData gameData, World world) {
         mapSPI = Lookup.getDefault().lookup(MapSPI.class);
+        playerSPI = Lookup.getDefault().lookup(PlayerSPI.class);
         if (mapSPI != null) {
             for (Entity entity : world.getEntities(Enemy.class)) {
                 Enemy enemy = (Enemy) entity;
+                checkPlayerProximity(enemy, world);
                 if (enemy.getTarget() != null) {
-                    //Attack mode
+                    enemyAttack(enemy, world);
                 } else if (enemy.getTargetNode() != null) {
                     //Investigation mode
                 } else {
@@ -44,8 +48,30 @@ public class EnemyAIProcessor implements IEntityProcessingService {
         }
     }
 
-    private void checkPlayerVisibility(Enemy enemy, World world) {
-
+    private void checkPlayerProximity(Enemy enemy, World world) {
+        if(playerSPI != null) {
+            Entity player = playerSPI.getPlayer(world);
+            float xDiff = Math.abs(player.getX() - enemy.getX());
+            float yDiff = Math.abs(player.getY() - enemy.getY());
+            float distance = (float) Math.sqrt(Math.pow(xDiff, 2) + Math.pow(yDiff, 2));
+            
+            if(distance < 200) {
+                enemy.setTarget(player);
+            } else {
+                enemy.setTarget(null);
+            }
+        }
+    }
+    
+    private void enemyAttack(Enemy enemy, World world) {
+        if(playerSPI != null) {
+            Entity player = playerSPI.getPlayer(world);
+            float dx = Math.abs(player.getX() - enemy.getX());
+            float dy = Math.abs(player.getY() - enemy.getY());
+            
+            float radians = (float) Math.atan2(dy, dx);
+            enemy.setRadians(radians);
+        }
     }
 
     private void moveTowardsNextNode(Enemy enemy, GameData gameData) {

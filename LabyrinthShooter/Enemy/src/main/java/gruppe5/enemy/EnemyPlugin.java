@@ -7,6 +7,7 @@ import gruppe5.common.data.World;
 import gruppe5.common.node.MapNode;
 import gruppe5.common.map.MapSPI;
 import gruppe5.common.services.IGamePluginService;
+import gruppe5.common.weapon.Weapon;
 import org.openide.util.Lookup;
 import org.openide.util.lookup.ServiceProvider;
 
@@ -20,6 +21,17 @@ public class EnemyPlugin implements IGamePluginService {
     @Override
     public void start(GameData gameData, World world) {
         Entity enemy = createEnemy(gameData);
+        
+        Weapon weapon = new Weapon();
+        weapon.setCollidable(false);
+        weapon.setDynamic(true);
+        weapon.setPosition(enemy.getX(), enemy.getY());
+        weapon.setRadius(12);
+        weapon.setOwner(enemy);
+        
+        enemy.addSubEntity(weapon);
+        
+        world.addEntity(weapon);
         world.addEntity(enemy);
         System.out.println("Enemy plugin started");
     }
@@ -49,13 +61,13 @@ public class EnemyPlugin implements IGamePluginService {
         enemy.setLife(2);
         enemy.setSoundPath("Enemy/target/Enemy-1.0.0-SNAPSHOT.jar!/assets/sound/enemydeath.ogg");
         enemy.setNextNode(spawnlocation.getNeighbours().get(0));
-        
+
         return enemy;
     }
 
     @Override
     public void stop(GameData gameData, World world) {
-        for(Entity enemy : world.getEntities(Enemy.class)) {
+        for (Entity enemy : world.getEntities(Enemy.class)) {
             world.removeEntity(enemy);
         }
         System.out.println("Enemy plugin stopped");
