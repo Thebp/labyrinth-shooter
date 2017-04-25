@@ -31,7 +31,7 @@ public class EnemyProcessor implements IEntityProcessingService {
         int enemyCount = 1;
         for (Entity enemy : world.getEntities(Enemy.class)) {
 
-            EnemyMovementSystem enemyMovementSystem = new EnemyMovementSystem();
+            //EnemyMovementSystem enemyMovementSystem = new EnemyMovementSystem();
 
             //Getters
             float dx = enemy.getDx();
@@ -89,7 +89,7 @@ public class EnemyProcessor implements IEntityProcessingService {
             float oldY = y;
 
             //Move forwards
-            enemyMovementSystem.moveForwards(enemy, gameData);
+            //enemyMovementSystem.moveForwards(enemy, gameData);
             
 
             //Setters 
@@ -104,27 +104,27 @@ public class EnemyProcessor implements IEntityProcessingService {
 //            enemy.setMaxSpeed(maxSpeed);
 
             //If the location hasn't moved FORWARDS boolean is set to false
-            boolean movingForwards = true;
-            if (oldDX - enemy.getDx() > 1  || oldDY - enemy.getDy() > 1 ) {
-                movingForwards = false;
-            }
+//            boolean movingForwards = true;
+//            if (oldDX - enemy.getDx() > 1  || oldDY - enemy.getDy() > 1 ) {
+//                movingForwards = false;
+//            }
             
-            if (Float.compare(oldX, enemy.getX()) > 30  || Float.compare(oldY, enemy.getY()) > 30  ){
-                movingForwards = false;
-            }
+//            if (Float.compare(oldX, enemy.getX()) > 30  || Float.compare(oldY, enemy.getY()) > 30  ){
+//                movingForwards = false;
+//            }
 
             //Checks if enemy has been interupted tin moving forwards
-            if (movingForwards == false) {
-                //Selects a random direction to turn (left or right)
-                Random rand = new Random();
-                int direction = rand.nextInt(2);
-                if (direction == 0) {
-                    enemyMovementSystem.turnLeft(enemy, gameData);
-                }
-                if (direction == 1) {
-                    enemyMovementSystem.turnRight(enemy, gameData);
-                }
-            }
+//            if (movingForwards == false) {
+//                //Selects a random direction to turn (left or right)
+//                Random rand = new Random();
+//                int direction = rand.nextInt(2);
+//                if (direction == 0) {
+//                    enemyMovementSystem.turnLeft(enemy, gameData);
+//                }
+//                if (direction == 1) {
+//                    enemyMovementSystem.turnRight(enemy, gameData);
+//                }
+//            }
 
         }
     }

@@ -28,14 +28,14 @@ public class EnemyAIProcessor implements IEntityProcessingService {
         if (mapSPI != null) {
             for (Entity entity : world.getEntities(Enemy.class)) {
                 Enemy enemy = (Enemy) entity;
-
-                if (enemy.getTarget() != null) {
-                    //Attack mode
-                } else if (enemy.getTargetNode() != null) {
-                    //Investigation mode
-                } else {
-                    //Patrolling mode
-                }
+                moveTowardsNextNode(enemy, gameData);
+//                if (enemy.getTarget() != null) {
+//                    //Attack mode
+//                } else if (enemy.getTargetNode() != null) {
+//                    //Investigation mode
+//                } else {
+//                    //Patrolling mode
+//                }
             }
         }
     }
@@ -44,9 +44,26 @@ public class EnemyAIProcessor implements IEntityProcessingService {
 
     }
 
-    private void moveTowardsNextNode(Enemy enemy) {
+    private void moveTowardsNextNode(Enemy enemy, GameData gameData) {
         MapNode nextNode = enemy.getNextNode();
-        
+        if(enemy.getX() != nextNode.getX() || enemy.getY() != nextNode.getY()) {
+            float dx = nextNode.getX() - enemy.getX();
+            float dy = nextNode.getY() - enemy.getY();
+            float dt = gameData.getDelta();
+            float maxspeed = enemy.getMaxSpeed();
+            
+            //Normalize
+            float length = (float) Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2));
+            dx = dx / length;
+            dy = dy / length;
+            
+            //Set speed vector
+            dx = dx * maxspeed;
+            dy = dy * maxspeed;
+            
+            enemy.setPosition(enemy.getX() + dx * dt, enemy.getY() + dy * dt);
+            
+        }
     }
 
 }

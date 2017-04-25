@@ -13,22 +13,21 @@ import org.openide.util.lookup.ServiceProvider;
 @ServiceProvider(service = IGamePluginService.class)
 public class EnemyPlugin implements IGamePluginService {
 
-    private Entity enemy;
-
     public EnemyPlugin() {
 
     }
 
     @Override
     public void start(GameData gameData, World world) {
-        enemy = createEnemy(gameData);
+        Entity enemy = createEnemy(gameData);
         world.addEntity(enemy);
         System.out.println("Enemy plugin started");
     }
 
     private Entity createEnemy(GameData gameData) {
-        enemy = new Enemy();
         MapNode spawnlocation = null;
+        Enemy enemy = new Enemy();
+        
         MapSPI mapSPI = Lookup.getDefault().lookup(MapSPI.class);
         if (mapSPI != null) {
             spawnlocation = mapSPI.getRandomSpawnNode();
@@ -49,13 +48,16 @@ public class EnemyPlugin implements IGamePluginService {
         enemy.setDynamic(true);
         enemy.setLife(2);
         enemy.setSoundPath("Enemy/target/Enemy-1.0.0-SNAPSHOT.jar!/assets/sound/enemydeath.ogg");
-
+        enemy.setNextNode(spawnlocation.getNeighbours().get(0));
+        
         return enemy;
     }
 
     @Override
     public void stop(GameData gameData, World world) {
-        world.removeEntity(enemy);
+        for(Entity enemy : world.getEntities(Enemy.class)) {
+            world.removeEntity(enemy);
+        }
         System.out.println("Enemy plugin stopped");
     }
 
