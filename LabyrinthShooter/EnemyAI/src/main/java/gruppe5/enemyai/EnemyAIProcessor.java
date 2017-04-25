@@ -31,7 +31,6 @@ public class EnemyAIProcessor implements IEntityProcessingService {
     private PlayerSPI playerSPI = null;
     private Node Node = null;
 
-
     @Override
     public void process(GameData gameData, World world) {
         mapSPI = Lookup.getDefault().lookup(MapSPI.class);
@@ -132,7 +131,6 @@ public class EnemyAIProcessor implements IEntityProcessingService {
             } else {
                 enemy.setPosition(enemy.getX() + dx * dt, enemy.getY() + dy * dt);
             }
-
         }
     }
 
