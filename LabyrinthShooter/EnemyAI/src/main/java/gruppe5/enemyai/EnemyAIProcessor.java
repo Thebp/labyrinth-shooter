@@ -51,6 +51,10 @@ public class EnemyAIProcessor implements IEntityProcessingService {
             }
         }
     }
+    
+    private void checkPlayerVisibility(Enemy enemy, World world) {
+        
+    }
 
     private void checkPlayerProximity(Enemy enemy, World world) {
         if (playerSPI != null) {
@@ -207,6 +211,4 @@ public class EnemyAIProcessor implements IEntityProcessingService {
         enemyPosition.setY(enemy.getY());
         return enemyPosition;
     }
-    
-
 }
