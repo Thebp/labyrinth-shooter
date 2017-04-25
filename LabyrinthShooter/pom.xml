@@ -77,6 +77,8 @@
         <module>FPSCounter</module>
         <module>commonCollision</module>
         <module>CommonAudio</module>
+        <module>CommonEnemy</module>
+        <module>EnemyAI</module>
     </modules>
 
     <properties>

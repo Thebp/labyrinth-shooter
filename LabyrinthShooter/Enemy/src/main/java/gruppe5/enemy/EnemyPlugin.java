@@ -1,7 +1,7 @@
 package gruppe5.enemy;
 
 import gruppe5.common.data.Entity;
-
+import gruppe5.common.enemy.Enemy;
 import gruppe5.common.data.GameData;
 import gruppe5.common.data.World;
 import gruppe5.common.node.MapNode;
