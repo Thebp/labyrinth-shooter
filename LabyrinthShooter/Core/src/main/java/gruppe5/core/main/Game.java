@@ -272,12 +272,9 @@ public class Game implements ApplicationListener, AudioSPI {
         if(entity.getSoundPath() != null){
             if(newsound == null){
             AssetsJarFileResolver ajfr = new AssetsJarFileResolver();
-            AssetManager soundManager = new AssetManager(ajfr);
             ResourceSPI soundSPI = Lookup.getDefault().lookup(ResourceSPI.class);
             soundURL = soundSPI.getResourceUrl(entity.getSoundPath());
-            soundManager.load(soundURL, Sound.class);
-            soundManager.finishLoading();
-            newsound = soundManager.get(soundURL, Sound.class);
+            newsound = Gdx.audio.newSound(ajfr.resolve(soundURL));
             }
             newsound.play();
         }
