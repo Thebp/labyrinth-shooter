@@ -24,7 +24,6 @@ public class WeaponProcessor implements IEntityProcessingService {
         for (Entity entity : world.getEntities(Weapon.class)) {
             Weapon weapon = (Weapon) entity;
             moveWeapon(weapon);
-            drawWeapon(weapon);
         }
     }
 
@@ -36,28 +35,28 @@ public class WeaponProcessor implements IEntityProcessingService {
         }
     }
 
-    private void drawWeapon(Weapon weapon) {
-        float[] shapex = weapon.getShapeX();
-        float[] shapey = weapon.getShapeY();
-        float x = weapon.getX();
-        float y = weapon.getY();
-        float radians = weapon.getRadians();
-        float radius = weapon.getRadius();
-
-        shapex[0] = (float) (x + Math.cos(radians - Math.PI * 0.1) * radius);
-        shapey[0] = (float) (y + Math.sin(radians - Math.PI * 0.1) * radius);
-
-        shapex[1] = (float) (x + Math.cos(radians + Math.PI * 0.1) * radius);
-        shapey[1] = (float) (y + Math.sin(radians + Math.PI * 0.1) * radius);
-
-        shapex[2] = (float) (x + Math.cos(radians - Math.PI * 1.1) * radius);
-        shapey[2] = (float) (y + Math.sin(radians - Math.PI * 1.1) * radius);
-
-        shapex[3] = (float) (x + Math.cos(radians + Math.PI * 1.1) * radius);
-        shapey[3] = (float) (y + Math.sin(radians + Math.PI * 1.1) * radius);
-
-        weapon.setShapeX(shapex);
-        weapon.setShapeY(shapey);
-    }
+//    private void drawWeapon(Weapon weapon) {
+//        float[] shapex = weapon.getShapeX();
+//        float[] shapey = weapon.getShapeY();
+//        float x = weapon.getX();
+//        float y = weapon.getY();
+//        float radians = weapon.getRadians();
+//        float radius = weapon.getRadius();
+//
+//        shapex[0] = (float) (x + Math.cos(radians - Math.PI * 0.1) * radius);
+//        shapey[0] = (float) (y + Math.sin(radians - Math.PI * 0.1) * radius);
+//
+//        shapex[1] = (float) (x + Math.cos(radians + Math.PI * 0.1) * radius);
+//        shapey[1] = (float) (y + Math.sin(radians + Math.PI * 0.1) * radius);
+//
+//        shapex[2] = (float) (x + Math.cos(radians - Math.PI * 1.1) * radius);
+//        shapey[2] = (float) (y + Math.sin(radians - Math.PI * 1.1) * radius);
+//
+//        shapex[3] = (float) (x + Math.cos(radians + Math.PI * 1.1) * radius);
+//        shapey[3] = (float) (y + Math.sin(radians + Math.PI * 1.1) * radius);
+//
+//        weapon.setShapeX(shapex);
+//        weapon.setShapeY(shapey);
+//    }
 
 }
