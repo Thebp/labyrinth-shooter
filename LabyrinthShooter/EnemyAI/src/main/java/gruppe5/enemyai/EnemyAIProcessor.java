@@ -21,10 +21,10 @@ import org.openide.util.lookup.ServiceProvider;
  * @author marcn
  */
 public class EnemyAIProcessor implements IEntityProcessingService {
-
+    private MapSPI mapSPI = null;
     @Override
     public void process(GameData gameData, World world) {
-        MapSPI mapSPI = Lookup.getDefault().lookup(MapSPI.class);
+        mapSPI = Lookup.getDefault().lookup(MapSPI.class);
         if (mapSPI != null) {
             for (Entity entity : world.getEntities(Enemy.class)) {
                 Enemy enemy = (Enemy) entity;
@@ -44,9 +44,9 @@ public class EnemyAIProcessor implements IEntityProcessingService {
 
     }
 
-    private void moveTowardsNode(Enemy enemy) {
+    private void moveTowardsNextNode(Enemy enemy) {
         MapNode nextNode = enemy.getNextNode();
-
+        
     }
 
 }
