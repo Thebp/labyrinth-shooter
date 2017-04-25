@@ -27,7 +27,7 @@ import org.openide.util.lookup.ServiceProviders;
 })
 public class FPSCounter implements IGamePluginService, IUIService {
     // For calculating FPS
-    private static final int MAX_FPS_SAMPLES = 64;
+    private static final int MAX_FPS_SAMPLES = 60;
     private float[] fpsSamples = new float[MAX_FPS_SAMPLES];
     private int currentSampleIndex = 0;
     
@@ -63,7 +63,7 @@ public class FPSCounter implements IGamePluginService, IUIService {
         BufferedImage image = new BufferedImage(120, 50, BufferedImage.TYPE_INT_ARGB);
         Graphics2D g = image.createGraphics();
         
-        int fps = (int)calcAverageFPS(gameData.getDelta());
+        int fps = Math.round(calcAverageFPS(gameData.getDelta()));
         
         g.setFont(new Font("Sans", Font.BOLD, 14));
         g.setColor(Color.GREEN);

@@ -28,7 +28,9 @@ import org.openide.util.lookup.ServiceProviders;
 public class MapGenerator implements MapSPI, IGameInitService {
 
     public static final int NODES_IN_CORRIDOR = 3; // Must be odd to have a center node
-    public static final boolean SHOW_NODES = false; // For debugging, if true entities for nodes will be created
+    /** For debugging, if true entities for nodes will be created and 
+     * other info will be shown */
+    public static final boolean DEBUG_ENABLED = false; 
 
     private Random rand; // Used for seed generation
     
@@ -120,9 +122,12 @@ public class MapGenerator implements MapSPI, IGameInitService {
         }
         
         // Add node entities to world if enabled
-        if (SHOW_NODES) {
+        if (DEBUG_ENABLED) {
             for (MapNode n : nodeList) {
                 world.addEntity(createNodeEntity(n));
+                // Print out debug info
+                if (n.getNeighbours().size() <= 1) 
+                    System.out.println("Node " + n + " has " + n.getNeighbours().size() + " neighbours!");
             }
         }
     }
