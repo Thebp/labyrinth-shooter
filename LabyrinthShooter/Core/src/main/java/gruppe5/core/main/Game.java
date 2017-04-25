@@ -26,6 +26,7 @@ import gruppe5.common.player.PlayerSPI;
 import gruppe5.common.resources.ResourceSPI;
 import gruppe5.core.managers.AssetsJarFileResolver;
 import gruppe5.core.managers.GameInputProcessor;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -109,8 +110,8 @@ public class Game implements ApplicationListener, AudioSPI {
         am.finishLoading();
 
         music = am.get(musicURL, Music.class);
-        music.setLooping(true);
-        music.play();
+        //music.setLooping(true);
+        //music.play();
     }
 
     @Override
@@ -183,17 +184,14 @@ public class Game implements ApplicationListener, AudioSPI {
             }
 
             sr.end();
-            
 
-                drawSprite(entity);
+            drawSprite(entity);
 
             //}
             drawFont();
 
         }
     }
-
-    
 
     private void drawSprite(Entity entity) {
         if (entity.getImagePath() != null) {
@@ -276,13 +274,17 @@ public class Game implements ApplicationListener, AudioSPI {
     @Override
     public void playAudio(String soundURL, Entity entity) {
         if (entity.getSoundPath() != null) {
-            if (newsound == null) {
-                AssetsJarFileResolver ajfr = new AssetsJarFileResolver();
-                ResourceSPI soundSPI = Lookup.getDefault().lookup(ResourceSPI.class);
-                soundURL = soundSPI.getResourceUrl(entity.getSoundPath());
-                newsound = Gdx.audio.newSound(ajfr.resolve(soundURL));
+            //if (newsound == null) {
+            AssetsJarFileResolver ajfr = new AssetsJarFileResolver();
+            ResourceSPI soundSPI = Lookup.getDefault().lookup(ResourceSPI.class);
+            List<String> soundPaths = new ArrayList<>();
+            soundURL = soundSPI.getResourceUrl(entity.getSoundPath());
+            soundPaths.add(soundURL);
+            for (int i = 0; i < soundPaths.size(); i++) {
+                newsound = Gdx.audio.newSound(ajfr.resolve(soundPaths.get(i)));
+                newsound.play();
             }
-            newsound.play();
+
         }
     }
 }
