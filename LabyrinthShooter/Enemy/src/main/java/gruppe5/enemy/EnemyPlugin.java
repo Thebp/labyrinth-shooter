@@ -52,6 +52,7 @@ public class EnemyPlugin implements IGamePluginService {
         enemy.setCollidable(true);
         enemy.setDynamic(true);
         enemy.setLife(2);
+        enemy.setSoundPath("Enemy/target/Enemy-1.0.0-SNAPSHOT.jar!/assets/sound/enemydeath.ogg");
         
         return enemy;
     }

@@ -102,7 +102,7 @@ public class Game implements ApplicationListener, AudioSPI {
 
         jfhr = new AssetsJarFileResolver();
         am = new AssetManager(jfhr);
-        
+
         ResourceSPI musicSPI = Lookup.getDefault().lookup(ResourceSPI.class);
         String musicURL = musicSPI.getResourceUrl("Core/target/Core-1.0.0-SNAPSHOT.jar!/assets/sound/music.ogg");
         am.load(musicURL, Music.class);
@@ -126,7 +126,7 @@ public class Game implements ApplicationListener, AudioSPI {
         updateCam();
 
         draw();
-        
+
         gameData.getKeys().update();
     }
 
@@ -166,6 +166,8 @@ public class Game implements ApplicationListener, AudioSPI {
 //            renderService.render(gameData, world);
 //        }
         for (Entity entity : world.getEntities()) {
+            //float distance = (float) Math.sqrt(Math.pow(entity.getX() - getPlayer().getX(), 2) + Math.pow(entity.getY() - getPlayer().getY(), 2));
+            //if (distance < 300) {
             sr.setColor(1, 1, 1, 1);
 
             sr.begin(ShapeRenderer.ShapeType.Line);
@@ -181,20 +183,24 @@ public class Game implements ApplicationListener, AudioSPI {
             }
 
             sr.end();
+            
 
-            drawSprite(entity);
+                drawSprite(entity);
+
+            //}
+            drawFont();
 
         }
-        drawFont();
-
     }
+
+    
 
     private void drawSprite(Entity entity) {
         if (entity.getImagePath() != null) {
             //uses ResourceSPI that takes entity.getImagePath as argument (string url).
             ResourceSPI spriteSPI = Lookup.getDefault().lookup(ResourceSPI.class);
             String url = spriteSPI.getResourceUrl(entity.getImagePath());
-            
+
             am.load(url, Texture.class);
             am.finishLoading();
             texture = am.get(url, Texture.class);
@@ -269,12 +275,12 @@ public class Game implements ApplicationListener, AudioSPI {
 
     @Override
     public void playAudio(String soundURL, Entity entity) {
-        if(entity.getSoundPath() != null){
-            if(newsound == null){
-            AssetsJarFileResolver ajfr = new AssetsJarFileResolver();
-            ResourceSPI soundSPI = Lookup.getDefault().lookup(ResourceSPI.class);
-            soundURL = soundSPI.getResourceUrl(entity.getSoundPath());
-            newsound = Gdx.audio.newSound(ajfr.resolve(soundURL));
+        if (entity.getSoundPath() != null) {
+            if (newsound == null) {
+                AssetsJarFileResolver ajfr = new AssetsJarFileResolver();
+                ResourceSPI soundSPI = Lookup.getDefault().lookup(ResourceSPI.class);
+                soundURL = soundSPI.getResourceUrl(entity.getSoundPath());
+                newsound = Gdx.audio.newSound(ajfr.resolve(soundURL));
             }
             newsound.play();
         }

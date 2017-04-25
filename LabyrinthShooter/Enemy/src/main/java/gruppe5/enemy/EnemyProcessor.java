@@ -5,12 +5,14 @@
  */
 package gruppe5.enemy;
 
+import gruppe5.common.audio.AudioSPI;
 import gruppe5.common.data.Entity;
 
 import gruppe5.common.data.GameData;
 import gruppe5.common.data.World;
 import gruppe5.common.services.IEntityProcessingService;
 import java.util.Random;
+import org.openide.util.Lookup;
 import org.openide.util.lookup.ServiceProvider;
 import org.openide.util.lookup.ServiceProviders;
 
@@ -74,9 +76,10 @@ public class EnemyProcessor implements IEntityProcessingService {
 //                enemy.setIsHit(false);
 //                
 //            }
-
+            AudioSPI audio = Lookup.getDefault().lookup(AudioSPI.class);
             if (enemy.getLife() <= 0) {
                 world.removeEntity(enemy);
+                audio.playAudio(enemy.getSoundPath(), enemy);
             }
 
             //Saving the dx and dy before movement for moveForwards() gets called
