@@ -30,6 +30,7 @@ public class BulletProcessor implements IEntityProcessingService {
             } else {
                 moveBullet(gameData, bullet);
                 setShape(bullet);
+                bullet.setDynamic(true);
             }
         }
     }

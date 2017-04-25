@@ -1,0 +1,485 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package gruppe5.mapgenerator;
+
+import gruppe5.common.node.MapNode;
+import gruppe5.common.node.Node;
+import gruppe5.common.data.Entity;
+import gruppe5.common.data.GameData;
+import gruppe5.common.data.World;
+import gruppe5.common.map.*;
+import gruppe5.common.services.IGameInitService;
+import gruppe5.mapgenerator.algorithms.RandDivisionMaze;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+import org.openide.util.lookup.ServiceProvider;
+import org.openide.util.lookup.ServiceProviders;
+
+@ServiceProviders(value = {
+    @ServiceProvider(service = IGameInitService.class),
+    @ServiceProvider(service = MapSPI.class)
+})
+/**
+ *
+ * @author nick
+ */
+public class MapGenerator implements MapSPI, IGameInitService {
+
+    public static final int NODES_IN_CORRIDOR = 3; // Must be odd to have a center node
+    /** For debugging, if true entities for nodes will be created and 
+     * other info will be shown */
+    public static final boolean DEBUG_ENABLED = false; 
+
+    private Random rand; // Used for seed generation
+    
+    // Used for MapSPI
+    private List<MapNode> nodeList;
+    private List<MapNode> centerNodeList;
+    private List<MapNode> availableSpawnNodes;
+    
+    private List<Entity> mazeEntities;
+
+    @Override
+    public List<MapNode> getMap() {
+        if (nodeList != null) 
+            return nodeList;
+        System.out.println("MapGenerator.getMap(): MapGenerator not initialized.");
+        return null;
+    }
+    
+    @Override
+    public List<MapNode> getCenterMapNodes() {
+        if (centerNodeList != null) 
+            return centerNodeList;
+        System.out.println("MapGenerator.getCenterMapNodes(): MapGenerator not initialized.");
+        return null;
+    }
+
+    @Override
+    public MapNode getRandomSpawnNode() {
+        if (availableSpawnNodes == null) {
+            System.out.println("MapGenerator.getRandomSpawnNode(): MapGenerator not initialized.");
+            return null;
+        }
+        
+        // Get random MapNode
+        MapNode randNode = availableSpawnNodes.get(rand.nextInt(availableSpawnNodes.size()));
+        // Remove node from list only if it isn't the last available node
+        if (availableSpawnNodes.size() > 1)
+            availableSpawnNodes.remove(randNode);
+        else
+            System.out.println("MapGenerator: Available spawn nodes depleted.");
+        
+        return randNode;
+    }
+
+    @Override
+    public void start(GameData gameData, World world) {
+        System.out.println("MapPlugin started");
+        
+        rand = new Random();
+        RandDivisionMaze generator = new RandDivisionMaze();
+
+        // Calculate the unit dimensions of the maze given the world width and height
+        int mazeWidth = (int) Math.floor(world.getWorldWidth() / GameData.UNIT_SIZE / NODES_IN_CORRIDOR);
+        int mazeHeight = (int) Math.floor(world.getWorldHeight() / GameData.UNIT_SIZE / NODES_IN_CORRIDOR);
+
+        // Generate a minimalistic version of maze
+        boolean[][] maze = generator.generate(mazeWidth, mazeHeight, rand.nextInt());
+        // Scale the maze
+        boolean[][] scaledMaze = scaleMaze(maze, NODES_IN_CORRIDOR);
+
+        // Prints out the mini-version of the maze to console
+        for (boolean[] maze1 : maze) {
+            for (int j = 0; j < maze1.length; j++) {
+                System.out.print(maze1[j] ? "@@" : "  ");
+            }
+            System.out.println();
+        }
+
+        // Create MapNodes required by MapSPI
+        nodeList = createNodeList(scaledMaze);
+        centerNodeList = new ArrayList();
+        availableSpawnNodes = new ArrayList();
+        
+        // Fill centerNodeList and availableSpawnNodes
+        for (MapNode node : nodeList) {
+            if (node.isMiddle()) {
+                centerNodeList.add(node);
+                // If node only has one neighbouring center node, it is added to spawn node list
+                if (((Node)node).getNeighbouringCenterNodes().size() == 1) {
+                    availableSpawnNodes.add(node);
+                }
+            }
+        }
+
+        mazeEntities = createMazeEntities(maze);
+        // Add wall entities to world
+        for (Entity entity : mazeEntities) {
+            world.addEntity(entity);
+        }
+        
+        // Add node entities to world if enabled
+        if (DEBUG_ENABLED) {
+            for (MapNode n : nodeList) {
+                world.addEntity(createNodeEntity(n));
+                // Print out debug info
+                if (n.getNeighbours().size() <= 1) 
+                    System.out.println("Node " + n + " has " + n.getNeighbours().size() + " neighbours!");
+            }
+        }
+    }
+
+    @Override
+    public void stop(GameData gameData, World world) {
+        System.out.println("MapPlugin stopped.");
+        
+        for (Entity entity : mazeEntities) {
+            world.removeEntity(entity);
+        }
+        mazeEntities = null;
+        
+        nodeList = null;
+        centerNodeList = null;
+        availableSpawnNodes = null;
+    }
+    
+    /**
+     *
+     * @param maze
+     * @param corSize
+     * @return
+     */
+    private ArrayList<Entity> createMazeEntities(boolean[][] maze) {
+        ArrayList<Entity> entities = new ArrayList();
+
+        for (int x = 0; x < maze.length; x++) {
+            for (int y = 0; y < maze[x].length; y++) {
+                if (maze[x][y]) {
+                    entities.add(createWallEntity(x, y, neighbors(maze, x, y)));
+                } else {
+                    entities.add(createFloorEntity(x, y));
+                }
+            }
+        }
+
+        return entities;
+    }
+
+    /**
+     * 
+     * @param mazeX
+     * @param mazeY
+     * @return 
+     */
+    private Entity createFloorEntity(int mazeX, int mazeY) {
+        Entity floor = new Entity();
+        
+        float floorSize = GameData.UNIT_SIZE * NODES_IN_CORRIDOR;
+      
+        float x = mazeX * floorSize + GameData.UNIT_SIZE;
+        float y = mazeY * floorSize + GameData.UNIT_SIZE;
+        
+        floor.setPosition(x, y);
+        floor.setDynamic(false);
+        floor.setCollidable(false);
+        floor.setIsBackground(true);
+        floor.setRadius(floorSize + 1);
+        floor.setRadians(0);
+        floor.setImagePath("MapGenerator/target/MapGenerator-1.0.0-SNAPSHOT.jar!/assets/images/floor_ground/floor.png");
+        
+        return floor;
+    }
+    
+    /**
+     *
+     * @param mazeX
+     * @param mazeY
+     * @param neighbors
+     * @return
+     */
+    private Entity createWallEntity(int mazeX, int mazeY, boolean[] neighbors) {
+        Entity wall = new Entity();
+
+        float wallSize = GameData.UNIT_SIZE * NODES_IN_CORRIDOR;
+        
+        float x = mazeX * wallSize + GameData.UNIT_SIZE;
+        float y = mazeY * wallSize + GameData.UNIT_SIZE;
+
+        wall.setPosition(x, y);
+        wall.setDynamic(false);
+        wall.setCollidable(true);
+        wall.setRadius(wallSize + 1);
+        wall.setRadians(0); // Up
+        
+        // Set image depending on wall's neighbors
+        String imagePath = "MapGenerator/target/MapGenerator-1.0.0-SNAPSHOT.jar!/assets/images/wall_tiles/wall";
+        if (!neighbors[0]) imagePath += "_up";
+        if (!neighbors[2]) imagePath += "_right";
+        if (!neighbors[4]) imagePath += "_down";
+        if (!neighbors[6]) imagePath += "_left";
+        imagePath += ".png";
+        wall.setImagePath(imagePath);
+
+        float[] shapex = new float[4];
+        float[] shapey = new float[4]; 
+        
+        shapex[0] = x - wallSize/2;
+        shapey[0] = y + wallSize/2;
+        
+        shapex[1] = x + wallSize/2;
+        shapey[1] = y + wallSize/2;
+        
+        shapex[2] = x + wallSize/2;
+        shapey[2] = y - wallSize/2;
+        
+        shapex[3] = x - wallSize/2;
+        shapey[3] = y - wallSize/2;
+
+        wall.setShapeX(shapex);
+        wall.setShapeY(shapey);
+
+        return wall;
+    }
+
+    /**
+     *
+     * @param n
+     * @return An entity representing a node
+     */
+    private Entity createNodeEntity(MapNode n) {
+        Entity node = new Entity();
+
+        float x = n.getX();
+        float y = n.getY();
+        float unit = GameData.UNIT_SIZE;
+
+        node.setPosition(x, y);
+        node.setCollidable(false);
+        node.setDynamic(false);
+
+        float[] shapex;
+        float[] shapey;
+        if (n.isMiddle()) {
+            shapex = new float[6];
+            shapey = new float[6];
+        } else {
+            shapex = new float[4];
+            shapey = new float[4];
+        }
+
+        shapex[0] = x;
+        shapey[0] = y + unit / 4;
+
+        shapex[1] = x + unit / 4;
+        shapey[1] = y;
+
+        shapex[2] = x;
+        shapey[2] = y - unit / 4;
+
+        shapex[3] = x - unit / 4;
+        shapey[3] = y;
+
+        // Create a line in the middle to indicate that this node is a center node
+        if (n.isMiddle()) {
+            shapex[4] = x;
+            shapey[4] = y + unit / 4;
+
+            shapex[5] = x;
+            shapey[5] = y - unit / 4;
+        }
+
+        node.setShapeX(shapex);
+        node.setShapeY(shapey);
+
+        return node;
+    }
+
+    /**
+     *
+     * @param maze
+     * @param corSize How many nodes wide a corridor should be. Has to be an odd
+     * number.
+     * @return
+     */
+    private boolean[][] scaleMaze(boolean[][] maze, int corSize) {
+        boolean[][] scaled = new boolean[maze.length * corSize][maze[0].length * corSize];
+
+        for (int x = 0; x < maze.length; x++) {
+            for (int y = 0; y < maze[x].length; y++) {
+                for (int i = 0; i < corSize; i++) {
+                    for (int j = 0; j < corSize; j++) {
+                        scaled[x * corSize + j][y * corSize + i] = maze[x][y];
+                    }
+                }
+            }
+        }
+
+        return scaled;
+    }
+
+    /**
+     *
+     * @param maze
+     * @return A transposed version of maze.
+     */
+    private boolean[][] transposeMaze(boolean[][] maze) {
+        boolean[][] transposed = new boolean[maze.length][maze[0].length];
+
+        for (int x = 0; x < maze.length; x++) {
+            for (int y = 0; y < maze[x].length; y++) {
+                transposed[x][y] = maze[y][x];
+            }
+        }
+        return transposed;
+    }
+
+    /**
+     * Initiates the recursive function iterateNodes to generate nodes.
+     *
+     * @param maze The maze the nodes should be generated from. True denotes a
+     * wall, False denotes an empty space. All empty spaces should be connected
+     * to ensure that all nodes have the correct neighbours.
+     * @return A list of all nodes, all connected with their neighbours.
+     */
+    private ArrayList<MapNode> createNodeList(boolean[][] maze) {
+        // Find random starting position
+        int x = 3;
+        int y = 3;
+        for (; x < maze.length && maze[x][y]; x++) {
+            for (; y < maze[x].length && maze[x][y]; y++);
+        }
+
+        // Return result of recursive function
+        return iterateCenterNodes(null, new ArrayList<MapNode>(), maze, x, y);
+    }
+
+    /**
+     * Recursive method that generates a node (with connection to its neighbors)
+     * for every empty location in maze.
+     *
+     * @param root Parent Node that the current Node should have a connection
+     * to.
+     * @param nodeList A list containing all Nodes in maze.
+     * @param maze The maze the nodes should be generated from. True denotes a
+     * wall, False denotes an empty space. All empty spaces should be connected
+     * to ensure that all nodes have the correct neighbors.
+     * @param x X-position in maze.
+     * @param y Y-position in maze.
+     * @return A list of all nodes generated from this method.
+     */
+    private ArrayList<MapNode> iterateCenterNodes(Node parent, ArrayList<MapNode> nodeList, boolean[][] maze, int x, int y) {
+        if (!safelyGetValue(maze, x, y)) {
+            Node child = createNode(x, y, isCenter(maze, x, y));
+            // If not already created
+            if (!nodeList.contains(child)) {
+                if (parent != null) {
+                    // Link parent and child together
+                    parent.getNeighbours().add(child);
+                    child.getNeighbours().add(parent);
+                }
+                // Add child to nodeList
+                nodeList.add(child);
+                // Create node for all of childs neighbours
+                iterateCenterNodes(child, nodeList, maze, x - 1, y);
+                iterateCenterNodes(child, nodeList, maze, x + 1, y);
+                iterateCenterNodes(child, nodeList, maze, x, y - 1);
+                iterateCenterNodes(child, nodeList, maze, x, y + 1);
+            } else// If nodeList already contains this node but it is not linked to its parent
+            {
+                if (!parent.getNeighbours().contains(child)) {
+                    parent.getNeighbours().add(child);
+                }
+            }
+        }
+        return nodeList;
+    }
+
+    /**
+     *
+     * @param maze
+     * @param x
+     * @param y
+     * @return A boolean indicating whether the position is the center of a
+     * corridor
+     */
+    private boolean isCenter(boolean[][] maze, int x, int y) {
+        boolean center = true;
+        boolean[] neighbors = neighbors(maze, x, y);
+
+        // If the position has no neighbouring walls, it is a center node
+        for (int i = 0; i < neighbors.length; i++) {
+            if (neighbors[i]) {
+                center = false;
+            }
+        }
+
+        return center;
+    }
+
+    /**
+     *
+     * @param maze
+     * @param x
+     * @param y
+     * @return An array indicating the neighboring positions that contains walls
+     * [0]: Up, [1]: UpRight, [2]: Right, [3]: RightDown, [4]: Down, [5]:
+     * DownLeft, [6]: Left, [7]: LeftUp
+     */
+    private boolean[] neighbors(boolean[][] maze, int x, int y) {
+        boolean[] neighbors = new boolean[8];
+
+        neighbors[0] = safelyGetValue(maze, x, y + 1);
+        neighbors[1] = safelyGetValue(maze, x + 1, y + 1);
+        neighbors[2] = safelyGetValue(maze, x + 1, y);
+        neighbors[3] = safelyGetValue(maze, x + 1, y - 1);
+        neighbors[4] = safelyGetValue(maze, x, y - 1);
+        neighbors[5] = safelyGetValue(maze, x - 1, y - 1);
+        neighbors[6] = safelyGetValue(maze, x - 1, y);
+        neighbors[7] = safelyGetValue(maze, x - 1, y + 1);
+
+        return neighbors;
+    }
+
+    /**
+     *
+     * @param maze
+     * @param x
+     * @param y
+     * @return The specified maze value or false if out of bounds
+     */
+    private boolean safelyGetValue(boolean[][] maze, int x, int y) {
+        if (x > 0 && y > 0 && x < maze.length && y < maze[x].length) 
+            return maze[x][y];
+        else if (x >= maze.length || x < 0) 
+            return false;
+        else if (y >= maze[x].length || y < 0) 
+            return false;
+        return true;
+    }
+
+    /**
+     * Creates a new Node without any neighbors
+     *
+     * @param x Corresponding boolean maze x-coordinate
+     * @param y Corresponding boolean maze y-coordinate
+     * @param center Specifies whether this node is the center node in a
+     * corridor
+     * @param offsetX Specifies the node distance between this node and its
+     * center node
+     * @param offsetY Specifies the node distance between this node and its
+     * center node
+     * @return
+     */
+    private Node createNode(int x, int y, boolean center) {
+        Node n = new Node();
+        n.setIsMiddle(center);
+        n.setX(GameData.UNIT_SIZE * x);
+        n.setY(GameData.UNIT_SIZE * y);
+        return n;
+    }
+}

@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?><module codename="gruppe5.CommonWeapon">
-    <module_version install_time="1492205151082" last="true" origin="installer" specification_version="1.0.0">
-        <file crc="84931886" name="config/Modules/gruppe5-CommonWeapon.xml"/>
-        <file crc="2878637504" name="modules/gruppe5-CommonWeapon.jar"/>
-    </module_version>
-</module>
