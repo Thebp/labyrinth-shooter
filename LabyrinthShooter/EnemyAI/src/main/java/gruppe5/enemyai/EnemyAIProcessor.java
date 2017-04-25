@@ -200,8 +200,6 @@ public class EnemyAIProcessor implements IEntityProcessingService {
         }
         return 14 * xDis + 10 * (yDis - xDis);
     }
-    
-
 
     private MapNode getEnemyPosition(Enemy enemy){
         Node enemyPosition = null;
