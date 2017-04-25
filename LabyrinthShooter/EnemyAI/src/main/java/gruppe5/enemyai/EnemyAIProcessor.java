@@ -182,7 +182,7 @@ public class EnemyAIProcessor implements IEntityProcessingService {
         }
 
     }
-    
+
     private void retracePath(MapNode startNode, MapNode targetNode){
         List<MapNode> path = null;
         MapNode current = targetNode;
