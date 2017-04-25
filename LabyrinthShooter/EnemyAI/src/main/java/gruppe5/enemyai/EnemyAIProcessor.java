@@ -38,39 +38,58 @@ public class EnemyAIProcessor implements IEntityProcessingService {
                 Enemy enemy = (Enemy) entity;
                 checkPlayerProximity(enemy, world);
                 if (enemy.getTarget() != null) {
-                    enemyAttack(enemy, world);
+                    enemyAttack(enemy, world, gameData);
                 } else if (enemy.getTargetNode() != null) {
                     //Investigation mode
                 } else {
                     //Patrolling mode
                 }
+                moveTowardsNextNode(enemy, gameData);
             }
         }
     }
 
     private void checkPlayerProximity(Enemy enemy, World world) {
-        if(playerSPI != null) {
+        if (playerSPI != null) {
             Entity player = playerSPI.getPlayer(world);
-            float xDiff = Math.abs(player.getX() - enemy.getX());
-            float yDiff = Math.abs(player.getY() - enemy.getY());
+            float xDiff = player.getX() - enemy.getX();
+            float yDiff = player.getY() - enemy.getY();
             float distance = (float) Math.sqrt(Math.pow(xDiff, 2) + Math.pow(yDiff, 2));
-            
-            if(distance < 200) {
+
+            if (distance < 200) {
                 enemy.setTarget(player);
             } else {
                 enemy.setTarget(null);
             }
         }
     }
-    
-    private void enemyAttack(Enemy enemy, World world) {
-        if(playerSPI != null) {
+
+    private void enemyAttack(Enemy enemy, World world, GameData gameData) {
+        if (playerSPI != null) {
             Entity player = playerSPI.getPlayer(world);
-            float dx = Math.abs(player.getX() - enemy.getX());
-            float dy = Math.abs(player.getY() - enemy.getY());
-            
+            float dx = player.getX() - enemy.getX();
+            float dy = player.getY() - enemy.getY();
+
             float radians = (float) Math.atan2(dy, dx);
             enemy.setRadians(radians);
+
+            MapNode closestNode = enemy.getNextNode();
+            float closestDistance = (float) Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2));
+
+            if (enemy.getX() == closestNode.getX() && enemy.getY() == closestNode.getY()) {
+                for (MapNode mapNode : closestNode.getNeighbours()) {
+                    float xDiff = player.getX() - mapNode.getX();
+                    float yDiff = player.getY() - mapNode.getY();
+                    float nodeDistance = (float) Math.sqrt(Math.pow(xDiff, 2) + Math.pow(yDiff, 2));
+                    
+                    if(nodeDistance < closestDistance) {
+                        closestDistance = nodeDistance;
+                        closestNode = mapNode;
+                    }
+                }
+            }
+            
+            enemy.setNextNode(closestNode);
         }
     }
 
@@ -107,38 +126,34 @@ public class EnemyAIProcessor implements IEntityProcessingService {
 
         }
     }
-    
-    private void findPath(MapNode startNode, MapNode targetNode, Enemy enemy, GameData gameData){
+
+    private void findPath(MapNode startNode, MapNode targetNode, Enemy enemy, GameData gameData) {
         mapSPI = Lookup.getDefault().lookup(MapSPI.class);
         mapNode = Lookup.getDefault().lookup(MapNode.class);
         List map = mapSPI.getMap();
-        
-        
+
         List<MapNode> openList = null;
         List<MapNode> closedList;
         openList.add(startNode);
-        
-        while(openList.size() > 0){
+
+        while (openList.size() > 0) {
             MapNode current = openList.get(0);
-            
-            for(int i = 0; i < openList.size(); i++){
-                
+
+            for (int i = 0; i < openList.size(); i++) {
+
             }
         }
-        
-        
+
     }
-    
-    private float getDistance(MapNode pos1, MapNode pos2){
+
+    private float getDistance(MapNode pos1, MapNode pos2) {
         float xDis = Math.abs(pos1.getX() - pos2.getX());
         float yDis = Math.abs(pos1.getY() - pos2.getY());
-        
-        if(xDis > yDis){
+
+        if (xDis > yDis) {
             return 14 * yDis + 10 * (xDis - yDis);
         }
         return 14 * xDis + 10 * (yDis - xDis);
     }
-    
-
 
 }
