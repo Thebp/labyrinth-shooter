@@ -12,6 +12,8 @@ import gruppe5.common.data.World;
 import gruppe5.common.map.MapNode;
 import gruppe5.common.map.MapSPI;
 import gruppe5.common.services.IEntityProcessingService;
+import java.util.List;
+import java.util.PriorityQueue;
 import org.openide.util.Lookup;
 import org.openide.util.lookup.ServiceProvider;
 
@@ -23,6 +25,7 @@ import org.openide.util.lookup.ServiceProvider;
 public class EnemyAIProcessor implements IEntityProcessingService {
 
     private MapSPI mapSPI = null;
+    private MapNode mapNode = null;
 
     @Override
     public void process(GameData gameData, World world) {
@@ -78,5 +81,38 @@ public class EnemyAIProcessor implements IEntityProcessingService {
 
         }
     }
+    
+    private void findPath(MapNode startNode, MapNode targetNode, Enemy enemy, GameData gameData){
+        mapSPI = Lookup.getDefault().lookup(MapSPI.class);
+        mapNode = Lookup.getDefault().lookup(MapNode.class);
+        List map = mapSPI.getMap();
+        
+        
+        List<MapNode> openList = null;
+        List<MapNode> closedList;
+        openList.add(startNode);
+        
+        while(openList.size() > 0){
+            MapNode current = openList.get(0);
+            
+            for(int i = 0; i < openList.size(); i++){
+                
+            }
+        }
+        
+        
+    }
+    
+    private float getDistance(MapNode pos1, MapNode pos2){
+        float xDis = Math.abs(pos1.getX() - pos2.getX());
+        float yDis = Math.abs(pos1.getY() - pos2.getY());
+        
+        if(xDis > yDis){
+            return 14 * yDis + 10 * (xDis - yDis);
+        }
+        return 14 * xDis + 10 * (yDis - xDis);
+    }
+    
+
 
 }

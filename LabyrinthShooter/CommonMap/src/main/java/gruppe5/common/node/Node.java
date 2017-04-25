@@ -8,6 +8,8 @@ public class Node implements MapNode {
     private boolean isMiddle = false;
     private float x = 0.0f;
     private float y = 0.0f;
+    private int gCost;
+    private int hCost;
     
     @Override
     public List<MapNode> getNeighbours() {
@@ -37,6 +39,8 @@ public class Node implements MapNode {
     public float getY() {
         return y;
     }
+    
+    
     
     public void setIsMiddle(boolean isMiddle) {
         this.isMiddle = isMiddle;
@@ -84,4 +88,21 @@ public class Node implements MapNode {
         }
         return true;
     }
+
+    @Override
+    public float fCost() {
+        return gCost + hCost;//To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public int gCost() {
+        return gCost;//To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public int hCost() {
+        return hCost;//To change body of generated methods, choose Tools | Templates.
+    }
+
+
 }

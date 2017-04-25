@@ -24,4 +24,10 @@ public interface MapNode {
      * @return The corresponding Y-coordinate in the game world.
      */
     public float getY();
+    
+    public float fCost();
+    
+    public int gCost();
+    
+    public int hCost();
 }
