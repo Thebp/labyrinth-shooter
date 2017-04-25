@@ -209,7 +209,7 @@ public class Game implements ApplicationListener, AudioSPI {
 
             drawSprite(entity);
             //}
-            drawFont();
+            //drawFont();
 
         }
         

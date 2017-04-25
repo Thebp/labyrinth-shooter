@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?><module codename="gruppe5.HUD">
-    <module_version install_time="1493105349664" last="true" origin="installer" specification_version="1.0.0">
+    <module_version install_time="1493125780644" last="true" origin="installer" specification_version="1.0.0">
         <file crc="728766386" name="config/Modules/gruppe5-HUD.xml"/>
-        <file crc="3692845786" name="modules/gruppe5-HUD.jar"/>
+        <file crc="3350262721" name="modules/gruppe5-HUD.jar"/>
     </module_version>
 </module>
