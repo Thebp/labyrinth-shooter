@@ -192,7 +192,6 @@ public class EnemyAIProcessor implements IEntityProcessingService {
             current = current.getParent();
         }
         Collections.reverse(path);
-        
     }
     
     private int getDistance(MapNode pos1, MapNode pos2){

@@ -21,7 +21,6 @@ public class EnemyPlugin implements IGamePluginService {
     @Override
     public void start(GameData gameData, World world) {
         Entity enemy = createEnemy(gameData);
-        
         Weapon weapon = new Weapon();
         weapon.setCollidable(false);
         weapon.setDynamic(true);
@@ -61,7 +60,6 @@ public class EnemyPlugin implements IGamePluginService {
         enemy.setLife(2);
         enemy.setSoundPath("Enemy/target/Enemy-1.0.0-SNAPSHOT.jar!/assets/sound/enemydeath.ogg");
         enemy.setNextNode(spawnlocation.getNeighbours().get(0));
-
         return enemy;
     }
 
