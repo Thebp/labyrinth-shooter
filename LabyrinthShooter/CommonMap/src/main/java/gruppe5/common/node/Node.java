@@ -10,6 +10,7 @@ public class Node implements MapNode {
     private float y = 0.0f;
     private int gCost;
     private int hCost;
+    public MapNode parent;
     
     @Override
     public List<MapNode> getNeighbours() {
@@ -104,5 +105,27 @@ public class Node implements MapNode {
         return hCost;//To change body of generated methods, choose Tools | Templates.
     }
 
+    @Override
+    public void setGCost(int newGCost) {
+        this.gCost = newGCost; //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void setHCost(int newHCost) {
+        this.hCost = newHCost; //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void setParent(MapNode parent) {
+        this.parent = parent; //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public MapNode getParent() {
+        return parent; //To change body of generated methods, choose Tools | Templates.
+    }
+    
+    
+ 
 
 }

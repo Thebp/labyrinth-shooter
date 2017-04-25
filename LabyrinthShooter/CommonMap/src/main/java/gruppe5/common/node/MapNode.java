@@ -30,4 +30,12 @@ public interface MapNode {
     public int gCost();
     
     public int hCost();
+    
+    public MapNode getParent();
+    
+    public void setGCost(int gCost);
+    
+    public void setHCost(int gCost);
+    
+    public void setParent(MapNode parent);
 }

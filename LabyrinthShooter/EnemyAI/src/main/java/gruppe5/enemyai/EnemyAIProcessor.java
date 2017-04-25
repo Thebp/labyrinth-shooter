@@ -10,11 +10,12 @@ import gruppe5.common.data.Entity;
 import gruppe5.common.data.GameData;
 import gruppe5.common.data.World;
 import gruppe5.common.node.MapNode;
+import gruppe5.common.node.Node;
 import gruppe5.common.map.MapSPI;
 import gruppe5.common.player.PlayerSPI;
 import gruppe5.common.services.IEntityProcessingService;
+import java.util.Collections;
 import java.util.List;
-import java.util.PriorityQueue;
 import org.openide.util.Lookup;
 import org.openide.util.lookup.ServiceProvider;
 
@@ -28,6 +29,8 @@ public class EnemyAIProcessor implements IEntityProcessingService {
     private MapSPI mapSPI = null;
     private MapNode mapNode = null;
     private PlayerSPI playerSPI = null;
+    private Node Node = null;
+
 
     @Override
     public void process(GameData gameData, World world) {
@@ -129,31 +132,79 @@ public class EnemyAIProcessor implements IEntityProcessingService {
 
     private void findPath(MapNode startNode, MapNode targetNode, Enemy enemy, GameData gameData) {
         mapSPI = Lookup.getDefault().lookup(MapSPI.class);
-        mapNode = Lookup.getDefault().lookup(MapNode.class);
+        //node = Lookup.getDefault().lookup(Node.class);
         List map = mapSPI.getMap();
 
         List<MapNode> openList = null;
-        List<MapNode> closedList;
+        List<MapNode> closedList = null;
         openList.add(startNode);
 
         while (openList.size() > 0) {
             MapNode current = openList.get(0);
-
-            for (int i = 0; i < openList.size(); i++) {
-
+            
+            for(int i = 0; i < openList.size(); i++){
+                if(openList.get(i).fCost() < current.fCost() || 
+                        openList.get(i).fCost() == current.fCost() && 
+                        openList.get(i).hCost() < current.hCost()){
+                    current = openList.get(i);
+                }
+                openList.remove(current);
+                closedList.add(current);
+                
+                if(current == targetNode){
+                    return;
+                }
+                
+                for(MapNode neighbour : current.getNeighbours()){
+                    if(closedList.contains(current)){
+                        continue;
+                    }
+                    int newMovementCostToNeighbour = current.gCost() + getDistance(current,neighbour);
+                    if(newMovementCostToNeighbour < neighbour.gCost() || !openList.contains(neighbour)){
+                        neighbour.setGCost(newMovementCostToNeighbour);
+                        neighbour.setHCost(getDistance(neighbour, targetNode));
+                        neighbour.setParent(current);
+                        
+                        if(!openList.contains(neighbour)){
+                            openList.add(neighbour);
+                        }
+                        
+                    }
+                    
+                }
             }
         }
 
     }
-
-    private float getDistance(MapNode pos1, MapNode pos2) {
-        float xDis = Math.abs(pos1.getX() - pos2.getX());
-        float yDis = Math.abs(pos1.getY() - pos2.getY());
-
-        if (xDis > yDis) {
+    
+    private void retracePath(MapNode startNode, MapNode targetNode){
+        List<MapNode> path = null;
+        MapNode current = targetNode;
+        
+        while(current != startNode){
+            path.add(current);
+            current = current.getParent();
+        }
+        Collections.reverse(path);
+        
+    }
+    
+    private int getDistance(MapNode pos1, MapNode pos2){
+        int xDis = Math.round(Math.abs(pos1.getX() - pos2.getX()));
+        int yDis = Math.round(Math.abs(pos1.getY() - pos2.getY()));
+        
+        if(xDis > yDis){
             return 14 * yDis + 10 * (xDis - yDis);
         }
         return 14 * xDis + 10 * (yDis - xDis);
     }
+
+    private MapNode getEnemyPosition(Enemy enemy){
+        Node enemyPosition = null;
+        enemyPosition.setX(enemy.getX());
+        enemyPosition.setY(enemy.getY());
+        return enemyPosition;
+    }
+    
 
 }
