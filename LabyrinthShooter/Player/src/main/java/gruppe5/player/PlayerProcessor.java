@@ -64,7 +64,7 @@ public class PlayerProcessor implements IEntityProcessingService, PlayerSPI {
                 }
                 if(weapon != null){
                     weaponSPI.shoot(world, weapon);
-                    audioSPI.playAudio(player.getSoundPath(), player);
+                    //audioSPI.playAudio(player.getSoundPath(), player);
                 }
             }
 

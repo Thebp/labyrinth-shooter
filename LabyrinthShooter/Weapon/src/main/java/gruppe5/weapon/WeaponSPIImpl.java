@@ -5,6 +5,7 @@
  */
 package gruppe5.weapon;
 
+import gruppe5.common.audio.AudioSPI;
 import gruppe5.common.bullet.BulletSPI;
 import gruppe5.common.data.Entity;
 import gruppe5.common.data.World;
@@ -31,11 +32,12 @@ public class WeaponSPIImpl implements WeaponSPI{
         }
         return null;
     }
-
+    AudioSPI audioSPI  = Lookup.getDefault().lookup(AudioSPI.class);
     @Override
     public void shoot(World world, Entity entity) {
         Entity bullet = Lookup.getDefault().lookup(BulletSPI.class).createBullet(entity);
         world.addEntity(bullet);
+        audioSPI.playAudio(entity.getSoundPath(), entity);
     }
     
 }
