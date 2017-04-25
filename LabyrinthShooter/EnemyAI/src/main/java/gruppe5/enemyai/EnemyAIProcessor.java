@@ -21,21 +21,22 @@ import org.openide.util.lookup.ServiceProvider;
  * @author marcn
  */
 public class EnemyAIProcessor implements IEntityProcessingService {
+
     private MapSPI mapSPI = null;
+
     @Override
     public void process(GameData gameData, World world) {
         mapSPI = Lookup.getDefault().lookup(MapSPI.class);
         if (mapSPI != null) {
             for (Entity entity : world.getEntities(Enemy.class)) {
                 Enemy enemy = (Enemy) entity;
-                moveTowardsNextNode(enemy, gameData);
-//                if (enemy.getTarget() != null) {
-//                    //Attack mode
-//                } else if (enemy.getTargetNode() != null) {
-//                    //Investigation mode
-//                } else {
-//                    //Patrolling mode
-//                }
+                if (enemy.getTarget() != null) {
+                    //Attack mode
+                } else if (enemy.getTargetNode() != null) {
+                    //Investigation mode
+                } else {
+                    //Patrolling mode
+                }
             }
         }
     }
@@ -46,23 +47,35 @@ public class EnemyAIProcessor implements IEntityProcessingService {
 
     private void moveTowardsNextNode(Enemy enemy, GameData gameData) {
         MapNode nextNode = enemy.getNextNode();
-        if(enemy.getX() != nextNode.getX() || enemy.getY() != nextNode.getY()) {
+        if (enemy.getX() != nextNode.getX() || enemy.getY() != nextNode.getY()) {
             float dx = nextNode.getX() - enemy.getX();
             float dy = nextNode.getY() - enemy.getY();
             float dt = gameData.getDelta();
             float maxspeed = enemy.getMaxSpeed();
-            
+            float x = enemy.getX();
+            float y = enemy.getY();
+
             //Normalize
             float length = (float) Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2));
             dx = dx / length;
             dy = dy / length;
-            
+
             //Set speed vector
             dx = dx * maxspeed;
             dy = dy * maxspeed;
-            
-            enemy.setPosition(enemy.getX() + dx * dt, enemy.getY() + dy * dt);
-            
+
+            x += dx * dt;
+            y += dy * dt;
+
+            float xDiff = Math.abs(x - nextNode.getX());
+            float yDiff = Math.abs(y - nextNode.getY());
+
+            if (xDiff < 5 && yDiff < 5) {
+                enemy.setPosition(nextNode.getX(), nextNode.getY());
+            } else {
+                enemy.setPosition(enemy.getX() + dx * dt, enemy.getY() + dy * dt);
+            }
+
         }
     }
 
