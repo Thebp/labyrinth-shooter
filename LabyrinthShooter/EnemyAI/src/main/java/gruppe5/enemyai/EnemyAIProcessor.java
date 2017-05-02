@@ -5,6 +5,7 @@
  */
 package gruppe5.enemyai;
 
+import gruppe5.common.collision.CollisionSPI;
 import gruppe5.common.enemy.Enemy;
 import gruppe5.common.data.Entity;
 import gruppe5.common.data.GameData;
@@ -33,11 +34,18 @@ public class EnemyAIProcessor implements IEntityProcessingService {
     private MapNode mapNode = null;
     private PlayerSPI playerSPI = null;
     private Node Node = null;
+    private CollisionSPI collisionSPI = null;
+    private Entity visibility;
 
     @Override
     public void process(GameData gameData, World world) {
+        if (visibility == null) {
+            visibility = new Entity();
+        }
+        world.removeEntity(visibility);
         mapSPI = Lookup.getDefault().lookup(MapSPI.class);
         playerSPI = Lookup.getDefault().lookup(PlayerSPI.class);
+        collisionSPI = Lookup.getDefault().lookup(CollisionSPI.class);
         if (mapSPI != null) {
             for (Entity entity : world.getEntities(Enemy.class)) {
                 Enemy enemy = (Enemy) entity;
@@ -61,16 +69,53 @@ public class EnemyAIProcessor implements IEntityProcessingService {
     private void checkPlayerProximity(Enemy enemy, World world) {
         if (playerSPI != null) {
             Entity player = playerSPI.getPlayer(world);
-            float xDiff = player.getX() - enemy.getX();
-            float yDiff = player.getY() - enemy.getY();
-            float distance = (float) Math.sqrt(Math.pow(xDiff, 2) + Math.pow(yDiff, 2));
+            if (player != null) {
+                float xDiff = player.getX() - enemy.getX();
+                float yDiff = player.getY() - enemy.getY();
+                float distance = (float) Math.sqrt(Math.pow(xDiff, 2) + Math.pow(yDiff, 2));
 
-            if (distance < 200) {
-                enemy.setTarget(player);
-            } else {
-                enemy.setTarget(null);
+                if (distance < 200 && (checkPlayerVisibility(enemy, player, world) || distance < 70)) {
+                    enemy.setTarget(player);
+                } else {
+                    enemy.setTarget(null);
+                }
             }
         }
+    }
+
+    private boolean checkPlayerVisibility(Enemy enemy, Entity player, World world) {
+        if (collisionSPI != null) {
+            //Entity entity = new Entity();
+            float[] shapex = new float[4];
+            float[] shapey = new float[4];
+
+            shapex[0] = enemy.getX();
+            shapey[0] = enemy.getY();
+
+            shapex[1] = enemy.getX();
+            shapey[1] = enemy.getY();
+
+            shapex[2] = player.getX();
+            shapey[2] = player.getY();
+
+            shapex[3] = player.getX();
+            shapey[3] = player.getY();
+
+            visibility.setShapeX(shapex);
+            visibility.setShapeY(shapey);
+
+            visibility.setCollidable(true);
+            visibility.setX(enemy.getX());
+            visibility.setY(enemy.getY());
+            visibility.setDynamic(false);
+            world.addEntity(visibility);
+
+            if (!collisionSPI.checkCollision(visibility, world)) {
+                return true;
+            }
+
+        }
+        return false;
     }
 
     private void enemyAttack(Enemy enemy, World world, GameData gameData) {

@@ -263,7 +263,9 @@ public class CollisionControlSystem implements IEntityProcessingService, Collisi
         Vector2 emptyVector = new Vector2();
         for (Entity e : world.getForegroundEntities()) {
             if (!e.isDynamic() && e.isCollidable()) {
-                return checkConditions(entity, e, emptyVector, emptyVector);
+                if(checkConditions(entity, e, emptyVector, emptyVector)){
+                    return true;
+                }
             }
         }
         return false;
