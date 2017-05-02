@@ -152,6 +152,7 @@ public class EnemyAIProcessor implements IEntityProcessingService {
             closedList.add(current);
 
             if (current == targetNode) {
+                retracePath(startNode, targetNode);
                 return;
             }
 
@@ -217,6 +218,5 @@ public class EnemyAIProcessor implements IEntityProcessingService {
         return target;
     }
     
-
 
 }
