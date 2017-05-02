@@ -18,6 +18,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.PriorityQueue;
 import java.util.Queue;
+import java.util.Random;
 import org.openide.util.Lookup;
 import org.openide.util.lookup.ServiceProvider;
 
@@ -47,6 +48,7 @@ public class EnemyAIProcessor implements IEntityProcessingService {
                     //Investigation mode
                 } else {
                     //Patrolling mode
+                    findPath(getEnemyPosition(enemy), randomTargetNode(), enemy, gameData);
                 }
                 moveTowardsNextNode(enemy, gameData);
             }
@@ -204,6 +206,18 @@ public class EnemyAIProcessor implements IEntityProcessingService {
         enemyPosition.setY(enemy.getY());
         return enemyPosition;
     }
+    
+    /*
+    Returns a random centerNode. Better solution is to get a random spawn location,
+    however atm. getting a spawnLocation removes it from List. new List? Ask Nick.
+    */
+    private MapNode randomTargetNode(){
+        Random rand = new Random();
+        int index = rand.nextInt(mapSPI.getCenterMapNodes().size());
+        MapNode target = mapSPI.getCenterMapNodes().get(index);
+        return target;
+    }
+    
 
 
 }
