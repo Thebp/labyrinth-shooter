@@ -22,7 +22,7 @@ public class Installer extends ModuleInstall {
         cfg.width = 1000;
         cfg.height = 800;
         cfg.useGL30 = false;
-        cfg.resizable = false;
+        cfg.resizable = true;
 
         new LwjglApplication(g, cfg);
     }
