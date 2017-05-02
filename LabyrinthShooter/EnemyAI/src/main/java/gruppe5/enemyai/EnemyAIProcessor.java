@@ -17,6 +17,7 @@ import gruppe5.common.services.IEntityProcessingService;
 import java.util.Collections;
 import java.util.List;
 import java.util.PriorityQueue;
+import java.util.Queue;
 import org.openide.util.Lookup;
 import org.openide.util.lookup.ServiceProvider;
 
@@ -89,14 +90,14 @@ public class EnemyAIProcessor implements IEntityProcessingService {
                     float xDiff = player.getX() - mapNode.getX();
                     float yDiff = player.getY() - mapNode.getY();
                     float nodeDistance = (float) Math.sqrt(Math.pow(xDiff, 2) + Math.pow(yDiff, 2));
-                    
-                    if(nodeDistance < closestDistance && mapNode.getNeighbours().size() > 0) {
+
+                    if (nodeDistance < closestDistance && mapNode.getNeighbours().size() > 0) {
                         closestDistance = nodeDistance;
                         closestNode = mapNode;
                     }
                 }
             }
-            
+
             enemy.setNextNode(closestNode);
         }
     }
@@ -140,44 +141,38 @@ public class EnemyAIProcessor implements IEntityProcessingService {
         //node = Lookup.getDefault().lookup(Node.class);
         List map = mapSPI.getMap();
 
-        PriorityQueue<MapNode> openList = null;
+        Queue<MapNode> openList = new PriorityQueue<MapNode>(map.size());
         List<MapNode> closedList = null;
         openList.add(startNode);
 
         while (openList.size() > 0) {
-            MapNode current = openList.element();
-            
-            for(int i = 0; i < openList.size(); i++){
-                if(openList.element().fCost() < current.fCost() || 
-                        openList.element().fCost() == current.fCost() && 
-                        openList.element().hCost() < current.hCost()){
-                    current = openList.element();
-                }
-                openList.remove(current); //If error then .remove(); should also remove the same.
-                closedList.add(current);
-                
-                if(current == targetNode){
-                    return;
-                }
-                
-                for(MapNode neighbour : current.getNeighbours()){
-                    if(closedList.contains(current)){
-                        continue;
-                    }
-                    int newMovementCostToNeighbour = current.gCost() + getDistance(current,neighbour);
-                    if(newMovementCostToNeighbour < neighbour.gCost() || !openList.contains(neighbour)){
-                        neighbour.setGCost(newMovementCostToNeighbour);
-                        neighbour.setHCost(getDistance(neighbour, targetNode));
-                        neighbour.setParent(current);
-                        
-                        if(!openList.contains(neighbour)){
-                            openList.add(neighbour);
-                        }
-                        
-                    }
-                    
-                }
+            MapNode current = openList.remove();
+
+            closedList.add(current);
+
+            if (current == targetNode) {
+                return;
             }
+
+            for (MapNode neighbour : current.getNeighbours()) {
+                if (closedList.contains(current)) {
+                    continue;
+                }
+                int newMovementCostToNeighbour = current.gCost() + getDistance(current, neighbour);
+                if (newMovementCostToNeighbour < neighbour.gCost() || !openList.contains(neighbour)) {
+                    neighbour.setGCost(newMovementCostToNeighbour);
+                    neighbour.setHCost(getDistance(neighbour, targetNode));
+                    neighbour.setParent(current);
+
+                    if (!openList.contains(neighbour)) {
+                        openList.add(neighbour);
+
+                    }
+
+                }
+
+            }
+
         }
 
     }
@@ -185,35 +180,30 @@ public class EnemyAIProcessor implements IEntityProcessingService {
     private void retracePath(MapNode startNode, MapNode targetNode){
         List<MapNode> path = null;
         MapNode current = targetNode;
-        
-        while(current != startNode){
+
+        while (current != startNode) {
             path.add(current);
             current = current.getParent();
         }
         Collections.reverse(path);
     }
-    
-    private int getDistance(MapNode pos1, MapNode pos2){
+
+    private int getDistance(MapNode pos1, MapNode pos2) {
         int xDis = Math.round(Math.abs(pos1.getX() - pos2.getX()));
         int yDis = Math.round(Math.abs(pos1.getY() - pos2.getY()));
-        
-        if(xDis > yDis){
+
+        if (xDis > yDis) {
             return 14 * yDis + 10 * (xDis - yDis);
         }
         return 14 * xDis + 10 * (yDis - xDis);
     }
-    
-    private MapNode getEnemyPosition(Enemy enemy){
+
+    private MapNode getEnemyPosition(Enemy enemy) {
         Node enemyPosition = null;
         enemyPosition.setX(enemy.getX());
         enemyPosition.setY(enemy.getY());
         return enemyPosition;
     }
 
-    private MapNode getEnemyPosition(Enemy enemy){
-        Node enemyPosition = null;
-        enemyPosition.setX(enemy.getX());
-        enemyPosition.setY(enemy.getY());
-        return enemyPosition;
-    }
+
 }
