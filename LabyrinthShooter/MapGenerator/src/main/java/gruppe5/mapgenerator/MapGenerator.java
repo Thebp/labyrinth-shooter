@@ -461,24 +461,32 @@ public class MapGenerator implements MapSPI, IGameInitService {
      */
     private ArrayList<MapNode> iterateCenterNodes(Node parent, ArrayList<MapNode> nodeList, boolean[][] maze, int x, int y) {
         if (!safelyGetValue(maze, x, y)) {
-            Node child = createNode(x, y, isCenter(maze, x, y));
-            // If not already created
-            if (!nodeList.contains(child)) {
-                if (parent != null) {
-                    // Link parent and child together
-                    parent.getNeighbours().add(child);
-                    child.getNeighbours().add(parent);
+            //Create child node
+            Node child = null;
+            for (MapNode existingNode : nodeList) {
+                //If there is already a node at the chosen position, choose that node
+                if (existingNode.getX() == GameData.UNIT_SIZE * x && existingNode.getY() == GameData.UNIT_SIZE * y) {
+                    child = (Node) existingNode;
                 }
-                // Add child to nodeList
+            }
+            //If child is still null create a new Node at the chosen position and at it to nodeList
+            if (child == null) {
+                child = createNode(x, y, isCenter(maze, x, y));
                 nodeList.add(child);
-                // Create node for all of childs neighbours
+
+                //Create neighbors
                 iterateCenterNodes(child, nodeList, maze, x - 1, y);
                 iterateCenterNodes(child, nodeList, maze, x + 1, y);
                 iterateCenterNodes(child, nodeList, maze, x, y - 1);
                 iterateCenterNodes(child, nodeList, maze, x, y + 1);
-            } else { // If nodeList already contains this node but it is not linked to its parent
+            }
+            if (parent != null) {
+                // Link parent and child together
                 if (!parent.getNeighbours().contains(child)) {
                     parent.getNeighbours().add(child);
+                }
+                if (!child.getNeighbours().contains(parent)) {
+                    child.getNeighbours().add(parent);
                 }
             }
         }
