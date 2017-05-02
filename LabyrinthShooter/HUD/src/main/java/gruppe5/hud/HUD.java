@@ -81,10 +81,12 @@ public class HUD implements IUIService, IGamePluginService {
             System.out.println("HUD: PlayerSPI module not found.");
             return;
         }
+       
         Entity player = playerSPI.getPlayer(world);
-        
+        if(player != null){
         updateHealthbar(gameData, player);
         updateScore(gameData);
+        }
     }
     
     private void updateScore(GameData gameData) {
@@ -112,6 +114,7 @@ public class HUD implements IUIService, IGamePluginService {
     }
     
     private void updateHealthbar(GameData gameData, Entity player) {
+        if(player != null){
         int playerLife = player.getLife();
         
         // Only draw healthbar if player life has changed
@@ -121,6 +124,7 @@ public class HUD implements IUIService, IGamePluginService {
             healthbarElement.setImage(createPlayerHealthbar(player.getLife()));
             healthbarElement.setX(gameData.getDisplayWidth() - image.getWidth());
             healthbarElement.setY(gameData.getDisplayHeight() - 10);
+        }
         }
     }
 

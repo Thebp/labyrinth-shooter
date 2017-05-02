@@ -187,8 +187,8 @@ public class Game implements ApplicationListener, AudioSPI {
         cam.update();
         spriteBatch.setProjectionMatrix(cam.combined);
         sr.setProjectionMatrix(cam.combined);
-    }
-
+        }
+    
     private void draw() {
         Entity player = getPlayer();
 

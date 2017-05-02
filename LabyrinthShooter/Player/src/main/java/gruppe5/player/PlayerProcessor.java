@@ -63,7 +63,8 @@ public class PlayerProcessor implements IEntityProcessingService, PlayerSPI {
                 }
                 if (weapon != null) {
                     weaponSPI.shoot(world, weapon);
-                    //audioSPI.playAudio(player.getSoundPath(), player);
+//                    player.setSoundPath("Player/target/Player-1.0.0-SNAPSHOT.jar!/assets/sound/bullet.ogg");
+//                    audioSPI.playAudio(player.getSoundPath(), player);
                 }
             }
 
@@ -87,11 +88,11 @@ public class PlayerProcessor implements IEntityProcessingService, PlayerSPI {
 //            double diffx = player.getX() - gameData.getMouseX();
 //            double diffy = player.getY() - gameData.getMouseY();
             radians = (float) Math.atan2(diffy, diffx);
-            //Taken from asteroids just to remember to implement it in this project
-//            if(player.getIsHit() == true){
-//                world.removeEntity(player);
-//                player.setIsHit(false);
-//            }
+            
+            if(player.getLife() <= 0){
+                world.removeEntity(player);
+                audioSPI.playAudio(player.getSoundPath(), player);
+            }
             //Movement
 //            if (gameData.getKeys().isDown(GameKeys.UP)) {
 //                dx = (float) Math.cos(radians) * maxSpeed;

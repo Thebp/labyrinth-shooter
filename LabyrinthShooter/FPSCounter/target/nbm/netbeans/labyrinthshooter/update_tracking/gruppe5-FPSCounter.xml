@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?><module codename="gruppe5.FPSCounter">
-    <module_version install_time="1493125781863" last="true" origin="installer" specification_version="1.0.0">
+    <module_version install_time="1493729122443" last="true" origin="installer" specification_version="1.0.0">
         <file crc="2012785024" name="config/Modules/gruppe5-FPSCounter.xml"/>
-        <file crc="3997707667" name="modules/gruppe5-FPSCounter.jar"/>
+        <file crc="101040969" name="modules/gruppe5-FPSCounter.jar"/>
     </module_version>
 </module>
