@@ -16,6 +16,7 @@ import gruppe5.common.player.PlayerSPI;
 import gruppe5.common.services.IEntityProcessingService;
 import java.util.Collections;
 import java.util.List;
+import java.util.PriorityQueue;
 import org.openide.util.Lookup;
 import org.openide.util.lookup.ServiceProvider;
 
@@ -139,20 +140,20 @@ public class EnemyAIProcessor implements IEntityProcessingService {
         //node = Lookup.getDefault().lookup(Node.class);
         List map = mapSPI.getMap();
 
-        List<MapNode> openList = null;
+        PriorityQueue<MapNode> openList = null;
         List<MapNode> closedList = null;
         openList.add(startNode);
 
         while (openList.size() > 0) {
-            MapNode current = openList.get(0);
+            MapNode current = openList.element();
             
             for(int i = 0; i < openList.size(); i++){
-                if(openList.get(i).fCost() < current.fCost() || 
-                        openList.get(i).fCost() == current.fCost() && 
-                        openList.get(i).hCost() < current.hCost()){
-                    current = openList.get(i);
+                if(openList.element().fCost() < current.fCost() || 
+                        openList.element().fCost() == current.fCost() && 
+                        openList.element().hCost() < current.hCost()){
+                    current = openList.element();
                 }
-                openList.remove(current);
+                openList.remove(current); //If error then .remove(); should also remove the same.
                 closedList.add(current);
                 
                 if(current == targetNode){
