@@ -48,7 +48,6 @@ public class EnemyAIProcessor implements IEntityProcessingService {
                     //Investigation mode
                 } else {
                     //Patrolling mode
-                    findPath(getEnemyPosition(enemy), randomTargetNode(), enemy, gameData);
                 }
                 moveTowardsNextNode(enemy, gameData);
             }
