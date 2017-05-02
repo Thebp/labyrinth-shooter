@@ -60,7 +60,7 @@ public class FPSCounter implements IGamePluginService, IUIService {
     }
     
     private BufferedImage createCounterImage(GameData gameData, World world) {
-        BufferedImage image = new BufferedImage(120, 50, BufferedImage.TYPE_INT_ARGB);
+        BufferedImage image = new BufferedImage(200, 75, BufferedImage.TYPE_INT_ARGB);
         Graphics2D g = image.createGraphics();
         
         int fps = Math.round(calcAverageFPS(gameData.getDelta()));
@@ -69,7 +69,9 @@ public class FPSCounter implements IGamePluginService, IUIService {
         g.setColor(Color.GREEN);
         
         g.drawString("FPS: " + fps, 0, 20);
-        g.drawString("Entities: " + world.getEntities().size(), 0, 35);
+        g.drawString("foreground entities: "+ world.getForegroundEntities().size(),0, 35);
+        g.drawString("background entities: " + world.getBackgroundEntities().size(), 0, 50);
+        g.drawString("Total entities: " + world.getEntities().size(), 0, 65);
         g.dispose();
         
         return image;

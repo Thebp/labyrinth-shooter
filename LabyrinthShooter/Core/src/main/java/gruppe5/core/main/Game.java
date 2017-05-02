@@ -14,6 +14,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.BufferUtils;
 import gruppe5.common.audio.AudioSPI;
 import gruppe5.common.data.Entity;
@@ -33,7 +34,6 @@ import gruppe5.core.managers.GameInputProcessor;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
 import java.nio.IntBuffer;
-import java.util.ArrayList;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -56,6 +56,7 @@ public class Game implements ApplicationListener, AudioSPI {
     private Sprite sprite;
     private static OrthographicCamera cam;
     private final GameData gameData = new GameData();
+    Vector3 mousePosition = new Vector3();
     private World world = new World();
     private final Lookup lookup = Lookup.getDefault();
     private List<IGamePluginService> gamePlugins = new CopyOnWriteArrayList<>();
@@ -75,13 +76,12 @@ public class Game implements ApplicationListener, AudioSPI {
 
     @Override
     public void create() {
-
         world.setWorldWidth(worldWidth);
         world.setWorldHeight(worldHeight);
 
         gameData.setDisplayWidth(1000);
         gameData.setDisplayHeight(800);
-        
+
         cam = new OrthographicCamera(displayWidth, displayHeight);
         cam.position.set(cam.viewportWidth / 2f, cam.viewportHeight / 2f, 0);
         cam.update();
@@ -91,7 +91,7 @@ public class Game implements ApplicationListener, AudioSPI {
         bitmapfont.setScale(.50f, .50f);
         spriteBatch = new SpriteBatch();
         uiBatch = new SpriteBatch();
-        
+
         Gdx.input.setInputProcessor(new GameInputProcessor(gameData));
 
         gameInitResult = lookup.lookupResult(IGameInitService.class);
@@ -140,9 +140,18 @@ public class Game implements ApplicationListener, AudioSPI {
 
         updateCam();
 
+        getMouseInput();
+
         draw();
 
         gameData.getKeys().update();
+    }
+
+    private void getMouseInput() {
+        mousePosition.set(Gdx.input.getX(), Gdx.input.getY(), 0);
+        cam.unproject(mousePosition);
+        gameData.setMouseX((int) mousePosition.x);
+        gameData.setMouseY((int) mousePosition.y);
     }
 
     private void update() {
@@ -153,6 +162,7 @@ public class Game implements ApplicationListener, AudioSPI {
             uiService.process(gameData, world);
         }
         zoomCam();
+        
     }
 
     private void zoomCam() {
@@ -180,14 +190,12 @@ public class Game implements ApplicationListener, AudioSPI {
     }
 
     private void draw() {
-//        for (IRenderService renderService : getRenderServices()) {
-//            renderService.render(gameData, world);
-//        }
-        
+        Entity player = getPlayer();
+
         for (Entity entity : world.getBackgroundEntities()) {
-            drawSprite(entity);
+            drawSprite(entity, player);
         }
-        
+
         for (Entity entity : world.getForegroundEntities()) {
             //float distance = (float) Math.sqrt(Math.pow(entity.getX() - getPlayer().getX(), 2) + Math.pow(entity.getY() - getPlayer().getY(), 2));
             //if (distance < 300) {
@@ -207,65 +215,69 @@ public class Game implements ApplicationListener, AudioSPI {
 
             sr.end();
 
-            drawSprite(entity);
+            drawSprite(entity, player);
             //}
             //drawFont();
 
         }
-        
+
         for (UIElement element : gameData.getUIElements()) {
             drawUIElement(element);
         }
+
     }
 
-    private void drawSprite(Entity entity) {
-        if (entity.getImagePath() != null) {
-            //uses ResourceSPI that takes entity.getImagePath as argument (string url).
-            ResourceSPI spriteSPI = Lookup.getDefault().lookup(ResourceSPI.class);
-            String url = spriteSPI.getResourceUrl(entity.getImagePath());
+    private void drawSprite(Entity entity, Entity player) {
+        float distance = (float) Math.sqrt(Math.pow(entity.getX() - player.getX(), 2) + Math.pow(entity.getY() - player.getY(), 2));
+        if (distance < 400) {
+            if (entity.getImagePath() != null) {
+                //uses ResourceSPI that takes entity.getImagePath as argument (string url).
+                ResourceSPI spriteSPI = Lookup.getDefault().lookup(ResourceSPI.class);
+                String url = spriteSPI.getResourceUrl(entity.getImagePath());
 
-            am.load(url, Texture.class);
-            am.finishLoading();
-            texture = am.get(url, Texture.class);
-            sprite = new Sprite(texture);
-            spriteBatch.begin();
-            sprite.setSize(entity.getRadius(), entity.getRadius());
-            sprite.setPosition(entity.getX() - (entity.getRadius() / 2), entity.getY() - (entity.getRadius() / 2));
-            sprite.setOrigin(sprite.getWidth() / 2, sprite.getHeight() / 2);
-            sprite.setRotation((float) Math.toDegrees(entity.getRadians()));
-            sprite.draw(spriteBatch);
-            spriteBatch.end();
+                am.load(url, Texture.class);
+                am.finishLoading();
+                texture = am.get(url, Texture.class);
+                spriteBatch.begin();
+                sprite = new Sprite(texture);
+                sprite.setSize(entity.getRadius(), entity.getRadius());
+                sprite.setPosition(entity.getX() - (entity.getRadius() / 2), entity.getY() - (entity.getRadius() / 2));
+                sprite.setOrigin(sprite.getWidth() / 2, sprite.getHeight() / 2);
+                sprite.setRotation((float) Math.toDegrees(entity.getRadians()));
+                sprite.draw(spriteBatch);
+                spriteBatch.end();
+            }
         }
     }
-    
+	
     private void drawUIElement(UIElement element) {
         if (element.getImage() != null) {
             BufferedImage image = element.getImage();
             // Create texture that BufferedImage should be drawn onto
             Texture tex = new Texture(image.getWidth(), image.getHeight(), Format.RGBA8888);
-            
-            int[] pixels = ((DataBufferInt)image.getRaster().getDataBuffer()).getData();
+
+            int[] pixels = ((DataBufferInt) image.getRaster().getDataBuffer()).getData();
             IntBuffer buffer = BufferUtils.newIntBuffer(image.getWidth() * image.getHeight());
-            
+
             // Bind texture to the currently active texture unit
-            tex.bind(); 
-            
+            tex.bind();
+
             // Load pixels into buffer
             buffer.rewind();
             buffer.put(pixels);
             buffer.flip();
-            
+
             // Upload buffer to texture unit
-            Gdx.gl.glTexSubImage2D(GL11.GL_TEXTURE_2D, 0, 0, 0, 
-                    image.getWidth(), image.getHeight(), GL12.GL_BGRA, 
+            Gdx.gl.glTexSubImage2D(GL11.GL_TEXTURE_2D, 0, 0, 0,
+                    image.getWidth(), image.getHeight(), GL12.GL_BGRA,
                     GL12.GL_UNSIGNED_INT_8_8_8_8_REV, buffer);
-            
+
             // Draw texture
             uiBatch.begin();
             // Height is subtracted from Y, so that the position corresponds to the image's top left corner
             uiBatch.draw(tex, element.getX(), element.getY() - image.getHeight(), image.getWidth(), image.getHeight());
             uiBatch.end();
-            
+
             tex.dispose();
         }
     }
@@ -293,7 +305,7 @@ public class Game implements ApplicationListener, AudioSPI {
     private Collection<? extends IRenderService> getRenderServices() {
         return lookup.lookupAll(IRenderService.class);
     }
-    
+
     private Collection<? extends IUIService> getUIServices() {
         return lookup.lookupAll(IUIService.class);
     }

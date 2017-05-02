@@ -35,7 +35,8 @@ public class WeaponPlugin implements IGamePluginService {
                 weapon.setCollidable(false);
                 weapon.setDynamic(true);
                 weapon.setPosition(node.getX(), node.getY());
-                weapon.setRadius(12);
+                weapon.setRadius(GameData.UNIT_SIZE);
+                weapon.setImagePath("Weapon/target/Weapon-1.0.0-SNAPSHOT.jar!/assets/images/weapon01.png");
                 weapon.setSoundPath("Weapon/target/Weapon-1.0.0-SNAPSHOT.jar!/assets/sound/riflefireogg.ogg");
                 world.addEntity(weapon);
             }

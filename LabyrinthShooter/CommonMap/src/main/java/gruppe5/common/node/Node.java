@@ -85,13 +85,10 @@ public class Node implements MapNode {
             return false;
         }
         final Node other = (Node) obj;
-        if (this.isMiddle != other.isMiddle) {
+        if (this.x != other.x) {
             return false;
         }
-        if (Float.floatToIntBits(this.x) != Float.floatToIntBits(other.x)) {
-            return false;
-        }
-        if (Float.floatToIntBits(this.y) != Float.floatToIntBits(other.y)) {
+        if (this.y != other.y) {
             return false;
         }
         return true;

@@ -48,15 +48,15 @@ public class PlayerPlugin implements IGamePluginService {
         player.setAcceleration(1000);
         player.setMaxSpeed(100);
         player.setDeacceleration(5);
-        player.setShapeX(new float[4]);
-        player.setShapeY(new float[4]);
-        player.setRadius(8);
+        player.setShapeX(new float[8]);
+        player.setShapeY(new float[8]);
+        player.setRadius(GameData.UNIT_SIZE);
         player.setRadians(3.1415f / 2);
         player.setRotationSpeed(3);
         player.setCollidable(true);
         player.setDynamic(true);
         player.setLife(3);
-        player.setImagePath("Player/target/Player-1.0.0-SNAPSHOT.jar!/assets/images/ship.png");
+        player.setImagePath("Player/target/Player-1.0.0-SNAPSHOT.jar!/assets/images/player.png");
         player.setSoundPath("Player/target/Player-1.0.0-SNAPSHOT.jar!/assets/sound/playerdeath.ogg");
 
         return player;

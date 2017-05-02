@@ -34,5 +34,6 @@ hs_err_pid*
 /LabyrinthShooter/CommonSprites/target/
 /LabyrinthShooter/CommonResources/target/
 /LabyrinthShooter/ResourceManager/target/
-/LabyrinthShooter/FPSCounter/target//LabyrinthShooter/ResourceManager/target/
+/LabyrinthShooter/FPSCounter/target/
+/LabyrinthShooter/commonCollision/target//LabyrinthShooter/FPSCounter/target//LabyrinthShooter/ResourceManager/target/
 /LabyrinthShooter/CommonAudio/target/
