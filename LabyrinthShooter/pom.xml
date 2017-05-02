@@ -76,6 +76,7 @@
         <module>CommonResources</module>
         <module>ResourceManager</module>
         <module>FPSCounter</module>
+        <module>commonCollision</module>
     </modules>
 
     <properties>

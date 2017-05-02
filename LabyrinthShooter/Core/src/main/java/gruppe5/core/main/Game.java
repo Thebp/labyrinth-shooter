@@ -215,8 +215,8 @@ public class Game implements ApplicationListener {
                 am.load(url, Texture.class);
                 am.finishLoading();
                 texture = am.get(url, Texture.class);
-                sprite = new Sprite(texture);
                 spriteBatch.begin();
+                sprite = new Sprite(texture);
                 sprite.setSize(entity.getRadius(), entity.getRadius());
                 sprite.setPosition(entity.getX() - (entity.getRadius() / 2), entity.getY() - (entity.getRadius() / 2));
                 sprite.setOrigin(sprite.getWidth() / 2, sprite.getHeight() / 2);
