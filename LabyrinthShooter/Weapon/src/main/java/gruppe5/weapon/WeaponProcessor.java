@@ -16,6 +16,8 @@ public class WeaponProcessor implements IEntityProcessingService {
         for (Entity entity : world.getEntities(Weapon.class)) {
             Weapon weapon = (Weapon) entity;
             moveWeapon(weapon);
+            
+            weapon.reduceCooldown(gameData.getDelta());
         }
     }
 

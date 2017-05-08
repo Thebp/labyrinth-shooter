@@ -10,7 +10,6 @@ import org.openide.util.Lookup;
 import org.openide.util.lookup.ServiceProvider;
 
 @ServiceProvider(service = WeaponSPI.class)
-
 public class WeaponSPIImpl implements WeaponSPI {
 
     @Override
@@ -34,10 +33,14 @@ public class WeaponSPIImpl implements WeaponSPI {
 
     @Override
     public void shoot(World world, Entity entity) {
-        Entity bullet = Lookup.getDefault().lookup(BulletSPI.class).createBullet(entity);
-        world.addEntity(bullet);
-        if (audioSPI != null) {
-            audioSPI.playAudio(entity.getSoundPath(), entity);
+        Weapon weapon = (Weapon) entity;
+        if (weapon.getCooldown() <= 0) {
+            Entity bullet = Lookup.getDefault().lookup(BulletSPI.class).createBullet(entity);
+            world.addEntity(bullet);
+            weapon.setCooldown(0.5f);
+            if (audioSPI != null) {
+                audioSPI.playAudio(entity.getSoundPath(), entity);
+            }
         }
     }
 

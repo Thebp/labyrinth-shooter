@@ -15,6 +15,8 @@ import gruppe5.common.node.Node;
 import gruppe5.common.map.MapSPI;
 import gruppe5.common.player.PlayerSPI;
 import gruppe5.common.services.IEntityProcessingService;
+import gruppe5.common.weapon.Weapon;
+import gruppe5.common.weapon.WeaponSPI;
 import java.util.Collections;
 import java.util.List;
 import java.util.PriorityQueue;
@@ -35,21 +37,17 @@ public class EnemyAIProcessor implements IEntityProcessingService {
     private PlayerSPI playerSPI = null;
     private Node Node = null;
     private CollisionSPI collisionSPI = null;
-    private Entity visibility;
 
     @Override
     public void process(GameData gameData, World world) {
-        if (visibility == null) {
-            visibility = new Entity();
-        }
-        world.removeEntity(visibility);
         mapSPI = Lookup.getDefault().lookup(MapSPI.class);
         playerSPI = Lookup.getDefault().lookup(PlayerSPI.class);
         collisionSPI = Lookup.getDefault().lookup(CollisionSPI.class);
+        Entity player = playerSPI.getPlayer(world);
         if (mapSPI != null) {
             for (Entity entity : world.getEntities(Enemy.class)) {
                 Enemy enemy = (Enemy) entity;
-                checkPlayerProximity(enemy, world);
+                checkPlayerProximity(enemy, player, world);
                 if (enemy.getTarget() != null) {
                     enemyAttack(enemy, world, gameData);
                 } else if (enemy.getTargetNode() != null) {
@@ -66,21 +64,20 @@ public class EnemyAIProcessor implements IEntityProcessingService {
         
     }
 
-    private void checkPlayerProximity(Enemy enemy, World world) {
-        if (playerSPI != null) {
-            Entity player = playerSPI.getPlayer(world);
+    private void checkPlayerProximity(Enemy enemy, Entity player, World world) {
             if (player != null) {
                 float xDiff = player.getX() - enemy.getX();
                 float yDiff = player.getY() - enemy.getY();
                 float distance = (float) Math.sqrt(Math.pow(xDiff, 2) + Math.pow(yDiff, 2));
-
-                if (distance < 200 && (checkPlayerVisibility(enemy, player, world) || distance < 70)) {
+                
+                if((distance < 9 * GameData.UNIT_SIZE && checkPlayerVisibility(enemy, player, world)) || (enemy.getTarget() != null && distance < 6 * GameData.UNIT_SIZE)) {
                     enemy.setTarget(player);
                 } else {
                     enemy.setTarget(null);
                 }
+            } else {
+                enemy.setTarget(null);
             }
-        }
     }
 
     private boolean checkPlayerVisibility(Enemy enemy, Entity player, World world) {
@@ -100,6 +97,8 @@ public class EnemyAIProcessor implements IEntityProcessingService {
 
             shapex[3] = player.getX();
             shapey[3] = player.getY();
+            
+            Entity visibility = new Entity();
 
             visibility.setShapeX(shapex);
             visibility.setShapeY(shapey);
@@ -108,7 +107,6 @@ public class EnemyAIProcessor implements IEntityProcessingService {
             visibility.setX(enemy.getX());
             visibility.setY(enemy.getY());
             visibility.setDynamic(false);
-            world.addEntity(visibility);
 
             if (!collisionSPI.checkCollision(visibility, world)) {
                 return true;
@@ -140,6 +138,20 @@ public class EnemyAIProcessor implements IEntityProcessingService {
                     if (nodeDistance < closestDistance && mapNode.getNeighbours().size() > 0) {
                         closestDistance = nodeDistance;
                         closestNode = mapNode;
+                    }
+                }
+            }
+            
+            if(checkPlayerVisibility(enemy, player, world)) {
+                Weapon weapon = null;
+                for(Entity subEntity : enemy.getEntities(Weapon.class)) {
+                    weapon = (Weapon) subEntity;
+                }
+                
+                if(weapon != null) {
+                    WeaponSPI weaponSPI = Lookup.getDefault().lookup(WeaponSPI.class);
+                    if(weaponSPI != null) {
+                        weaponSPI.shoot(world, weapon);
                     }
                 }
             }
