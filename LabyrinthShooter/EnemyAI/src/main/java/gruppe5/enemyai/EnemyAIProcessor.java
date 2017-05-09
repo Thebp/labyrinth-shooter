@@ -70,9 +70,26 @@ public class EnemyAIProcessor implements IEntityProcessingService {
                 float yDiff = player.getY() - enemy.getY();
                 float distance = (float) Math.sqrt(Math.pow(xDiff, 2) + Math.pow(yDiff, 2));
                 
-                if((distance < 9 * GameData.UNIT_SIZE && checkPlayerVisibility(enemy, player, world)) || (enemy.getTarget() != null && distance < 6 * GameData.UNIT_SIZE)) {
+                if(distance < 9 * GameData.UNIT_SIZE && checkPlayerVisibility(enemy, player, world)) {
                     enemy.setTarget(player);
-                } else {
+                } else if(enemy.getTarget() != null){
+                    if(mapSPI != null) {
+                        MapNode closestNode = enemy.getNextNode();
+                        float closestDistance = distance;
+                        for(MapNode node : mapSPI.getMap()) {
+                            float nodeXDiff = player.getX() - node.getX();
+                            float nodeYDiff = player.getY() - node.getY();
+                            float nodeDistance = (float) Math.sqrt(Math.pow(nodeXDiff, 2) + Math.pow(nodeYDiff, 2));
+                            
+                            if (nodeDistance < closestDistance) {
+                                closestNode = node;
+                                closestDistance = nodeDistance;
+                            }
+                        }
+                        
+                        enemy.setTargetNode(closestNode);
+                        
+                    }
                     enemy.setTarget(null);
                 }
             } else {
