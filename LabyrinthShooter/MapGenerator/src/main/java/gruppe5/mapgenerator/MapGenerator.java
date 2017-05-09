@@ -25,17 +25,15 @@ public class MapGenerator implements MapSPI, IGameInitService {
      * For debugging, if true entities for nodes will be created and other info
      * will be shown
      */
-    public static final boolean DEBUG_ENABLED = false;
+    public static final boolean DEBUG_ENABLED = true;
     
-    public static final int NODES_IN_CORRIDOR = 3; // Must be odd to have a center node
+    public static final int NODES_IN_CORRIDOR = 7; // Must be odd to have a center node
+    public static final float MAP_UNIT_SIZE = GameData.UNIT_SIZE / 2;
     
-    // Random sprite chances
-    private static final int WALL_CRACK_CHANCE = 15; // 1/chance
-    private static final int NUM_FLOOR_EFFECTS = 3; // Number of floor effect images in assets
-    private static final int FLOOR_EFFECT_CHANCE = 10; // 1/chance
-
     private Random rand; // Used for seed generation
-
+    
+    
+    
     // Used for MapSPI
     private List<MapNode> nodeList;
     private List<MapNode> centerNodeList;
@@ -63,6 +61,17 @@ public class MapGenerator implements MapSPI, IGameInitService {
 
     @Override
     public MapNode getRandomSpawnNode() {
+         if (availableSpawnNodes == null) {
+            System.out.println("MapGenerator.getRandomSpawnNode(): MapGenerator not initialized.");
+            return null;
+        }
+        
+        // Get random MapNode
+        return availableSpawnNodes.get(rand.nextInt(availableSpawnNodes.size()));
+    }
+    
+    @Override
+    public MapNode reserveRandomSpawnNode() {
         if (availableSpawnNodes == null) {
             System.out.println("MapGenerator.getRandomSpawnNode(): MapGenerator not initialized.");
             return null;
@@ -88,8 +97,8 @@ public class MapGenerator implements MapSPI, IGameInitService {
         RandDivisionMaze generator = new RandDivisionMaze();
 
         // Calculate the unit dimensions of the maze given the world width and height
-        int mazeWidth = (int) Math.floor(world.getWorldWidth() / GameData.UNIT_SIZE / NODES_IN_CORRIDOR);
-        int mazeHeight = (int) Math.floor(world.getWorldHeight() / GameData.UNIT_SIZE / NODES_IN_CORRIDOR);
+        int mazeWidth = (int) Math.floor(world.getWorldWidth() / MAP_UNIT_SIZE / NODES_IN_CORRIDOR);
+        int mazeHeight = (int) Math.floor(world.getWorldHeight() / MAP_UNIT_SIZE / NODES_IN_CORRIDOR);
 
         // Generate a minimalistic version of maze
         boolean[][] maze = generator.generate(mazeWidth, mazeHeight, rand.nextInt());
@@ -105,7 +114,7 @@ public class MapGenerator implements MapSPI, IGameInitService {
         }
 
         // Create MapNodes required by MapSPI
-        nodeList = createNodeList(scaledMaze);
+        nodeList = createNodeList(scaledMaze, maze);
         centerNodeList = new ArrayList();
         availableSpawnNodes = new ArrayList();
 
@@ -151,7 +160,7 @@ public class MapGenerator implements MapSPI, IGameInitService {
         
         for (MapNode n : nodeList) {
             // Spawn node entities into world
-            world.addEntity(createNodeEntity(n));
+            world.addEntity(MapEntityCreator.createNodeEntity(n));
 
             // Print out debug info
             if (n.getNeighbours().size() <= 1) {
@@ -166,12 +175,14 @@ public class MapGenerator implements MapSPI, IGameInitService {
             }
 
             // Check that duplicates aren't contained in nodeList
-            for (MapNode other : nodeList) {
-                if (n.equals(other) && nodeList.indexOf(n) != nodeList.indexOf(other)) {
+            for (int i = 0; i < nodeList.size(); i++) {
+                if (n.equals(nodeList.get(i)) && nodeList.indexOf(n) != i) {
                     System.out.println("- Node " + n + " has a duplicate!");
                 }
             }
         }
+        
+        System.out.println("MapNode debugging done.");
     }
 
     /**
@@ -186,196 +197,14 @@ public class MapGenerator implements MapSPI, IGameInitService {
         for (int x = 0; x < maze.length; x++) {
             for (int y = 0; y < maze[x].length; y++) {
                 if (maze[x][y]) {
-                    entities.add(createWallEntity(x, y, neighbors(maze, x, y)));
+                    entities.add(MapEntityCreator.createWallEntity(x, y, neighbors(maze, x, y)));
                 } else {
-                    entities.add(createFloorEntity(x, y));
+                    entities.add(MapEntityCreator.createFloorEntity(x, y));
                 }
             }
         }
 
         return entities;
-    }
-
-    /**
-     *
-     * @param mazeX
-     * @param mazeY
-     * @return
-     */
-    private Entity createFloorEntity(int mazeX, int mazeY) {
-        Entity floor = new Entity();
-
-        float floorSize = GameData.UNIT_SIZE * NODES_IN_CORRIDOR;
-
-        float x = mazeX * floorSize + GameData.UNIT_SIZE;
-        float y = mazeY * floorSize + GameData.UNIT_SIZE;
-
-        floor.setPosition(x, y);
-        floor.setDynamic(false);
-        floor.setCollidable(false);
-        floor.setIsBackground(true);
-        floor.setRadius(floorSize + 1);
-        floor.setRadians(0);
-        String path = "MapGenerator/target/MapGenerator-1.0.0-SNAPSHOT.jar!/assets/images/floor_ground/floor";
-        if (rand.nextInt(FLOOR_EFFECT_CHANCE) == 0) {
-            path += "_effect" + (rand.nextInt(NUM_FLOOR_EFFECTS) + 1);
-        }
-        path += ".png";
-        floor.setImagePath(path);
-
-        return floor;
-    }
-
-    /**
-     *
-     * @param mazeX
-     * @param mazeY
-     * @param neighbors
-     * @return
-     */
-    private Entity createWallEntity(int mazeX, int mazeY, boolean[] neighbors) {
-        Entity wall = new Entity();
-
-        float wallSize = GameData.UNIT_SIZE * NODES_IN_CORRIDOR;
-
-        float x = mazeX * wallSize + GameData.UNIT_SIZE;
-        float y = mazeY * wallSize + GameData.UNIT_SIZE;
-
-        wall.setPosition(x, y);
-        wall.setDynamic(false);
-        wall.setCollidable(true);
-        wall.setRadius(wallSize + 1);
-        wall.setRadians(0); // Up
-
-        // Set image depending on wall's neighbors
-        String imagePath = "MapGenerator/target/MapGenerator-1.0.0-SNAPSHOT.jar!/assets/images/wall_tiles/wall";
-        if (!neighbors[0]) {
-            imagePath += "_up";
-        }
-        if (!neighbors[2]) {
-            imagePath += "_right";
-        }
-        if (!neighbors[4]) {
-            imagePath += "_down";
-        }
-        if (!neighbors[6]) {
-            imagePath += "_left";
-        }
-        
-        // Apply crack chance
-        if (rand.nextInt(WALL_CRACK_CHANCE) == 0)
-            imagePath += "_cracked";
-        
-        imagePath += ".png";
-        wall.setImagePath(imagePath);
-
-        float[] shapex = new float[4];
-        float[] shapey = new float[4];
-
-        shapex[0] = x - wallSize / 2;
-        shapey[0] = y + wallSize / 2;
-
-        shapex[1] = x + wallSize / 2;
-        shapey[1] = y + wallSize / 2;
-
-        shapex[2] = x + wallSize / 2;
-        shapey[2] = y - wallSize / 2;
-
-        shapex[3] = x - wallSize / 2;
-        shapey[3] = y - wallSize / 2;
-
-        wall.setShapeX(shapex);
-        wall.setShapeY(shapey);
-
-        return wall;
-    }
-
-    /**
-     *
-     * @param n
-     * @return An entity representing a node
-     */
-    private Entity createNodeEntity(MapNode n) {
-        Entity node = new Entity();
-
-        float x = n.getX();
-        float y = n.getY();
-        float unit = GameData.UNIT_SIZE;
-
-        node.setPosition(x, y);
-        node.setCollidable(false);
-        node.setDynamic(false);
-        node.setRadius(GameData.UNIT_SIZE);
-
-        // load sprite
-        boolean[] neighbors = new boolean[4];
-        for (MapNode neighbor : n.getNeighbours()) {
-            if (neighbor.getX() == n.getX() && neighbor.getY() > n.getY()) {
-                neighbors[0] = true;
-            }
-            if (neighbor.getY() == n.getY() && neighbor.getX() > n.getX()) {
-                neighbors[1] = true;
-            }
-            if (neighbor.getX() == n.getX() && neighbor.getY() < n.getY()) {
-                neighbors[2] = true;
-            }
-            if (neighbor.getY() == n.getY() && neighbor.getX() < n.getX()) {
-                neighbors[3] = true;
-            }
-        }
-
-        String imagePath = "MapGenerator/target/MapGenerator-1.0.0-SNAPSHOT.jar!/assets/images/node/node";
-        if (neighbors[0]) {
-            imagePath += "_up";
-        }
-        if (neighbors[1]) {
-            imagePath += "_right";
-        }
-        if (neighbors[2]) {
-            imagePath += "_down";
-        }
-        if (neighbors[3]) {
-            imagePath += "_left";
-        }
-
-        imagePath += ".png";
-        node.setImagePath(imagePath);
-
-        float[] shapex;
-        float[] shapey;
-        if (n.isMiddle()) {
-            shapex = new float[6];
-            shapey = new float[6];
-        } else {
-            shapex = new float[4];
-            shapey = new float[4];
-        }
-
-        shapex[0] = x;
-        shapey[0] = y + unit / 4;
-
-        shapex[1] = x + unit / 4;
-        shapey[1] = y;
-
-        shapex[2] = x;
-        shapey[2] = y - unit / 4;
-
-        shapex[3] = x - unit / 4;
-        shapey[3] = y;
-
-        // Create a line in the middle to indicate that this node is a center node
-        if (n.isMiddle()) {
-            shapex[4] = x;
-            shapey[4] = y + unit / 4;
-
-            shapex[5] = x;
-            shapey[5] = y - unit / 4;
-        }
-
-        node.setShapeX(shapex);
-        node.setShapeY(shapey);
-
-        return node;
     }
 
     /**
@@ -397,24 +226,8 @@ public class MapGenerator implements MapSPI, IGameInitService {
                 }
             }
         }
-
+       
         return scaled;
-    }
-
-    /**
-     *
-     * @param maze
-     * @return A transposed version of maze.
-     */
-    private boolean[][] transposeMaze(boolean[][] maze) {
-        boolean[][] transposed = new boolean[maze.length][maze[0].length];
-
-        for (int x = 0; x < maze.length; x++) {
-            for (int y = 0; y < maze[x].length; y++) {
-                transposed[x][y] = maze[y][x];
-            }
-        }
-        return transposed;
     }
 
     /**
@@ -423,18 +236,22 @@ public class MapGenerator implements MapSPI, IGameInitService {
      * @param maze The maze the nodes should be generated from. True denotes a
      * wall, False denotes an empty space. All empty spaces should be connected
      * to ensure that all nodes have the correct neighbours.
+     * @param originalMaze Used for settings correct center nodes.
      * @return A list of all nodes, all connected with their neighbours.
      */
-    private ArrayList<MapNode> createNodeList(boolean[][] maze) {
+    private ArrayList<MapNode> createNodeList(boolean[][] maze, boolean[][] originalMaze) {
         // Find random starting position
-        int x = 3;
-        int y = 3;
+        int x = NODES_IN_CORRIDOR;
+        int y = NODES_IN_CORRIDOR;
         for (; x < maze.length && maze[x][y]; x++) {
             for (; y < maze[x].length && maze[x][y]; y++);
         }
-
+        
         // Return result of recursive function
-        return iterateCenterNodes(null, new ArrayList<MapNode>(), maze, x, y);
+        ArrayList<MapNode> nodeList = new ArrayList();
+        createNodes(null, nodeList, maze, x, y, originalMaze);
+        
+        return nodeList;
     }
 
     /**
@@ -449,28 +266,30 @@ public class MapGenerator implements MapSPI, IGameInitService {
      * to ensure that all nodes have the correct neighbors.
      * @param x X-position in maze.
      * @param y Y-position in maze.
+     * @param originalMaze Original non-scaled maze. Used for determining whether
+     * a node is a center node.
      * @return A list of all nodes generated from this method.
      */
-    private ArrayList<MapNode> iterateCenterNodes(Node parent, ArrayList<MapNode> nodeList, boolean[][] maze, int x, int y) {
+    private void createNodes(Node parent, ArrayList<MapNode> nodeList, boolean[][] maze, int x, int y, boolean[][] originalMaze) {
         if (!safelyGetValue(maze, x, y)) {
             //Create child node
             Node child = null;
             for (MapNode existingNode : nodeList) {
                 //If there is already a node at the chosen position, choose that node
-                if (existingNode.getX() == GameData.UNIT_SIZE * x && existingNode.getY() == GameData.UNIT_SIZE * y) {
+                if (existingNode.getX() == MAP_UNIT_SIZE * x && existingNode.getY() == MAP_UNIT_SIZE * y) {
                     child = (Node) existingNode;
                 }
             }
             //If child is still null create a new Node at the chosen position and at it to nodeList
             if (child == null) {
-                child = createNode(x, y, isCenter(maze, x, y));
+                child = createNode(x, y, isCenter(maze, x, y, originalMaze));
                 nodeList.add(child);
 
                 //Create neighbors
-                iterateCenterNodes(child, nodeList, maze, x - 1, y);
-                iterateCenterNodes(child, nodeList, maze, x + 1, y);
-                iterateCenterNodes(child, nodeList, maze, x, y - 1);
-                iterateCenterNodes(child, nodeList, maze, x, y + 1);
+                createNodes(child, nodeList, maze, x - 1, y, originalMaze);
+                createNodes(child, nodeList, maze, x + 1, y, originalMaze);
+                createNodes(child, nodeList, maze, x, y - 1, originalMaze);
+                createNodes(child, nodeList, maze, x, y + 1, originalMaze);
             }
             if (parent != null) {
                 // Link parent and child together
@@ -482,29 +301,53 @@ public class MapGenerator implements MapSPI, IGameInitService {
                 }
             }
         }
-        return nodeList;
     }
 
     /**
      *
-     * @param maze
+     * @param scaledMaze
      * @param x
      * @param y
+     * @param originalMaze
      * @return A boolean indicating whether the position is the center of a
      * corridor
      */
-    private boolean isCenter(boolean[][] maze, int x, int y) {
-        boolean center = true;
-        boolean[] neighbors = neighbors(maze, x, y);
-
-        // If the position has no neighbouring walls, it is a center node
-        for (int i = 0; i < neighbors.length; i++) {
-            if (neighbors[i]) {
-                center = false;
+    private boolean isCenter(boolean[][] scaledMaze, int x, int y, boolean[][] originalMaze) {
+        boolean horizontal = false;
+        boolean vertical = false;
+        
+        // Determine position in original maze
+        int originalX = x / NODES_IN_CORRIDOR;
+        int originalY = y / NODES_IN_CORRIDOR;
+        
+        boolean[] neighbors = neighbors(originalMaze, originalX, originalY);
+        
+        // Determine if the positions' corridor is vertical or horizontal, or both
+        if (!neighbors[0] || !neighbors[4]) {
+            vertical = true;
+        } 
+        if (!neighbors[2] || !neighbors[6]) {
+            horizontal = true;
+        }
+        
+        if (vertical) {
+            // Check if the scaled x coordinate is center of the corridor
+            if (x % NODES_IN_CORRIDOR == NODES_IN_CORRIDOR / 2) {
+                // Check that the position is not touching any walls NODES_IN_CORRIDOR / 2 in either direction
+                if (!scaledMaze[x][y + (NODES_IN_CORRIDOR / 2)] && !scaledMaze[x][y - (NODES_IN_CORRIDOR / 2)]) {
+                    return true;
+                }
             }
         }
-
-        return center;
+        if (horizontal) {
+            if (y % NODES_IN_CORRIDOR == NODES_IN_CORRIDOR / 2) {
+                if (!scaledMaze[x + (NODES_IN_CORRIDOR / 2)][y] && !scaledMaze[x - (NODES_IN_CORRIDOR / 2)][y]) {
+                    return true;
+                }
+            }
+        }
+        
+        return false;
     }
 
     /**
@@ -565,8 +408,8 @@ public class MapGenerator implements MapSPI, IGameInitService {
     private Node createNode(int x, int y, boolean center) {
         Node n = new Node();
         n.setIsMiddle(center);
-        n.setX(GameData.UNIT_SIZE * x);
-        n.setY(GameData.UNIT_SIZE * y);
+        n.setX(MAP_UNIT_SIZE * x);
+        n.setY(MAP_UNIT_SIZE * y);
         return n;
     }
 }
