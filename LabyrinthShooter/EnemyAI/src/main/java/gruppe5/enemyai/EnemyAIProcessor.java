@@ -54,6 +54,7 @@ public class EnemyAIProcessor implements IEntityProcessingService {
                     //Investigation mode
                 } else {
                     //Patrolling mode
+
                 }
                 moveTowardsNextNode(enemy, gameData);
             }
@@ -65,12 +66,13 @@ public class EnemyAIProcessor implements IEntityProcessingService {
     }
 
     private void checkPlayerProximity(Enemy enemy, Entity player, World world) {
+
             if (player != null) {
                 float xDiff = player.getX() - enemy.getX();
                 float yDiff = player.getY() - enemy.getY();
                 float distance = (float) Math.sqrt(Math.pow(xDiff, 2) + Math.pow(yDiff, 2));
                 
-                if(distance < 9 * GameData.UNIT_SIZE && checkPlayerVisibility(enemy, player, world)) {
+                if ((distance < 9 * GameData.UNIT_SIZE && checkPlayerVisibility(enemy, player, world)) || (enemy.getTarget() != null && distance < 6 * GameData.UNIT_SIZE)) {
                     enemy.setTarget(player);
                 } else if(enemy.getTarget() != null){
                     if(mapSPI != null) {
@@ -114,7 +116,7 @@ public class EnemyAIProcessor implements IEntityProcessingService {
 
             shapex[3] = player.getX();
             shapey[3] = player.getY();
-            
+
             Entity visibility = new Entity();
 
             visibility.setShapeX(shapex);
@@ -158,16 +160,16 @@ public class EnemyAIProcessor implements IEntityProcessingService {
                     }
                 }
             }
-            
-            if(checkPlayerVisibility(enemy, player, world)) {
+
+            if (checkPlayerVisibility(enemy, player, world)) {
                 Weapon weapon = null;
-                for(Entity subEntity : enemy.getEntities(Weapon.class)) {
+                for (Entity subEntity : enemy.getEntities(Weapon.class)) {
                     weapon = (Weapon) subEntity;
                 }
-                
-                if(weapon != null) {
+
+                if (weapon != null) {
                     WeaponSPI weaponSPI = Lookup.getDefault().lookup(WeaponSPI.class);
-                    if(weaponSPI != null) {
+                    if (weaponSPI != null) {
                         weaponSPI.shoot(world, weapon);
                     }
                 }
@@ -210,24 +212,25 @@ public class EnemyAIProcessor implements IEntityProcessingService {
             }
         }
     }
-
-    private void findPath(MapNode startNode, MapNode targetNode, Enemy enemy, GameData gameData) {
+    
+    /*
+        Creates a list of mapNodes which is the path enemy takes when moving 
+        longer distances.
+    */
+    private List<MapNode> findPath(MapNode startNode, MapNode targetNode, Enemy enemy, GameData gameData) {
         mapSPI = Lookup.getDefault().lookup(MapSPI.class);
         //node = Lookup.getDefault().lookup(Node.class);
         List map = mapSPI.getMap();
-
         Queue<MapNode> openList = new PriorityQueue<MapNode>(map.size());
         List<MapNode> closedList = null;
         openList.add(startNode);
 
         while (openList.size() > 0) {
             MapNode current = openList.remove();
-
             closedList.add(current);
 
             if (current == targetNode) {
-                retracePath(startNode, targetNode);
-                return;
+                return retracePath(startNode, targetNode);
             }
 
             for (MapNode neighbour : current.getNeighbours()) {
@@ -242,18 +245,18 @@ public class EnemyAIProcessor implements IEntityProcessingService {
 
                     if (!openList.contains(neighbour)) {
                         openList.add(neighbour);
-
                     }
-
                 }
-
             }
-
         }
-
+        return null;
     }
-
-    private void retracePath(MapNode startNode, MapNode targetNode){
+    
+    /*
+        given the nodes from findPath(), loops through and creates a List of 
+        MapNodes and reverses it.
+    */
+    private List<MapNode> retracePath(MapNode startNode, MapNode targetNode) {
         List<MapNode> path = null;
         MapNode current = targetNode;
 
@@ -262,6 +265,27 @@ public class EnemyAIProcessor implements IEntityProcessingService {
             current = current.getParent();
         }
         Collections.reverse(path);
+        return path;
+    }
+
+    /*
+        If the enemy isn't at the target location it calls findPath().
+        Otherwise it sets the enemy's next node to be the first Node on the list.
+    */
+    private void pathRequest(MapNode startNode, MapNode targetNode, Enemy enemy, GameData gameData) {
+        List<MapNode> path = null;
+        Boolean pathComplete = false;
+        if (targetNode == getEnemyPosition(enemy)) {
+            pathComplete = true;
+        }
+        if (path.isEmpty()) {
+            pathComplete = true;
+        }
+        if (pathComplete = true) {
+
+            path = findPath(startNode, randomTargetNode(), enemy, gameData);
+        }
+        enemy.setNextNode(path.remove(0));
     }
 
     private int getDistance(MapNode pos1, MapNode pos2) {
@@ -280,17 +304,16 @@ public class EnemyAIProcessor implements IEntityProcessingService {
         enemyPosition.setY(enemy.getY());
         return enemyPosition;
     }
-    
+
     /*
     Returns a random centerNode. Better solution is to get a random spawn location,
     however atm. getting a spawnLocation removes it from List. new List? Ask Nick.
-    */
-    private MapNode randomTargetNode(){
+     */
+    private MapNode randomTargetNode() {
         Random rand = new Random();
         int index = rand.nextInt(mapSPI.getCenterMapNodes().size());
         MapNode target = mapSPI.getCenterMapNodes().get(index);
         return target;
     }
-    
 
 }
