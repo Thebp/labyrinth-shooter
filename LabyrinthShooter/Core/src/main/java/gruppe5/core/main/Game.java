@@ -179,6 +179,9 @@ public class Game implements ApplicationListener, AudioSPI {
             if(playerSPI.getPlayer(world) == null){
                 Entity e = new Entity();
                 e.setPosition(cam.position.x, cam.position.y);
+                for(IGamePluginService gp : gamePlugins){
+                        gp.stop(gameData, world);
+                }
                 return e;
             }
             return playerSPI.getPlayer(world);
