@@ -25,7 +25,7 @@ public class MapGenerator implements MapSPI, IGameInitService {
      * For debugging, if true entities for nodes will be created and other info
      * will be shown
      */
-    public static final boolean DEBUG_ENABLED = true;
+    public static final boolean DEBUG_ENABLED = false;
     
     public static final int NODES_IN_CORRIDOR = 7; // Must be odd to have a center node
     public static final float MAP_UNIT_SIZE = GameData.UNIT_SIZE / 2;
