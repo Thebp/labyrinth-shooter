@@ -214,6 +214,7 @@ public class EnemyAIProcessor implements IEntityProcessingService {
     }
     
     /*
+        A* algorythm. Gets called from pathRequest. 
         Creates a list of mapNodes which is the path enemy takes when moving 
         longer distances.
     */
@@ -269,6 +270,7 @@ public class EnemyAIProcessor implements IEntityProcessingService {
     }
 
     /*
+        Gets called from the process-method. Calls the findPath(A*) method.
         If the enemy isn't at the target location it calls findPath().
         Otherwise it sets the enemy's next node to be the first Node on the list.
     */
