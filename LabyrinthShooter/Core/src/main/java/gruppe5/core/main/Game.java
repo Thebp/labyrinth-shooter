@@ -119,13 +119,14 @@ public class Game implements ApplicationListener, AudioSPI {
         am = new AssetManager(jfhr);
 
         ResourceSPI musicSPI = Lookup.getDefault().lookup(ResourceSPI.class);
-        String musicURL = musicSPI.getResourceUrl("Core/target/Core-1.0.0-SNAPSHOT.jar!/assets/sound/music.ogg");
+        String musicURL = musicSPI.getResourceUrl("Core/target/Core-1.0.0-SNAPSHOT.jar!/assets/sound/musictwo.ogg");
         am.load(musicURL, Music.class);
         am.finishLoading();
 
         music = am.get(musicURL, Music.class);
-        //music.setLooping(true);
-        //music.play();
+        //music.setVolume(0.1f);
+        music.setLooping(true);
+        music.play();
     }
 
     @Override
