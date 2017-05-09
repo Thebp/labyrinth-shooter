@@ -7,12 +7,14 @@ package gruppe5.common.enemy;
 
 import gruppe5.common.data.Entity;
 import gruppe5.common.node.MapNode;
+import java.util.List;
 
 /**
  *
  * @author marcn
  */
 public class Enemy extends Entity{
+    private List<MapNode> path;
     private Entity target;
     private MapNode targetNode;
     private MapNode nextNode;
@@ -40,4 +42,14 @@ public class Enemy extends Entity{
     public void setNextNode(MapNode nextNode) {
         this.nextNode = nextNode;
     }
+
+    public List<MapNode> getPath() {
+        return path;
+    }
+
+    public void setPath(List<MapNode> path) {
+        this.path = path;
+    }
+    
+    
 }

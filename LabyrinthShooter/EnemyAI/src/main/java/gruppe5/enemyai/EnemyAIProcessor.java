@@ -20,6 +20,7 @@ import gruppe5.common.weapon.Weapon;
 import gruppe5.common.weapon.WeaponSPI;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.PriorityQueue;
 import java.util.Queue;
@@ -60,7 +61,7 @@ public class EnemyAIProcessor implements IEntityProcessingService {
                     //Investigation mode
                 } else {
                     //Patrolling mode
-                    //pathRequest(enemy, gameData);
+                    pathRequest(enemy, gameData);
                 }
                 moveTowardsNextNode(enemy, gameData);
             }
@@ -87,7 +88,7 @@ public class EnemyAIProcessor implements IEntityProcessingService {
     private MapNode getClosestNode(float x, float y) {
 
         if (mapSPI != null) {
-            List<MapNode> nodes = mapSPI.getCenterMapNodes();
+            List<MapNode> nodes = mapSPI.getMap();
 
             if (nodes != null && nodes.size() > 0) {
                 MapNode closestNode = nodes.get(0);
@@ -273,7 +274,7 @@ public class EnemyAIProcessor implements IEntityProcessingService {
         mapSPI = Lookup.getDefault().lookup(MapSPI.class);
         //node = Lookup.getDefault().lookup(Node.class);
         List map = mapSPI.getMap();
-        Queue<MapNode> openList = new PriorityQueue<MapNode>(map.size());
+        Queue<MapNode> openList = new PriorityQueue<MapNode>(map.size(), new HeapComparator());
         List<MapNode> closedList = new ArrayList();
         openList.add(startNode);
 
@@ -284,7 +285,7 @@ public class EnemyAIProcessor implements IEntityProcessingService {
             closedList.add(current);
 
             if (current == targetNode) {
-                return retracePath(startNode, targetNode);
+                return retracePath(startNode, targetNode, enemy);
             }
 
             //Alt kører som det skal indtil her
@@ -314,9 +315,9 @@ public class EnemyAIProcessor implements IEntityProcessingService {
     /*
         given the nodes from findPath(), loops through and creates a List of 
         MapNodes and reverses it.
-    */
-    private List<MapNode> retracePath(MapNode startNode, MapNode targetNode) {
-        List<MapNode> path = null;
+     */
+    private List<MapNode> retracePath(MapNode startNode, MapNode targetNode, Enemy enemy) {
+        List<MapNode> path = enemy.getPath();
         MapNode current = targetNode;
         //System.out.println("retracePath called");
         while (current != startNode) {
@@ -333,14 +334,18 @@ public class EnemyAIProcessor implements IEntityProcessingService {
         Otherwise it sets the enemy's next node to be the first Node on the list.
      */
     private void pathRequest(Enemy enemy, GameData gameData) {
-        List<MapNode> path = null;
-        Boolean pathComplete;
+        List<MapNode> path = enemy.getPath();
+        Boolean pathComplete = false;
         //if (targetNode == getEnemyPosition(enemy)) {
-          //  pathComplete = true;        }
+        //  pathComplete = true;        }
+        if (path == null) {
+            path = new ArrayList<MapNode>();
+            enemy.setPath(path);
+        }
         if (path.isEmpty()) {
             pathComplete = true;
         }
-        while (pathComplete = true) {
+        if (pathComplete) {
             MapNode startNode = getEnemyPosition(enemy);
             path = findPath(startNode, randomTargetNode(), enemy, gameData);
         }
@@ -358,7 +363,7 @@ public class EnemyAIProcessor implements IEntityProcessingService {
     }
 
     private MapNode getEnemyPosition(Enemy enemy) {
-        return getClosestNode(enemy.getX(),enemy.getY());
+        return getClosestNode(enemy.getX(), enemy.getY());
     }
 
     /*
