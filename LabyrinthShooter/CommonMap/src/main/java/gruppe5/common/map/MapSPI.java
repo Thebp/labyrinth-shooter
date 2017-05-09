@@ -24,8 +24,13 @@ public interface MapSPI {
      */
     public List<MapNode> getCenterMapNodes();
     /**
-     * Finds and reserves a MapNode such that this MapNode won't be returned again by this function
+     * Returns a random available spawn node.
      * @return 
      */
     public MapNode getRandomSpawnNode();
+    /**
+     * Finds and reserves a MapNode such that this MapNode won't be returned again by this function
+     * @return 
+     */
+    public MapNode reserveRandomSpawnNode();
 }
