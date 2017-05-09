@@ -54,7 +54,7 @@ public class EnemyAIProcessor implements IEntityProcessingService {
                     //Investigation mode
                 } else {
                     //Patrolling mode
-
+                    pathRequest(enemy, gameData);
                 }
                 moveTowardsNextNode(enemy, gameData);
             }
@@ -273,18 +273,18 @@ public class EnemyAIProcessor implements IEntityProcessingService {
         Gets called from the process-method. Calls the findPath(A*) method.
         If the enemy isn't at the target location it calls findPath().
         Otherwise it sets the enemy's next node to be the first Node on the list.
-    */
-    private void pathRequest(MapNode startNode, MapNode targetNode, Enemy enemy, GameData gameData) {
+     */
+    private void pathRequest(Enemy enemy, GameData gameData) {
         List<MapNode> path = null;
         Boolean pathComplete = false;
-        if (targetNode == getEnemyPosition(enemy)) {
-            pathComplete = true;
-        }
+//        if (targetNode == getEnemyPosition(enemy)) {
+//            pathComplete = true;
+//        }
         if (path.isEmpty()) {
             pathComplete = true;
         }
         if (pathComplete = true) {
-
+            MapNode startNode = getEnemyPosition(enemy);
             path = findPath(startNode, randomTargetNode(), enemy, gameData);
         }
         enemy.setNextNode(path.remove(0));
