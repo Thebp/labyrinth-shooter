@@ -74,27 +74,40 @@ public class EnemyAIProcessor implements IEntityProcessingService {
     private void checkBullets(Enemy enemy, World world) {
         List<Entity> bullets = world.getEntities(Bullet.class);
 
-        if (bullets.size() >= 1 && mapSPI != null) {
-            Entity bullet = bullets.get(0);
-            
+        if (bullets.size() >= 1) {
+
+            MapNode closestNode = getClosestNode(bullets.get(0).getX(), bullets.get(0).getY());
+            if (closestNode != null) {
+                enemy.setTargetNode(closestNode);
+            }
+
+        }
+    }
+
+    private MapNode getClosestNode(float x, float y) {
+
+        if (mapSPI != null) {
             List<MapNode> nodes = mapSPI.getCenterMapNodes();
 
-            if(nodes != null && nodes.size() > 0) {
+            if (nodes != null && nodes.size() > 0) {
                 MapNode closestNode = nodes.get(0);
-                float closestDistance = getDistance(closestNode.getX(), closestNode.getY(), bullet.getX(), bullet.getY());
-                
-                for(int i = 1; i < nodes.size(); i++) {
+                float closestDistance = getDistance(closestNode.getX(), closestNode.getY(), x, y);
+
+                for (int i = 1; i < nodes.size(); i++) {
                     MapNode node = nodes.get(i);
-                    float distance = getDistance(node.getX(), node.getY(), bullet.getX(), bullet.getY());
-                    if(distance < closestDistance) {
+                    float distance = getDistance(node.getX(), node.getY(), x, y);
+                    if (distance < closestDistance) {
                         closestDistance = distance;
                         closestNode = node;
                     }
                 }
-                
-                enemy.setTargetNode(closestNode);
+
+                return closestNode;
             }
+
         }
+        return null;
+
     }
 
     private float getDistance(float x1, float y1, float x2, float y2) {
@@ -269,19 +282,18 @@ public class EnemyAIProcessor implements IEntityProcessingService {
             //System.out.println(current.getX());
             //System.out.println(current.getY());
             closedList.add(current);
-            
-            
+
             if (current == targetNode) {
                 return retracePath(startNode, targetNode);
             }
-            
+
             //Alt kører som det skal indtil her
             for (MapNode neighbour : current.getNeighbours()) {
                 if (closedList.contains(neighbour)) {               // Tror fejlen ligger her et sted
                     continue; //Så vidt jeg forstår skal denne gøre at den går "tilbage" til for loopet 
                     //(springer) alt nedenunder over for denne neighbour, og så itererer videre i for loopet
                 }
-                
+
                 // Selve A* calculation der vælger vejen. Setter nogle variabler ved node der calculeres fra
                 int newMovementCostToNeighbour = current.gCost() + getDistance(current, neighbour);
                 if (newMovementCostToNeighbour < neighbour.gCost() || !openList.contains(neighbour)) {
@@ -327,7 +339,7 @@ public class EnemyAIProcessor implements IEntityProcessingService {
 //            pathComplete = true;
 //        }
 //        if (path.isEmpty()) {
-            pathComplete = true;
+        pathComplete = true;
 //        }
         while (pathComplete = true) {
             MapNode startNode = getEnemyPosition(enemy);
