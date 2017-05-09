@@ -6,7 +6,6 @@
 package gruppe5.mapgenerator;
 
 import gruppe5.common.data.Entity;
-import gruppe5.common.data.GameData;
 import gruppe5.common.node.MapNode;
 import static gruppe5.mapgenerator.MapGenerator.NODES_IN_CORRIDOR;
 import java.util.Random;
@@ -32,10 +31,10 @@ public class MapEntityCreator {
     public static Entity createFloorEntity(int mazeX, int mazeY) {
         Entity floor = new Entity();
 
-        float floorSize = GameData.UNIT_SIZE * NODES_IN_CORRIDOR;
+        float floorSize = MapGenerator.MAP_UNIT_SIZE * NODES_IN_CORRIDOR;
 
-        float x = mazeX * floorSize + (GameData.UNIT_SIZE * (NODES_IN_CORRIDOR - 1) / 2);
-        float y = mazeY * floorSize + (GameData.UNIT_SIZE * (NODES_IN_CORRIDOR - 1) / 2);
+        float x = mazeX * floorSize + (MapGenerator.MAP_UNIT_SIZE * (NODES_IN_CORRIDOR - 1) / 2);
+        float y = mazeY * floorSize + (MapGenerator.MAP_UNIT_SIZE * (NODES_IN_CORRIDOR - 1) / 2);
 
         floor.setPosition(x, y);
         floor.setDynamic(false);
@@ -63,10 +62,10 @@ public class MapEntityCreator {
     public static Entity createWallEntity(int mazeX, int mazeY, boolean[] neighbors) {
         Entity wall = new Entity();
 
-        float wallSize = GameData.UNIT_SIZE * NODES_IN_CORRIDOR;
+        float wallSize = MapGenerator.MAP_UNIT_SIZE * NODES_IN_CORRIDOR;
 
-        float x = mazeX * wallSize + (GameData.UNIT_SIZE * (NODES_IN_CORRIDOR - 1) / 2);
-        float y = mazeY * wallSize + (GameData.UNIT_SIZE * (NODES_IN_CORRIDOR - 1) / 2);
+        float x = mazeX * wallSize + (MapGenerator.MAP_UNIT_SIZE * (NODES_IN_CORRIDOR - 1) / 2);
+        float y = mazeY * wallSize + (MapGenerator.MAP_UNIT_SIZE * (NODES_IN_CORRIDOR - 1) / 2);
 
         wall.setPosition(x, y);
         wall.setDynamic(false);
@@ -127,12 +126,12 @@ public class MapEntityCreator {
 
         float x = n.getX();
         float y = n.getY();
-        float unit = GameData.UNIT_SIZE;
+        float unit = MapGenerator.MAP_UNIT_SIZE;
 
         node.setPosition(x, y);
         node.setCollidable(false);
         node.setDynamic(false);
-        node.setRadius(GameData.UNIT_SIZE);
+        node.setRadius(MapGenerator.MAP_UNIT_SIZE);
 
         // load sprite
         boolean[] neighbors = new boolean[4];
