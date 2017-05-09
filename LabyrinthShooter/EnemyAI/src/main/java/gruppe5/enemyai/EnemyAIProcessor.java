@@ -5,6 +5,7 @@
  */
 package gruppe5.enemyai;
 
+import gruppe5.common.bullet.Bullet;
 import gruppe5.common.collision.CollisionSPI;
 import gruppe5.common.enemy.Enemy;
 import gruppe5.common.data.Entity;
@@ -48,6 +49,10 @@ public class EnemyAIProcessor implements IEntityProcessingService {
             for (Entity entity : world.getEntities(Enemy.class)) {
                 Enemy enemy = (Enemy) entity;
                 checkPlayerProximity(enemy, player, world);
+                if (enemy.getTarget() == null) {
+                    checkBullets(enemy, world);
+                }
+
                 if (enemy.getTarget() != null) {
                     enemyAttack(enemy, world, gameData);
                 } else if (enemy.getTargetNode() != null) {
@@ -63,6 +68,38 @@ public class EnemyAIProcessor implements IEntityProcessingService {
     
     private void checkPlayerVisibility(Enemy enemy, World world) {
         
+    }
+
+    private void checkBullets(Enemy enemy, World world) {
+        List<Entity> bullets = world.getEntities(Bullet.class);
+
+        if (bullets.size() >= 1 && mapSPI != null) {
+            Entity bullet = bullets.get(0);
+            
+            List<MapNode> nodes = mapSPI.getCenterMapNodes();
+
+            if(nodes != null && nodes.size() > 0) {
+                MapNode closestNode = nodes.get(0);
+                float closestDistance = getDistance(closestNode.getX(), closestNode.getY(), bullet.getX(), bullet.getY());
+                
+                for(int i = 1; i < nodes.size(); i++) {
+                    MapNode node = nodes.get(i);
+                    float distance = getDistance(node.getX(), node.getY(), bullet.getX(), bullet.getY());
+                    if(distance < closestDistance) {
+                        closestDistance = distance;
+                        closestNode = node;
+                    }
+                }
+                
+                enemy.setTargetNode(closestNode);
+            }
+        }
+    }
+
+    private float getDistance(float x1, float y1, float x2, float y2) {
+        float xDiff = x1 - x2;
+        float yDiff = y1 - y2;
+        return (float) Math.sqrt(Math.pow(xDiff, 2) + Math.pow(xDiff, 2));
     }
 
     private void checkPlayerProximity(Enemy enemy, Entity player, World world) {
