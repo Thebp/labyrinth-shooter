@@ -66,7 +66,6 @@
         <module>CommonPlayer</module>
         <module>CommonWeapon</module>
         <module>MapGenerator</module>
-        <module>Renderer</module>
         <module>Collision</module>
         <module>Bullet</module>
         <module>Weapon</module>

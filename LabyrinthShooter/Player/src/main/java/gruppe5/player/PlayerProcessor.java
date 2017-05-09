@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package gruppe5.player;
 
 import gruppe5.common.audio.AudioSPI;
@@ -18,10 +13,6 @@ import org.openide.util.Lookup;
 import org.openide.util.lookup.ServiceProvider;
 import org.openide.util.lookup.ServiceProviders;
 
-/**
- *
- * @author Christian
- */
 @ServiceProviders(value = {
     @ServiceProvider(service = IEntityProcessingService.class),
     @ServiceProvider(service = PlayerSPI.class)
@@ -45,14 +36,13 @@ public class PlayerProcessor implements IEntityProcessingService, PlayerSPI {
             float dt = gameData.getDelta();
             int rotationSpeed = player.getRotationSpeed();
             float b = (3.1415f / 2);
-             
 
             if (gameData.getKeys().isDown(GameKeys.LEFT)) {
                 radians += rotationSpeed * dt;
             } else if (gameData.getKeys().isDown(GameKeys.RIGHT)) {
                 radians -= rotationSpeed * dt;
             }
-            AudioSPI audioSPI  = Lookup.getDefault().lookup(AudioSPI.class);
+            AudioSPI audioSPI = Lookup.getDefault().lookup(AudioSPI.class);
             WeaponSPI weaponSPI = Lookup.getDefault().lookup(WeaponSPI.class);
             //shooting
             if (gameData.getKeys().isPressed(GameKeys.SPACE) && weaponSPI != null) {
@@ -63,8 +53,6 @@ public class PlayerProcessor implements IEntityProcessingService, PlayerSPI {
                 }
                 if (weapon != null) {
                     weaponSPI.shoot(world, weapon);
-//                    player.setSoundPath("Player/target/Player-1.0.0-SNAPSHOT.jar!/assets/sound/bullet.ogg");
-//                    audioSPI.playAudio(player.getSoundPath(), player);
                 }
             }
 
@@ -88,10 +76,12 @@ public class PlayerProcessor implements IEntityProcessingService, PlayerSPI {
 //            double diffx = player.getX() - gameData.getMouseX();
 //            double diffy = player.getY() - gameData.getMouseY();
             radians = (float) Math.atan2(diffy, diffx);
-            
-            if(player.getLife() <= 0){
+
+            if (player.getLife() <= 0) {
                 world.removeEntity(player);
-                audioSPI.playAudio(player.getSoundPath(), player);
+                if (audioSPI != null) {
+                    audioSPI.playAudio(player.getSoundPath(), player);
+                }
             }
             //Movement
 //            if (gameData.getKeys().isDown(GameKeys.UP)) {

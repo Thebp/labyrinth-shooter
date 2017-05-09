@@ -4,10 +4,6 @@ import gruppe5.common.resources.ResourceSPI;
 import java.io.File;
 import org.openide.util.lookup.ServiceProvider;
 
-/**
- *
- * @author Daniel
- */
 @ServiceProvider(service = ResourceSPI.class)
 public class ResourceProcessor implements ResourceSPI {
 
@@ -25,7 +21,7 @@ public class ResourceProcessor implements ResourceSPI {
 
     private String correctAbsolutePath() {
         if (absolutePath.endsWith("application\\target\\labyrinthshooter")) {
-            //removes the 
+            
             shortenedPath = absolutePath.replace("application\\target\\labyrinthshooter", "");
 
             //replaces \ with / in the url.

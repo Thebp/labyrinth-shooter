@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package gruppe5.mapgenerator;
 
 import gruppe5.common.node.MapNode;
@@ -24,10 +19,7 @@ import org.openide.util.lookup.ServiceProviders;
     ,
     @ServiceProvider(service = MapSPI.class)
 })
-/**
- *
- * @author nick
- */
+
 public class MapGenerator implements MapSPI, IGameInitService {
     /**
      * For debugging, if true entities for nodes will be created and other info

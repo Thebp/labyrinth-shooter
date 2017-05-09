@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package gruppe5.fpscounter;
 
 import gruppe5.common.data.GameData;
@@ -17,10 +12,6 @@ import java.awt.Font;
 import org.openide.util.lookup.ServiceProvider;
 import org.openide.util.lookup.ServiceProviders;
 
-/**
- *
- * @author nick
- */
 @ServiceProviders(value = {
     @ServiceProvider(service = IUIService.class),
     @ServiceProvider(service = IGamePluginService.class)
@@ -36,14 +27,14 @@ public class FPSCounter implements IGamePluginService, IUIService {
     
     @Override
     public void start(GameData gameData, World world) {
-        System.out.println("FPSCounter started");
+        System.out.println("FPSCounter plugin started");
         counter = new UIElement();
         gameData.addUIElement(counter);
     }
 
     @Override
     public void stop(GameData gameData, World world) {
-        System.out.println("FPSCounter stopped");
+        System.out.println("FPSCounter plugin stopped");
         gameData.removeUIElement(counter);
     }
     

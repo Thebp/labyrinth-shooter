@@ -1,17 +1,8 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package gruppe5.common.node;
 
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- *
- * @author nick
- */
 public class Node implements MapNode {
     private List<MapNode> neighbours = new ArrayList<>();
     private boolean isMiddle = false;

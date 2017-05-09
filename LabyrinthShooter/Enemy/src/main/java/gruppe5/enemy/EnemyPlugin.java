@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package gruppe5.enemy;
 
 import gruppe5.common.data.Entity;
@@ -15,10 +10,6 @@ import gruppe5.common.services.IGamePluginService;
 import org.openide.util.Lookup;
 import org.openide.util.lookup.ServiceProvider;
 
-/**
- *
- * @author Gyhuji
- */
 @ServiceProvider(service = IGamePluginService.class)
 public class EnemyPlugin implements IGamePluginService {
 
@@ -32,17 +23,22 @@ public class EnemyPlugin implements IGamePluginService {
     public void start(GameData gameData, World world) {
         enemy = createEnemy(gameData);
         world.addEntity(enemy);
+        System.out.println("Enemy plugin started");
     }
 
     private Entity createEnemy(GameData gameData) {
         enemy = new Enemy();
+        MapNode spawnlocation = null;
         MapSPI mapSPI = Lookup.getDefault().lookup(MapSPI.class);
-        
-        MapNode spawnlocation = mapSPI.getRandomSpawnNode();
-        
+        if (mapSPI != null) {
+            spawnlocation = mapSPI.getRandomSpawnNode();
+            enemy.setPosition(spawnlocation.getX(),
+                    spawnlocation.getY());
+        } else {
+            enemy.setPosition(gameData.getDisplayWidth() / 2, gameData.getDisplayHeight() / 2);
+        }
+
         //Setters for various features of the Enemy entity
-        enemy.setPosition(spawnlocation.getX(), 
-                spawnlocation.getY());
         enemy.setMaxSpeed(50);
         enemy.setAcceleration(10);
         enemy.setDeacceleration(15);
@@ -53,13 +49,14 @@ public class EnemyPlugin implements IGamePluginService {
         enemy.setDynamic(true);
         enemy.setLife(2);
         enemy.setSoundPath("Enemy/target/Enemy-1.0.0-SNAPSHOT.jar!/assets/sound/enemydeath.ogg");
-        
+
         return enemy;
     }
 
     @Override
     public void stop(GameData gameData, World world) {
         world.removeEntity(enemy);
+        System.out.println("Enemy plugin stopped");
     }
 
 }

@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package gruppe5.weapon;
 
 import gruppe5.common.data.Entity;
@@ -12,15 +7,11 @@ import gruppe5.common.node.MapNode;
 import gruppe5.common.map.MapSPI;
 import gruppe5.common.services.IGamePluginService;
 import gruppe5.common.weapon.Weapon;
-import java.util.List;
 import org.openide.util.Lookup;
 import org.openide.util.lookup.ServiceProvider;
 
 @ServiceProvider(service = IGamePluginService.class)
-/**
- *
- * @author Marc
- */
+
 public class WeaponPlugin implements IGamePluginService {
 
     @Override
@@ -48,6 +39,7 @@ public class WeaponPlugin implements IGamePluginService {
         for (Entity weapon : world.getEntities(Weapon.class)) {
             world.removeEntity(weapon);
         }
+        System.out.println("Weapon plugin stopped");
     }
 
 }

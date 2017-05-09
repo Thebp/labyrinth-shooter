@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package gruppe5.bullet;
 
 import gruppe5.common.bullet.Bullet;
@@ -16,10 +11,6 @@ import org.openide.util.lookup.ServiceProvider;
 
 @ServiceProvider(service = IEntityProcessingService.class)
 
-/**
- *
- * @author marcn
- */
 public class BulletProcessor implements IEntityProcessingService {
 
     @Override
@@ -55,8 +46,7 @@ public class BulletProcessor implements IEntityProcessingService {
         float[] shapey = bullet.getShapeY();
         float x = bullet.getX();
         float y = bullet.getY();
-        float radians = bullet.getRadians();
-        float size = bullet.getRadius()/3;
+        float size = bullet.getRadius() / 3;
 
         shapex[0] = (float) (x - size);
         shapey[0] = (float) (y);

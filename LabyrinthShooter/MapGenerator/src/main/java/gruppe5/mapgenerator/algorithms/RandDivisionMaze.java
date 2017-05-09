@@ -1,16 +1,7 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package gruppe5.mapgenerator.algorithms;
 
 import java.util.Random;
 
-/**
- *
- * @author nick
- */
 public class RandDivisionMaze {
     private static final int N = 1;
     private static final int S = 2;

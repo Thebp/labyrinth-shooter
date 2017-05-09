@@ -5,7 +5,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Pixmap.Format;
@@ -109,9 +108,6 @@ public class Game implements ApplicationListener, AudioSPI {
             plugin.start(gameData, world);
             gamePlugins.add(plugin);
         }
-//        for (IRenderService renderService : getRenderServices()) {
-//            renderService.create(gameData, world);
-//        }
 
         sprite = new Sprite();
 
@@ -124,7 +120,6 @@ public class Game implements ApplicationListener, AudioSPI {
         am.finishLoading();
 
         music = am.get(musicURL, Music.class);
-        //music.setVolume(0.1f);
         music.setLooping(true);
         music.play();
     }
@@ -163,7 +158,7 @@ public class Game implements ApplicationListener, AudioSPI {
             uiService.process(gameData, world);
         }
         zoomCam();
-        
+
     }
 
     private void zoomCam() {
@@ -180,7 +175,15 @@ public class Game implements ApplicationListener, AudioSPI {
 
     private Entity getPlayer() {
         PlayerSPI playerSPI = Lookup.getDefault().lookup(PlayerSPI.class);
-        return playerSPI.getPlayer(world);
+        if (playerSPI != null) {
+            if(playerSPI.getPlayer(world) == null){
+                Entity e = new Entity();
+                e.setPosition(cam.position.x, cam.position.y);
+                return e;
+            }
+            return playerSPI.getPlayer(world);
+        }
+        return new Entity();
     }
 
     private void updateCam() {
@@ -188,8 +191,8 @@ public class Game implements ApplicationListener, AudioSPI {
         cam.update();
         spriteBatch.setProjectionMatrix(cam.combined);
         sr.setProjectionMatrix(cam.combined);
-        }
-    
+    }
+
     private void draw() {
         Entity player = getPlayer();
 
@@ -198,8 +201,6 @@ public class Game implements ApplicationListener, AudioSPI {
         }
 
         for (Entity entity : world.getForegroundEntities()) {
-            //float distance = (float) Math.sqrt(Math.pow(entity.getX() - getPlayer().getX(), 2) + Math.pow(entity.getY() - getPlayer().getY(), 2));
-            //if (distance < 300) {
             sr.setColor(1, 1, 1, 1);
 
             sr.begin(ShapeRenderer.ShapeType.Line);
@@ -217,8 +218,6 @@ public class Game implements ApplicationListener, AudioSPI {
             sr.end();
 
             drawSprite(entity, player);
-            //}
-            //drawFont();
 
         }
 
@@ -250,7 +249,7 @@ public class Game implements ApplicationListener, AudioSPI {
             }
         }
     }
-	
+
     private void drawUIElement(UIElement element) {
         if (element.getImage() != null) {
             BufferedImage image = element.getImage();

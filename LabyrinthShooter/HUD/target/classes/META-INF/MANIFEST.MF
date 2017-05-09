@@ -1,8 +1,8 @@
 Manifest-Version: 1.0
 OpenIDE-Module-Localizing-Bundle: gruppe5/hud/Bundle.properties
 OpenIDE-Module-Specification-Version: 1.0.0
-OpenIDE-Module-Implementation-Version: 1.0.0-20170502
-OpenIDE-Module-Build-Version: 201705021245
+OpenIDE-Module-Implementation-Version: 1.0.0-20170509
+OpenIDE-Module-Build-Version: 201705091330
 OpenIDE-Module: gruppe5.HUD
 OpenIDE-Module-Public-Packages: -
 OpenIDE-Module-Requires: org.openide.modules.ModuleFormat1

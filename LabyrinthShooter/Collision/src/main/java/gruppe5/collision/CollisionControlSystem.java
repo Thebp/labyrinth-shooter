@@ -8,10 +8,6 @@ import gruppe5.common.data.World;
 import gruppe5.common.services.IEntityProcessingService;
 import org.openide.util.lookup.ServiceProvider;
 
-/**
- *
- * @author Daniel
- */
 @ServiceProvider(service = IEntityProcessingService.class)
 
 public class CollisionControlSystem implements IEntityProcessingService, CollisionSPI {
@@ -23,7 +19,7 @@ public class CollisionControlSystem implements IEntityProcessingService, Collisi
         for (Entity shape1 : world.getForegroundEntities()) {
             if (shape1.isDynamic()) {
                 for (Entity shape2 : world.getForegroundEntities()) {
-                    float distance = (float) Math.sqrt(Math.pow(shape2.getX() - shape1.getX(), 2) + Math.pow(shape1.getY() - shape2.getY(), 2));
+                    float distance = (float) Math.sqrt(Math.pow(shape2.getX() - shape1.getX(), 2) + Math.pow(shape2.getY() - shape1.getY(), 2));
                     if (distance < 200) {
                         Vector2 velocity = new Vector2(shape1.getDx(), shape1.getDy());
                         if (checkConditions(shape1, shape2, mtv, velocity)) {
