@@ -8,6 +8,7 @@ import gruppe5.common.node.MapNode;
 import gruppe5.common.map.MapSPI;
 import gruppe5.common.services.IGamePluginService;
 import gruppe5.common.weapon.Weapon;
+import gruppe5.common.weapon.WeaponSPI;
 import org.openide.util.Lookup;
 import org.openide.util.lookup.ServiceProvider;
 
@@ -21,16 +22,15 @@ public class EnemyPlugin implements IGamePluginService {
     @Override
     public void start(GameData gameData, World world) {
         Entity enemy = createEnemy(gameData);
-        Weapon weapon = new Weapon();
-        weapon.setCollidable(false);
-        weapon.setDynamic(true);
-        weapon.setPosition(enemy.getX(), enemy.getY());
-        weapon.setRadius(12);
-        weapon.setOwner(enemy);
-        
-        enemy.addSubEntity(weapon);
-        
-        world.addEntity(weapon);
+
+        WeaponSPI weaponSPI = Lookup.getDefault().lookup(WeaponSPI.class);
+        if (weaponSPI != null) {
+            Weapon weapon = weaponSPI.createWeapon(world);
+            weapon.setPosition(enemy.getX(), enemy.getY());
+            weapon.setOwner(enemy);
+            enemy.addSubEntity(weapon);
+            world.addEntity(weapon);
+        }
         world.addEntity(enemy);
         System.out.println("Enemy plugin started");
     }
