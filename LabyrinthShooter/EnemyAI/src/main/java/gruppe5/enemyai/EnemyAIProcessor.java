@@ -18,6 +18,7 @@ import gruppe5.common.player.PlayerSPI;
 import gruppe5.common.services.IEntityProcessingService;
 import gruppe5.common.weapon.Weapon;
 import gruppe5.common.weapon.WeaponSPI;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.PriorityQueue;
@@ -260,21 +261,28 @@ public class EnemyAIProcessor implements IEntityProcessingService {
         //node = Lookup.getDefault().lookup(Node.class);
         List map = mapSPI.getMap();
         Queue<MapNode> openList = new PriorityQueue<MapNode>(map.size());
-        List<MapNode> closedList = null;
+        List<MapNode> closedList = new ArrayList();
         openList.add(startNode);
 
         while (openList.size() > 0) {
             MapNode current = openList.remove();
+            //System.out.println(current.getX());
+            //System.out.println(current.getY());
             closedList.add(current);
-
+            
+            
             if (current == targetNode) {
                 return retracePath(startNode, targetNode);
             }
-
+            
+            //Alt kører som det skal indtil her
             for (MapNode neighbour : current.getNeighbours()) {
-                if (closedList.contains(current)) {
-                    continue;
+                if (closedList.contains(neighbour)) {               // Tror fejlen ligger her et sted
+                    continue; //Så vidt jeg forstår skal denne gøre at den går "tilbage" til for loopet 
+                    //(springer) alt nedenunder over for denne neighbour, og så itererer videre i for loopet
                 }
+                
+                // Selve A* calculation der vælger vejen. Setter nogle variabler ved node der calculeres fra
                 int newMovementCostToNeighbour = current.gCost() + getDistance(current, neighbour);
                 if (newMovementCostToNeighbour < neighbour.gCost() || !openList.contains(neighbour)) {
                     neighbour.setGCost(newMovementCostToNeighbour);
@@ -283,6 +291,7 @@ public class EnemyAIProcessor implements IEntityProcessingService {
 
                     if (!openList.contains(neighbour)) {
                         openList.add(neighbour);
+                        System.out.println("neighbour added to openList");
                     }
                 }
             }
@@ -297,7 +306,7 @@ public class EnemyAIProcessor implements IEntityProcessingService {
     private List<MapNode> retracePath(MapNode startNode, MapNode targetNode) {
         List<MapNode> path = null;
         MapNode current = targetNode;
-
+        //System.out.println("retracePath called");
         while (current != startNode) {
             path.add(current);
             current = current.getParent();
@@ -313,14 +322,14 @@ public class EnemyAIProcessor implements IEntityProcessingService {
      */
     private void pathRequest(Enemy enemy, GameData gameData) {
         List<MapNode> path = null;
-        Boolean pathComplete = false;
+        Boolean pathComplete;
 //        if (targetNode == getEnemyPosition(enemy)) {
 //            pathComplete = true;
 //        }
-        if (path.isEmpty()) {
+//        if (path.isEmpty()) {
             pathComplete = true;
-        }
-        if (pathComplete = true) {
+//        }
+        while (pathComplete = true) {
             MapNode startNode = getEnemyPosition(enemy);
             path = findPath(startNode, randomTargetNode(), enemy, gameData);
         }
@@ -338,7 +347,7 @@ public class EnemyAIProcessor implements IEntityProcessingService {
     }
 
     private MapNode getEnemyPosition(Enemy enemy) {
-        Node enemyPosition = null;
+        Node enemyPosition = new Node();
         enemyPosition.setX(enemy.getX());
         enemyPosition.setY(enemy.getY());
         return enemyPosition;
