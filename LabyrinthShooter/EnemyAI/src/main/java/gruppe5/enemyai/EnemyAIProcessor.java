@@ -335,12 +335,11 @@ public class EnemyAIProcessor implements IEntityProcessingService {
     private void pathRequest(Enemy enemy, GameData gameData) {
         List<MapNode> path = null;
         Boolean pathComplete;
-//        if (targetNode == getEnemyPosition(enemy)) {
-//            pathComplete = true;
-//        }
-//        if (path.isEmpty()) {
-        pathComplete = true;
-//        }
+        //if (targetNode == getEnemyPosition(enemy)) {
+          //  pathComplete = true;        }
+        if (path.isEmpty()) {
+            pathComplete = true;
+        }
         while (pathComplete = true) {
             MapNode startNode = getEnemyPosition(enemy);
             path = findPath(startNode, randomTargetNode(), enemy, gameData);
@@ -359,10 +358,7 @@ public class EnemyAIProcessor implements IEntityProcessingService {
     }
 
     private MapNode getEnemyPosition(Enemy enemy) {
-        Node enemyPosition = new Node();
-        enemyPosition.setX(enemy.getX());
-        enemyPosition.setY(enemy.getY());
-        return enemyPosition;
+        return getClosestNode(enemy.getX(),enemy.getY());
     }
 
     /*
