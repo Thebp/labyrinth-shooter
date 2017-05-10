@@ -59,9 +59,10 @@ public class EnemyAIProcessor implements IEntityProcessingService {
                     enemyAttack(enemy, world, gameData);
                 } else if (enemy.getTargetNode() != null) {
                     //Investigation mode
+                    pathRequest(enemy, gameData, enemy.getTargetNode());
                 } else {
                     //Patrolling mode
-                    pathRequest(enemy, gameData);
+                    //pathRequest(enemy, gameData, randomTargetNode());
                 }
                 moveTowardsNextNode(enemy, gameData);
             }
@@ -333,7 +334,7 @@ public class EnemyAIProcessor implements IEntityProcessingService {
         If the enemy isn't at the target location it calls findPath().
         Otherwise it sets the enemy's next node to be the first Node on the list.
      */
-    private void pathRequest(Enemy enemy, GameData gameData) {
+    private void pathRequest(Enemy enemy, GameData gameData, MapNode targetNode) {
         List<MapNode> path = enemy.getPath();
         Boolean pathComplete = false;
         //if (targetNode == getEnemyPosition(enemy)) {
@@ -342,12 +343,15 @@ public class EnemyAIProcessor implements IEntityProcessingService {
             path = new ArrayList<MapNode>();
             enemy.setPath(path);
         }
+        if(!path.isEmpty() && path.get(path.size() - 1) != targetNode) {
+            path.clear();
+        }
         if (path.isEmpty()) {
             pathComplete = true;
         }
         if (pathComplete) {
             MapNode startNode = getEnemyPosition(enemy);
-            path = findPath(startNode, randomTargetNode(), enemy, gameData);
+            path = findPath(startNode, targetNode, enemy, gameData);
         }
         if (enemy.getX() == enemy.getNextNode().getX() && enemy.getY() == enemy.getNextNode().getY()) {
             enemy.setNextNode(path.remove(0));
