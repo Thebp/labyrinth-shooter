@@ -57,12 +57,8 @@ public class EnemyAIProcessor implements IEntityProcessingService {
 
                 if (enemy.getTarget() != null) {
                     enemyAttack(enemy, world, gameData);
-                } else if (enemy.getTargetNode() != null) {
-                    //Investigation mode
-                    pathRequest(enemy, gameData, enemy.getTargetNode());
                 } else {
-                    //Patrolling mode
-                    //pathRequest(enemy, gameData, randomTargetNode());
+                    pathRequest(enemy, gameData);
                 }
                 moveTowardsNextNode(enemy, gameData);
             }
@@ -89,7 +85,7 @@ public class EnemyAIProcessor implements IEntityProcessingService {
     private MapNode getClosestNode(float x, float y) {
 
         if (mapSPI != null) {
-            List<MapNode> nodes = mapSPI.getMap();
+            List<MapNode> nodes = mapSPI.getCenterMapNodes();
 
             if (nodes != null && nodes.size() > 0) {
                 MapNode closestNode = nodes.get(0);
@@ -334,28 +330,46 @@ public class EnemyAIProcessor implements IEntityProcessingService {
         If the enemy isn't at the target location it calls findPath().
         Otherwise it sets the enemy's next node to be the first Node on the list.
      */
-    private void pathRequest(Enemy enemy, GameData gameData, MapNode targetNode) {
+    private void pathRequest(Enemy enemy, GameData gameData) {
         List<MapNode> path = enemy.getPath();
-        Boolean pathComplete = false;
-        //if (targetNode == getEnemyPosition(enemy)) {
-        //  pathComplete = true;        }
-        if (path == null) {
+        MapNode targetNode = enemy.getTargetNode();
+        
+        boolean newPath = false;
+        
+        if(path == null) {
             path = new ArrayList<MapNode>();
             enemy.setPath(path);
         }
-        if(!path.isEmpty() && path.get(path.size() - 1) != targetNode) {
+        
+        if (path.isEmpty() && targetNode == getEnemyPosition(enemy)) {
+            targetNode = null;
+            enemy.setTargetNode(null);
+        }        
+        
+        if (targetNode == null) {
+            targetNode = randomTargetNode();
+            enemy.setTargetNode(targetNode);
+        }
+        
+        if (!path.isEmpty() && path.get(path.size() - 1) != targetNode) {
             path.clear();
         }
-        if (path.isEmpty()) {
-            pathComplete = true;
+        
+        if(path.isEmpty()) {
+            newPath = true;
         }
-        if (pathComplete) {
+        
+        if(newPath) {
             MapNode startNode = getEnemyPosition(enemy);
             path = findPath(startNode, targetNode, enemy, gameData);
         }
-        if (enemy.getX() == enemy.getNextNode().getX() && enemy.getY() == enemy.getNextNode().getY()) {
+        
+        if (!path.isEmpty() && enemy.getX() == enemy.getNextNode().getX() && enemy.getY() == enemy.getNextNode().getY()) {
             enemy.setNextNode(path.remove(0));
         }
+        
+        
+        
     }
 
     private int getDistance(MapNode pos1, MapNode pos2) {

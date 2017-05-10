@@ -23,7 +23,7 @@ public class HeapComparator implements Comparator<Object> {
         if (compare == 0) {
             compare = n1.hCost() - n2.hCost();
         }
-        return Math.round(-compare); // if openSet is wrongly sorted, flip compare
+        return Math.round(compare); // if openSet is wrongly sorted, flip compare
 
     }
 
