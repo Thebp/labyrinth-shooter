@@ -114,7 +114,7 @@ public class EnemyAIProcessor implements IEntityProcessingService {
     private float getDistance(float x1, float y1, float x2, float y2) {
         float xDiff = x1 - x2;
         float yDiff = y1 - y2;
-        return (float) Math.sqrt(Math.pow(xDiff, 2) + Math.pow(xDiff, 2));
+        return (float) Math.sqrt(Math.pow(xDiff, 2) + Math.pow(yDiff, 2));
     }
 
     private void checkPlayerProximity(Enemy enemy, Entity player, World world) {
@@ -349,7 +349,9 @@ public class EnemyAIProcessor implements IEntityProcessingService {
             MapNode startNode = getEnemyPosition(enemy);
             path = findPath(startNode, randomTargetNode(), enemy, gameData);
         }
-        enemy.setNextNode(path.remove(0));
+        if (enemy.getX() == enemy.getNextNode().getX() && enemy.getY() == enemy.getNextNode().getY()) {
+            enemy.setNextNode(path.remove(0));
+        }
     }
 
     private int getDistance(MapNode pos1, MapNode pos2) {
