@@ -21,10 +21,12 @@ import gruppe5.common.weapon.WeaponSPI;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
 import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.Random;
+import java.util.Set;
 import org.openide.util.Lookup;
 import org.openide.util.lookup.ServiceProvider;
 
@@ -277,7 +279,7 @@ public class EnemyAIProcessor implements IEntityProcessingService {
         //node = Lookup.getDefault().lookup(Node.class);
         List map = mapSPI.getMap();
         Queue<MapNode> openList = new PriorityQueue<MapNode>(map.size(), new HeapComparator());
-        List<MapNode> closedList = new ArrayList();
+        Set<MapNode> closedList = new HashSet();
         openList.add(startNode);
 
         while (openList.size() > 0) {
