@@ -166,7 +166,7 @@ public class EnemyAIProcessor implements IEntityProcessingService {
             shapex[3] = player.getX();
             shapey[3] = player.getY();
 
-            Entity visibility = new Entity();
+            Entity visibility = new Visibility();
 
             visibility.setShapeX(shapex);
             visibility.setShapeY(shapey);
@@ -253,7 +253,12 @@ public class EnemyAIProcessor implements IEntityProcessingService {
             float xDiff = Math.abs(x - nextNode.getX());
             float yDiff = Math.abs(y - nextNode.getY());
             float distance = (float) Math.sqrt(Math.pow(xDiff, 2) + Math.pow(yDiff, 2));
-
+            
+            //Set radians to walking direction, if not aiming at target
+            if(enemy.getTarget() == null) {
+                enemy.setRadians((float) Math.atan2(dy, dx));
+            }
+            
             if (distance < 1) {
                 enemy.setPosition(nextNode.getX(), nextNode.getY());
             } else {
@@ -301,7 +306,6 @@ public class EnemyAIProcessor implements IEntityProcessingService {
 
                     if (!openList.contains(neighbour)) {
                         openList.add(neighbour);
-                        System.out.println("neighbour added to openList");
                     }
                 }
             }
@@ -395,6 +399,12 @@ public class EnemyAIProcessor implements IEntityProcessingService {
         int index = rand.nextInt(mapSPI.getCenterMapNodes().size());
         MapNode target = mapSPI.getCenterMapNodes().get(index);
         return target;
+    }
+    
+    /**
+     * Used as Enemy's "vision", to find out if enemy can see the player.
+     */
+    class Visibility extends Entity{
     }
 
 }

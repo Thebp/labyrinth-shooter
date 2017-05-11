@@ -21,18 +21,20 @@ public class EnemyPlugin implements IGamePluginService {
 
     @Override
     public void start(GameData gameData, World world) {
-        Entity enemy = createEnemy(gameData);
-
         WeaponSPI weaponSPI = Lookup.getDefault().lookup(WeaponSPI.class);
-        if (weaponSPI != null) {
-            Weapon weapon = weaponSPI.createWeapon(world);
-            weapon.setPosition(enemy.getX(), enemy.getY());
-            weapon.setOwner(enemy);
-            enemy.addSubEntity(weapon);
-            world.addEntity(weapon);
+        for (int i = 0; i < 2; i++) {
+            Entity enemy = createEnemy(gameData);
+
+            if (weaponSPI != null) {
+                Weapon weapon = weaponSPI.createWeapon(world);
+                weapon.setPosition(enemy.getX(), enemy.getY());
+                weapon.setOwner(enemy);
+                enemy.addSubEntity(weapon);
+                world.addEntity(weapon);
+            }
+
+            world.addEntity(enemy);
         }
-        world.addEntity(enemy);
-        System.out.println("Enemy plugin started");
     }
 
     private Entity createEnemy(GameData gameData) {
@@ -53,7 +55,7 @@ public class EnemyPlugin implements IGamePluginService {
         enemy.setAcceleration(10);
         enemy.setDeacceleration(15);
         enemy.setRotationSpeed(20);
-        enemy.setRadius(8);
+        enemy.setRadius(GameData.UNIT_SIZE / 2);
         enemy.setRadians(3.1415f / 1);
         enemy.setCollidable(true);
         enemy.setDynamic(true);

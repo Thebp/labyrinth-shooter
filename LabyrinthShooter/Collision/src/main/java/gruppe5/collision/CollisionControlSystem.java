@@ -40,6 +40,9 @@ public class CollisionControlSystem implements IEntityProcessingService, Collisi
         if (!shape1.isCollidable() || !shape2.isCollidable()) {
             return false;
         }
+        if (shape1.getClass().equals(shape2.getClass())) {
+            return false;
+        }
         if (!polyCollideMTV(shape2, shape1, mtv, velocity)) {
             return false;
         }
