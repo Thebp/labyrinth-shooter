@@ -1,5 +1,6 @@
 package gruppe5.weapon;
 
+import gruppe5.common.audio.AudioSPI;
 import gruppe5.common.bullet.BulletSPI;
 import gruppe5.common.data.Entity;
 import gruppe5.common.data.GameData;
@@ -57,6 +58,7 @@ public class WeaponProcessor implements IEntityProcessingService, IGamePluginSer
                 Weapon weapon = createWeapon(world);
                 weapon.setPosition(node.getX(), node.getY());
                 world.addEntity(weapon);
+                weapon.setSoundPath("Weapon/target/Weapon-1.0.0-SNAPSHOT.jar!/assets/sound/bullet.ogg");
             }
         }
     }
@@ -94,6 +96,11 @@ public class WeaponProcessor implements IEntityProcessingService, IGamePluginSer
             Entity bullet = Lookup.getDefault().lookup(BulletSPI.class).createBullet(entity);
             world.addEntity(bullet);
             weapon.setCooldown(0.5f);
+            AudioSPI audioSPI = Lookup.getDefault().lookup(AudioSPI.class);
+            
+            if(audioSPI != null) {
+                audioSPI.playAudio("", weapon);
+            }
         }
 
     }

@@ -63,10 +63,6 @@ public class EnemyAIProcessor implements IEntityProcessingService {
             }
         }
     }
-    
-    private void checkPlayerVisibility(Enemy enemy, World world) {
-        
-    }
 
     private void checkBullets(Enemy enemy, World world) {
         List<Entity> bullets = world.getEntities(Bullet.class);
@@ -115,36 +111,34 @@ public class EnemyAIProcessor implements IEntityProcessingService {
 
     private void checkPlayerProximity(Enemy enemy, Entity player, World world) {
 
-            if (player != null) {
-                float xDiff = player.getX() - enemy.getX();
-                float yDiff = player.getY() - enemy.getY();
-                float distance = (float) Math.sqrt(Math.pow(xDiff, 2) + Math.pow(yDiff, 2));
-                
-                if ((distance < 9 * GameData.UNIT_SIZE && checkPlayerVisibility(enemy, player, world)) || (enemy.getTarget() != null && distance < 6 * GameData.UNIT_SIZE)) {
-                    enemy.setTarget(player);
-                } else if(enemy.getTarget() != null){
-                    if(mapSPI != null) {
-                        MapNode closestNode = enemy.getNextNode();
-                        float closestDistance = distance;
-                        for(MapNode node : mapSPI.getMap()) {
-                            float nodeXDiff = player.getX() - node.getX();
-                            float nodeYDiff = player.getY() - node.getY();
-                            float nodeDistance = (float) Math.sqrt(Math.pow(nodeXDiff, 2) + Math.pow(nodeYDiff, 2));
-                            
-                            if (nodeDistance < closestDistance) {
-                                closestNode = node;
-                                closestDistance = nodeDistance;
-                            }
+        if (player != null) {
+            float xDiff = player.getX() - enemy.getX();
+            float yDiff = player.getY() - enemy.getY();
+            float distance = (float) Math.sqrt(Math.pow(xDiff, 2) + Math.pow(yDiff, 2));
+
+            if (distance < 9 * GameData.UNIT_SIZE && checkPlayerVisibility(enemy, player, world)) {
+                enemy.setTarget(player);
+            } else if (enemy.getTarget() != null) {
+                if (mapSPI != null) {
+                    MapNode closestNode = enemy.getNextNode();
+                    float closestDistance = distance;
+                    for (MapNode node : mapSPI.getMap()) {
+                        float nodeXDiff = player.getX() - node.getX();
+                        float nodeYDiff = player.getY() - node.getY();
+                        float nodeDistance = (float) Math.sqrt(Math.pow(nodeXDiff, 2) + Math.pow(nodeYDiff, 2));
+
+                        if (nodeDistance < closestDistance) {
+                            closestNode = node;
+                            closestDistance = nodeDistance;
                         }
-                        
-                        enemy.setTargetNode(closestNode);
-                        
                     }
-                    enemy.setTarget(null);
+
+                    enemy.setTargetNode(closestNode);
+
                 }
-            } else {
                 enemy.setTarget(null);
             }
+        }
     }
 
     private boolean checkPlayerVisibility(Enemy enemy, Entity player, World world) {
@@ -186,44 +180,47 @@ public class EnemyAIProcessor implements IEntityProcessingService {
     private void enemyAttack(Enemy enemy, World world, GameData gameData) {
         if (playerSPI != null) {
             Entity player = playerSPI.getPlayer(world);
-            float dx = player.getX() - enemy.getX();
-            float dy = player.getY() - enemy.getY();
+            if (player != null) {
 
-            float radians = (float) Math.atan2(dy, dx);
-            enemy.setRadians(radians);
+                float dx = player.getX() - enemy.getX();
+                float dy = player.getY() - enemy.getY();
 
-            MapNode nextNode = enemy.getNextNode();
-            MapNode closestNode = nextNode;
-            float closestDistance = (float) Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2));
+                float radians = (float) Math.atan2(dy, dx);
+                enemy.setRadians(radians);
 
-            if (enemy.getX() == closestNode.getX() && enemy.getY() == closestNode.getY()) {
-                for (MapNode mapNode : nextNode.getNeighbours()) {
-                    float xDiff = player.getX() - mapNode.getX();
-                    float yDiff = player.getY() - mapNode.getY();
-                    float nodeDistance = (float) Math.sqrt(Math.pow(xDiff, 2) + Math.pow(yDiff, 2));
+                MapNode nextNode = enemy.getNextNode();
+                MapNode closestNode = nextNode;
+                float closestDistance = (float) Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2));
 
-                    if (nodeDistance < closestDistance && mapNode.getNeighbours().size() > 0) {
-                        closestDistance = nodeDistance;
-                        closestNode = mapNode;
+                if (enemy.getX() == closestNode.getX() && enemy.getY() == closestNode.getY()) {
+                    for (MapNode mapNode : nextNode.getNeighbours()) {
+                        float xDiff = player.getX() - mapNode.getX();
+                        float yDiff = player.getY() - mapNode.getY();
+                        float nodeDistance = (float) Math.sqrt(Math.pow(xDiff, 2) + Math.pow(yDiff, 2));
+
+                        if (nodeDistance < closestDistance && mapNode.getNeighbours().size() > 0) {
+                            closestDistance = nodeDistance;
+                            closestNode = mapNode;
+                        }
                     }
                 }
-            }
 
-            if (checkPlayerVisibility(enemy, player, world)) {
-                Weapon weapon = null;
-                for (Entity subEntity : enemy.getEntities(Weapon.class)) {
-                    weapon = (Weapon) subEntity;
-                }
+                if (checkPlayerVisibility(enemy, player, world)) {
+                    Weapon weapon = null;
+                    for (Entity subEntity : enemy.getEntities(Weapon.class)) {
+                        weapon = (Weapon) subEntity;
+                    }
 
-                if (weapon != null) {
-                    WeaponSPI weaponSPI = Lookup.getDefault().lookup(WeaponSPI.class);
-                    if (weaponSPI != null) {
-                        weaponSPI.shoot(world, weapon);
+                    if (weapon != null) {
+                        WeaponSPI weaponSPI = Lookup.getDefault().lookup(WeaponSPI.class);
+                        if (weaponSPI != null) {
+                            weaponSPI.shoot(world, weapon);
+                        }
                     }
                 }
-            }
 
-            enemy.setNextNode(closestNode);
+                enemy.setNextNode(closestNode);
+            }
         }
     }
 
@@ -252,12 +249,12 @@ public class EnemyAIProcessor implements IEntityProcessingService {
             float xDiff = Math.abs(x - nextNode.getX());
             float yDiff = Math.abs(y - nextNode.getY());
             float distance = (float) Math.sqrt(Math.pow(xDiff, 2) + Math.pow(yDiff, 2));
-            
+
             //Set radians to walking direction, if not aiming at target
-            if(enemy.getTarget() == null) {
+            if (enemy.getTarget() == null) {
                 enemy.setRadians((float) Math.atan2(dy, dx));
             }
-            
+
             if (distance < 1) {
                 enemy.setPosition(nextNode.getX(), nextNode.getY());
             } else {
@@ -265,19 +262,19 @@ public class EnemyAIProcessor implements IEntityProcessingService {
             }
         }
     }
-    
+
     /*
         A* algorythm. Gets called from pathRequest. 
         Creates a list of mapNodes which is the path enemy takes when moving 
         longer distances.
-    */
+     */
     private List<MapNode> findPath(MapNode startNode, MapNode targetNode, Enemy enemy, GameData gameData) {
         mapSPI = Lookup.getDefault().lookup(MapSPI.class);
         //node = Lookup.getDefault().lookup(Node.class);
-        
+
         Heuristics startHeuristics = new Heuristics(startNode);
         Heuristics targetHeuristics = new Heuristics(targetNode);
-        
+
         List map = mapSPI.getMap();
         Queue<Heuristics> openList = new PriorityQueue<Heuristics>(map.size(), new HeapComparator());
         Set<MapNode> closedList = new HashSet();
@@ -299,7 +296,7 @@ public class EnemyAIProcessor implements IEntityProcessingService {
                     continue; //Så vidt jeg forstår skal denne gøre at den går "tilbage" til for loopet 
                     //(springer) alt nedenunder over for denne neighbour, og så itererer videre i for loopet
                 }
-                
+
                 Heuristics neighbourHeuristics = new Heuristics(neighbour);
 
                 // Selve A* calculation der vælger vejen. Setter nogle variabler ved node der calculeres fra
@@ -311,11 +308,11 @@ public class EnemyAIProcessor implements IEntityProcessingService {
 
                     if (!openList.contains(neighbourHeuristics)) {
                         openList.add(neighbourHeuristics);
-                        
-                        if(neighbourHeuristics.equals(startHeuristics)) {
+
+                        if (neighbourHeuristics.equals(startHeuristics)) {
                             startHeuristics = neighbourHeuristics;
                         }
-                        if(neighbourHeuristics.equals(targetHeuristics)) {
+                        if (neighbourHeuristics.equals(targetHeuristics)) {
                             targetHeuristics = neighbourHeuristics;
                         }
                     }
@@ -324,7 +321,7 @@ public class EnemyAIProcessor implements IEntityProcessingService {
         }
         return null;
     }
-    
+
     /*
         given the nodes from findPath(), loops through and creates a List of 
         MapNodes and reverses it.
@@ -349,45 +346,43 @@ public class EnemyAIProcessor implements IEntityProcessingService {
     private void pathRequest(Enemy enemy, GameData gameData) {
         List<MapNode> path = enemy.getPath();
         MapNode targetNode = enemy.getTargetNode();
-        
+
         boolean newPath = false;
-        
-        if(path == null) {
+
+        if (path == null) {
             path = new ArrayList<MapNode>();
             enemy.setPath(path);
         }
-        
+
         if (path.isEmpty() && targetNode == getEnemyPosition(enemy)) {
             targetNode = null;
             enemy.setTargetNode(null);
-        }        
-        
+        }
+
         if (targetNode == null) {
             targetNode = randomTargetNode();
             enemy.setTargetNode(targetNode);
         }
-        
+
         if (!path.isEmpty() && path.get(path.size() - 1) != targetNode) {
             path.clear();
         }
-        
-        if(path.isEmpty()) {
+
+        if (path.isEmpty()) {
             newPath = true;
         }
-        
-        if(newPath) {
+
+        if (newPath) {
             MapNode startNode = getEnemyPosition(enemy);
-            if(startNode != targetNode) {
+            if (startNode != targetNode) {
                 path = findPath(startNode, targetNode, enemy, gameData);
             }
         }
-        
+
         if (!path.isEmpty() && enemy.getX() == enemy.getNextNode().getX() && enemy.getY() == enemy.getNextNode().getY()) {
             enemy.setNextNode(path.remove(0));
         }
-        
-        
-        
+
     }
 
     private int getDistance(MapNode pos1, MapNode pos2) {
@@ -414,11 +409,11 @@ public class EnemyAIProcessor implements IEntityProcessingService {
         MapNode target = mapSPI.getCenterMapNodes().get(index);
         return target;
     }
-    
+
     /**
      * Used as Enemy's "vision", to find out if enemy can see the player.
      */
-    class Visibility extends Entity{
+    class Visibility extends Entity {
     }
 
 }

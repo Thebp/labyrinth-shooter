@@ -22,7 +22,7 @@ public class EnemyPlugin implements IGamePluginService {
     @Override
     public void start(GameData gameData, World world) {
         WeaponSPI weaponSPI = Lookup.getDefault().lookup(WeaponSPI.class);
-        for (int i = 0; i < 20; i++) {
+        for (int i = 0; i < 5; i++) {
             Entity enemy = createEnemy(gameData);
 
             if (weaponSPI != null) {
