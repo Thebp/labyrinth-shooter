@@ -41,6 +41,7 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
+import org.openide.util.Exceptions;
 import org.openide.util.Lookup;
 import org.openide.util.LookupEvent;
 import org.openide.util.LookupListener;
@@ -361,15 +362,14 @@ public class Game implements ApplicationListener, AudioSPI, VictorySPI {
 
     @Override
     public void setLevelComplete(GameData gameData, World world) {
-        for (IGameInitService initService : lookup.lookupAll(IGameInitService.class)) {
-            System.out.println("Stopping init");
-            initService.stop(gameData, world);
-        }
         for (IGamePluginService plugin : lookup.lookupAll(IGamePluginService.class)) {
             if (plugin.getClass().getPackage().equals(getPlayer().getClass().getPackage()) || plugin instanceof IUIService) {
             } else {
                 plugin.stop(gameData, world);
             }
+        }
+        for (IGameInitService initService : lookup.lookupAll(IGameInitService.class)) {
+            initService.stop(gameData, world);
         }
         
         for (IGameInitService initService : lookup.lookupAll(IGameInitService.class)) {
