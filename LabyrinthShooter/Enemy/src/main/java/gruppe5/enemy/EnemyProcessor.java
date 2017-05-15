@@ -31,15 +31,10 @@ public class EnemyProcessor implements IEntityProcessingService {
         int enemyCount = 1;
         for (Entity enemy : world.getEntities(Enemy.class)) {
 
-            //EnemyMovementSystem enemyMovementSystem = new EnemyMovementSystem();
-
             //Getters
             float dx = enemy.getDx();
             float dy = enemy.getDy();
             
-            
-
-
             //Shape     
             float[] shapex = new float[5];
             float[] shapey = new float[5];
@@ -66,16 +61,6 @@ public class EnemyProcessor implements IEntityProcessingService {
             enemy.setShapeX(shapex);
             enemy.setShapeY(shapey);
 
-            //if hit  ->  for testing purposes, will be handled by collision
-            int damage = 25;
-//            if(enemy.getIsHit() == true){
-//                enemy.setLife(enemy.getLife() - damage);
-//                if(enemy.getLife()<1){
-//                    world.removeEntity(enemy);
-//                }
-//                enemy.setIsHit(false);
-//                
-//            }
             AudioSPI audio = Lookup.getDefault().lookup(AudioSPI.class);
             if (enemy.getLife() <= 0) {
                 world.removeEntity(enemy);
@@ -87,44 +72,12 @@ public class EnemyProcessor implements IEntityProcessingService {
             float oldDY = dy;
             float oldX = x;
             float oldY = y;
-
-            //Move forwards
-            //enemyMovementSystem.moveForwards(enemy, gameData);
             
+            //Reset hit detection
+            if(enemy.isHit()) {
+                enemy.setIsHit(false);
+            }
 
-            //Setters 
-            //enemy.setX(x);
-            //enemy.setY(y);
-            //enemy.setDx(dx); //Moved to MovementSystems moveForward method
-            //enemy.setDy(dy); //Moved to MovementSystems moveForward method
-            //enemy.setRadians(radians); //Moved to MovementSystems Turn methods
-//            enemy.setRotationSpeed(rotationSpeed);
-//            enemy.setAcceleration(acceleration);
-//            enemy.setDeacceleration(deceleration);
-//            enemy.setMaxSpeed(maxSpeed);
-
-            //If the location hasn't moved FORWARDS boolean is set to false
-//            boolean movingForwards = true;
-//            if (oldDX - enemy.getDx() > 1  || oldDY - enemy.getDy() > 1 ) {
-//                movingForwards = false;
-//            }
-            
-//            if (Float.compare(oldX, enemy.getX()) > 30  || Float.compare(oldY, enemy.getY()) > 30  ){
-//                movingForwards = false;
-//            }
-
-            //Checks if enemy has been interupted tin moving forwards
-//            if (movingForwards == false) {
-//                //Selects a random direction to turn (left or right)
-//                Random rand = new Random();
-//                int direction = rand.nextInt(2);
-//                if (direction == 0) {
-//                    enemyMovementSystem.turnLeft(enemy, gameData);
-//                }
-//                if (direction == 1) {
-//                    enemyMovementSystem.turnRight(enemy, gameData);
-//                }
-//            }
 
         }
     }

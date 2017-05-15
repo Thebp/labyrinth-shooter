@@ -24,8 +24,16 @@ public class CollisionControlSystem implements IEntityProcessingService, Collisi
                         Vector2 velocity = new Vector2(shape1.getDx(), shape1.getDy());
                         if (checkConditions(shape1, shape2, mtv, velocity)) {
                             shape1.setPosition(shape1.getX() + (velocity.x + mtv.x), shape1.getY() + (velocity.y + mtv.y));
-                            shape1.setLife(shape1.getLife() - shape2.getDamage());
-                            shape1.setIsHit(true);
+
+                            if (!shape1.isHit()) {
+                                shape1.setLife(shape1.getLife() - shape2.getDamage());
+                                shape1.setIsHit(true);
+                            }
+                            if (!shape2.isHit()) {
+                                shape2.setLife(shape2.getLife() - shape1.getDamage());
+                                shape2.setIsHit(true);
+                            }
+
                         }
                     }
                 }
@@ -266,7 +274,7 @@ public class CollisionControlSystem implements IEntityProcessingService, Collisi
         Vector2 emptyVector = new Vector2();
         for (Entity e : world.getForegroundEntities()) {
             if (!e.isDynamic() && e.isCollidable()) {
-                if(checkConditions(entity, e, emptyVector, emptyVector)){
+                if (checkConditions(entity, e, emptyVector, emptyVector)) {
                     return true;
                 }
             }

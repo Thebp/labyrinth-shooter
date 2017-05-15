@@ -190,6 +190,11 @@ public class PlayerProcessor implements IEntityProcessingService, PlayerSPI {
             player.setMaxSpeed(maxSpeed);
             player.setShapeX(shapeX);
             player.setShapeY(shapeY);
+            
+            //Reset hit detection
+            if(player.isHit()) {
+                player.setIsHit(false);
+            }
 
         }
     }
