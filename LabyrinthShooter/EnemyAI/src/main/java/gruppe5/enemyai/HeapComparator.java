@@ -16,12 +16,12 @@ public class HeapComparator implements Comparator<Object> {
 
     @Override
     public int compare(Object t, Object t1) {
-        MapNode n1 = (MapNode) t;
-        MapNode n2 = (MapNode) t1;
+        Heuristics n1 = (Heuristics) t;
+        Heuristics n2 = (Heuristics) t1;
 
         float compare = n1.fCost() - n2.fCost();
         if (compare == 0) {
-            compare = n1.hCost() - n2.hCost();
+            compare = n1.gethCost() - n2.gethCost();
         }
         return Math.round(compare); // if openSet is wrongly sorted, flip compare
 

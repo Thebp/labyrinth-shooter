@@ -70,7 +70,8 @@ public class WeaponProcessor implements IEntityProcessingService, IGamePluginSer
 
     @Override
     public Entity equipWeapon(World world, Entity entity) {
-        for (Entity weapon : world.getEntities(Weapon.class)) {
+        for (Entity weaponEntity : world.getEntities(Weapon.class)) {
+            Weapon weapon = (Weapon) weaponEntity;
             float xDiff = Math.abs(weapon.getX() - entity.getX());
             float yDiff = Math.abs(weapon.getY() - entity.getY());
             if (xDiff < 50 && yDiff < 50) {
@@ -78,7 +79,7 @@ public class WeaponProcessor implements IEntityProcessingService, IGamePluginSer
                 for (Entity entityWeapon : entity.getEntities(Weapon.class)) {
                     oldWeapon = entityWeapon;
                 }
-                if (oldWeapon != weapon) {
+                if (oldWeapon != weapon && weapon.getOwner() == null) {
                     return weapon;
                 }
             }

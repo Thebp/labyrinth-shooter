@@ -12,7 +12,6 @@ import gruppe5.common.data.Entity;
 import gruppe5.common.data.GameData;
 import gruppe5.common.data.World;
 import gruppe5.common.node.MapNode;
-import gruppe5.common.node.Node;
 import gruppe5.common.map.MapSPI;
 import gruppe5.common.player.PlayerSPI;
 import gruppe5.common.services.IEntityProcessingService;
@@ -38,9 +37,7 @@ import org.openide.util.lookup.ServiceProvider;
 public class EnemyAIProcessor implements IEntityProcessingService {
 
     private MapSPI mapSPI = null;
-    private MapNode mapNode = null;
     private PlayerSPI playerSPI = null;
-    private Node Node = null;
     private CollisionSPI collisionSPI = null;
 
     @Override
@@ -277,37 +274,50 @@ public class EnemyAIProcessor implements IEntityProcessingService {
     private List<MapNode> findPath(MapNode startNode, MapNode targetNode, Enemy enemy, GameData gameData) {
         mapSPI = Lookup.getDefault().lookup(MapSPI.class);
         //node = Lookup.getDefault().lookup(Node.class);
+        
+        Heuristics startHeuristics = new Heuristics(startNode);
+        Heuristics targetHeuristics = new Heuristics(targetNode);
+        
         List map = mapSPI.getMap();
-        Queue<MapNode> openList = new PriorityQueue<MapNode>(map.size(), new HeapComparator());
+        Queue<Heuristics> openList = new PriorityQueue<Heuristics>(map.size(), new HeapComparator());
         Set<MapNode> closedList = new HashSet();
-        openList.add(startNode);
+        openList.add(startHeuristics);
 
         while (openList.size() > 0) {
-            MapNode current = openList.remove();
+            Heuristics current = openList.remove();
             //System.out.println(current.getX());
             //System.out.println(current.getY());
-            closedList.add(current);
+            closedList.add(current.getNode());
 
-            if (current == targetNode) {
-                return retracePath(startNode, targetNode, enemy);
+            if (current.equals(targetHeuristics)) {
+                return retracePath(startHeuristics, targetHeuristics, enemy);
             }
 
             //Alt kører som det skal indtil her
-            for (MapNode neighbour : current.getNeighbours()) {
+            for (MapNode neighbour : current.getNode().getNeighbours()) {
                 if (closedList.contains(neighbour)) {               // Tror fejlen ligger her et sted
                     continue; //Så vidt jeg forstår skal denne gøre at den går "tilbage" til for loopet 
                     //(springer) alt nedenunder over for denne neighbour, og så itererer videre i for loopet
                 }
+                
+                Heuristics neighbourHeuristics = new Heuristics(neighbour);
 
                 // Selve A* calculation der vælger vejen. Setter nogle variabler ved node der calculeres fra
-                int newMovementCostToNeighbour = current.gCost() + getDistance(current, neighbour);
-                if (newMovementCostToNeighbour < neighbour.gCost() || !openList.contains(neighbour)) {
-                    neighbour.setGCost(newMovementCostToNeighbour);
-                    neighbour.setHCost(getDistance(neighbour, targetNode));
-                    neighbour.setParent(current);
+                int newMovementCostToNeighbour = current.getgCost() + getDistance(current.getNode(), neighbour);
+                if (newMovementCostToNeighbour < neighbourHeuristics.getgCost() || !openList.contains(neighbourHeuristics)) {
+                    neighbourHeuristics.setgCost(newMovementCostToNeighbour);
+                    neighbourHeuristics.sethCost(getDistance(neighbour, targetHeuristics.getNode()));
+                    neighbourHeuristics.setParent(current);
 
-                    if (!openList.contains(neighbour)) {
-                        openList.add(neighbour);
+                    if (!openList.contains(neighbourHeuristics)) {
+                        openList.add(neighbourHeuristics);
+                        
+                        if(neighbourHeuristics.equals(startHeuristics)) {
+                            startHeuristics = neighbourHeuristics;
+                        }
+                        if(neighbourHeuristics.equals(targetHeuristics)) {
+                            targetHeuristics = neighbourHeuristics;
+                        }
                     }
                 }
             }
@@ -319,12 +329,12 @@ public class EnemyAIProcessor implements IEntityProcessingService {
         given the nodes from findPath(), loops through and creates a List of 
         MapNodes and reverses it.
      */
-    private List<MapNode> retracePath(MapNode startNode, MapNode targetNode, Enemy enemy) {
+    private List<MapNode> retracePath(Heuristics startNode, Heuristics targetNode, Enemy enemy) {
         List<MapNode> path = enemy.getPath();
-        MapNode current = targetNode;
+        Heuristics current = targetNode;
         //System.out.println("retracePath called");
         while (current != startNode) {
-            path.add(current);
+            path.add(current.getNode());
             current = current.getParent();
         }
         Collections.reverse(path);
@@ -367,7 +377,9 @@ public class EnemyAIProcessor implements IEntityProcessingService {
         
         if(newPath) {
             MapNode startNode = getEnemyPosition(enemy);
-            path = findPath(startNode, targetNode, enemy, gameData);
+            if(startNode != targetNode) {
+                path = findPath(startNode, targetNode, enemy, gameData);
+            }
         }
         
         if (!path.isEmpty() && enemy.getX() == enemy.getNextNode().getX() && enemy.getY() == enemy.getNextNode().getY()) {

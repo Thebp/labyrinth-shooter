@@ -24,18 +24,4 @@ public interface MapNode {
      * @return The corresponding Y-coordinate in the game world.
      */
     public float getY();
-    
-    public float fCost();
-    
-    public int gCost();
-    
-    public int hCost();
-    
-    public MapNode getParent();
-    
-    public void setGCost(int gCost);
-    
-    public void setHCost(int gCost);
-    
-    public void setParent(MapNode parent);
 }
