@@ -15,6 +15,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.BufferUtils;
+import com.badlogic.gdx.utils.Timer;
 import gruppe5.common.audio.AudioSPI;
 import gruppe5.common.data.Entity;
 import gruppe5.common.data.GameData;
@@ -28,6 +29,7 @@ import gruppe5.common.services.IRenderService;
 import gruppe5.common.player.PlayerSPI;
 import gruppe5.common.resources.ResourceSPI;
 import gruppe5.common.services.IUIService;
+import gruppe5.commonvictory.VictorySPI;
 import gruppe5.core.managers.AssetsJarFileResolver;
 import gruppe5.core.managers.GameInputProcessor;
 import java.awt.image.BufferedImage;
@@ -163,6 +165,7 @@ public class Game implements ApplicationListener, AudioSPI, VictorySPI {
 
     private void zoomCam() {
         if (gameData.getKeys().isPressed(GameKeys.SHIFT)) {
+
             if (cam.viewportWidth == displayWidth) {
                 cam.viewportWidth = worldWidth;
                 cam.viewportHeight = worldHeight;
@@ -176,7 +179,7 @@ public class Game implements ApplicationListener, AudioSPI, VictorySPI {
     private Entity getPlayer() {
         PlayerSPI playerSPI = Lookup.getDefault().lookup(PlayerSPI.class);
         if (playerSPI != null) {
-            if(playerSPI.getPlayer(world) == null){
+            if (playerSPI.getPlayer(world) == null) {
                 Entity e = new Entity();
                 e.setPosition(cam.position.x, cam.position.y);
                 return e;
@@ -350,5 +353,29 @@ public class Game implements ApplicationListener, AudioSPI, VictorySPI {
             }
 
         }
+    }
+
+    @Override
+    public void setLevelComplete() {
+        for (IGameInitService initService : gameInits) {
+            initService.stop(gameData, world);
+        }
+        for (IGamePluginService plugin : gamePlugins) {
+            if (plugin.getClass().getPackage().equals(getPlayer().getClass().getPackage()) || plugin instanceof IUIService) {
+            } else {
+                plugin.stop(gameData, world);
+            }
+        }
+
+        for (IGameInitService initService : gameInits) {
+            initService.start(gameData, world);
+        }
+        for (IGamePluginService plugin : gamePlugins) {
+            if (plugin.getClass().getPackage().equals(getPlayer().getClass().getPackage()) || plugin instanceof IUIService) {
+            } else {
+                plugin.start(gameData, world);
+            }
+        }
+
     }
 }
