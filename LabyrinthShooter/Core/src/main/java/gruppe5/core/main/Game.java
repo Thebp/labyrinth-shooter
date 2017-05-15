@@ -45,8 +45,12 @@ import org.openide.util.Lookup;
 import org.openide.util.LookupEvent;
 import org.openide.util.LookupListener;
 import org.openide.util.lookup.ServiceProvider;
+import org.openide.util.lookup.ServiceProviders;
 
-@ServiceProvider(service = AudioSPI.class)
+@ServiceProviders(value = {
+        @ServiceProvider(service = AudioSPI.class),
+        @ServiceProvider(service = VictorySPI.class)
+})
 
 public class Game implements ApplicationListener, AudioSPI, VictorySPI {
 
@@ -64,7 +68,6 @@ public class Game implements ApplicationListener, AudioSPI, VictorySPI {
     private List<IGameInitService> gameInits = new CopyOnWriteArrayList<>();
     private Lookup.Result<IGamePluginService> gamePluginResult;
     private Lookup.Result<IGameInitService> gameInitResult;
-    private Lookup.Result<IGamePluginService> result;
     private final float displayWidth = 400;
     private final float displayHeight = 400;
     private final int worldWidth = 2000;
@@ -123,6 +126,7 @@ public class Game implements ApplicationListener, AudioSPI, VictorySPI {
 
         music = am.get(musicURL, Music.class);
         music.setLooping(true);
+        music.setVolume(0.3f);
         music.play();
     }
 
@@ -356,21 +360,22 @@ public class Game implements ApplicationListener, AudioSPI, VictorySPI {
     }
 
     @Override
-    public void setLevelComplete() {
-        for (IGameInitService initService : gameInits) {
+    public void setLevelComplete(GameData gameData, World world) {
+        for (IGameInitService initService : lookup.lookupAll(IGameInitService.class)) {
+            System.out.println("Stopping init");
             initService.stop(gameData, world);
         }
-        for (IGamePluginService plugin : gamePlugins) {
+        for (IGamePluginService plugin : lookup.lookupAll(IGamePluginService.class)) {
             if (plugin.getClass().getPackage().equals(getPlayer().getClass().getPackage()) || plugin instanceof IUIService) {
             } else {
                 plugin.stop(gameData, world);
             }
         }
-
-        for (IGameInitService initService : gameInits) {
+        
+        for (IGameInitService initService : lookup.lookupAll(IGameInitService.class)) {
             initService.start(gameData, world);
         }
-        for (IGamePluginService plugin : gamePlugins) {
+        for (IGamePluginService plugin : lookup.lookupAll(IGamePluginService.class)) {
             if (plugin.getClass().getPackage().equals(getPlayer().getClass().getPackage()) || plugin instanceof IUIService) {
             } else {
                 plugin.start(gameData, world);

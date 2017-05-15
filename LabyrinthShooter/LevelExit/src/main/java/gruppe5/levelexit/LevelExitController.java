@@ -5,6 +5,7 @@
  */
 package gruppe5.levelexit;
 
+import gruppe5.common.audio.AudioSPI;
 import gruppe5.common.data.Entity;
 import gruppe5.common.data.GameData;
 import gruppe5.common.data.World;
@@ -40,6 +41,7 @@ public class LevelExitController implements IGamePluginService, IEntityProcessin
         exit.setCollidable(false);
         exit.setDynamic(false);
         exit.setRadius(GameData.UNIT_SIZE);
+        exit.setSoundPath("LevelExit/target/LevelExit-1.0.0-SNAPSHOT.jar!/assets/sounds/winning.ogg");
         
         // Set position on a spawn node
         MapSPI map = Lookup.getDefault().lookup(MapSPI.class);
@@ -70,6 +72,7 @@ public class LevelExitController implements IGamePluginService, IEntityProcessin
 
     @Override
     public void stop(GameData gameData, World world) {
+        System.out.println("LevelExit stopped");
         world.removeEntity(exit);
         exit = null;
     }
@@ -83,14 +86,21 @@ public class LevelExitController implements IGamePluginService, IEntityProcessin
         }
         
         Entity player = playerSPI.getPlayer(world);
+        if (player == null) {
+            return;
+        }
         float diffX = Math.abs(player.getX() - exit.getX());
         float diffY = Math.abs(player.getY() - exit.getY());
         
         // If the player touches exit, call setLevelComplete
         if (diffX <= GameData.UNIT_SIZE / 2 && diffY <= GameData.UNIT_SIZE / 2) {
             VictorySPI victorySPI = Lookup.getDefault().lookup(VictorySPI.class);
+            AudioSPI audioSPI = Lookup.getDefault().lookup(AudioSPI.class);
             if (victorySPI != null) {
-                victorySPI.setLevelComplete();
+                // Play winning audio
+                audioSPI.playAudio("LevelExit/target/LevelExit-1.0.0-SNAPSHOT.jar!/assets/sounds/winning.ogg", exit);
+                // Set win
+                victorySPI.setLevelComplete(gameData, world);
             } else {
                 System.out.println("LevelExit: Level is complete, but cannot find VictorySPI");
             }
