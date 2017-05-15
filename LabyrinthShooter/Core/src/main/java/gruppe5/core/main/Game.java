@@ -15,6 +15,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.BufferUtils;
+import com.badlogic.gdx.utils.Timer;
 import gruppe5.common.audio.AudioSPI;
 import gruppe5.common.data.Entity;
 import gruppe5.common.data.GameData;
@@ -28,6 +29,7 @@ import gruppe5.common.services.IRenderService;
 import gruppe5.common.player.PlayerSPI;
 import gruppe5.common.resources.ResourceSPI;
 import gruppe5.common.services.IUIService;
+import gruppe5.commonvictory.VictorySPI;
 import gruppe5.core.managers.AssetsJarFileResolver;
 import gruppe5.core.managers.GameInputProcessor;
 import java.awt.image.BufferedImage;
@@ -43,10 +45,14 @@ import org.openide.util.Lookup;
 import org.openide.util.LookupEvent;
 import org.openide.util.LookupListener;
 import org.openide.util.lookup.ServiceProvider;
+import org.openide.util.lookup.ServiceProviders;
 
-@ServiceProvider(service = AudioSPI.class)
+@ServiceProviders(value = {
+        @ServiceProvider(service = AudioSPI.class),
+        @ServiceProvider(service = VictorySPI.class)
+})
 
-public class Game implements ApplicationListener, AudioSPI {
+public class Game implements ApplicationListener, AudioSPI, VictorySPI {
 
     private ShapeRenderer sr;
     private BitmapFont bitmapfont;
@@ -62,7 +68,6 @@ public class Game implements ApplicationListener, AudioSPI {
     private List<IGameInitService> gameInits = new CopyOnWriteArrayList<>();
     private Lookup.Result<IGamePluginService> gamePluginResult;
     private Lookup.Result<IGameInitService> gameInitResult;
-    private Lookup.Result<IGamePluginService> result;
     private final float displayWidth = 400;
     private final float displayHeight = 400;
     private final int worldWidth = 2000;
@@ -121,6 +126,7 @@ public class Game implements ApplicationListener, AudioSPI {
 
         music = am.get(musicURL, Music.class);
         music.setLooping(true);
+        music.setVolume(0.3f);
         music.play();
     }
 
@@ -163,6 +169,7 @@ public class Game implements ApplicationListener, AudioSPI {
 
     private void zoomCam() {
         if (gameData.getKeys().isPressed(GameKeys.SHIFT)) {
+
             if (cam.viewportWidth == displayWidth) {
                 cam.viewportWidth = worldWidth;
                 cam.viewportHeight = worldHeight;
@@ -176,7 +183,7 @@ public class Game implements ApplicationListener, AudioSPI {
     private Entity getPlayer() {
         PlayerSPI playerSPI = Lookup.getDefault().lookup(PlayerSPI.class);
         if (playerSPI != null) {
-            if(playerSPI.getPlayer(world) == null){
+            if (playerSPI.getPlayer(world) == null) {
                 Entity e = new Entity();
                 e.setPosition(cam.position.x, cam.position.y);
                 return e;
@@ -350,5 +357,30 @@ public class Game implements ApplicationListener, AudioSPI {
             }
 
         }
+    }
+
+    @Override
+    public void setLevelComplete(GameData gameData, World world) {
+        for (IGameInitService initService : lookup.lookupAll(IGameInitService.class)) {
+            System.out.println("Stopping init");
+            initService.stop(gameData, world);
+        }
+        for (IGamePluginService plugin : lookup.lookupAll(IGamePluginService.class)) {
+            if (plugin.getClass().getPackage().equals(getPlayer().getClass().getPackage()) || plugin instanceof IUIService) {
+            } else {
+                plugin.stop(gameData, world);
+            }
+        }
+        
+        for (IGameInitService initService : lookup.lookupAll(IGameInitService.class)) {
+            initService.start(gameData, world);
+        }
+        for (IGamePluginService plugin : lookup.lookupAll(IGamePluginService.class)) {
+            if (plugin.getClass().getPackage().equals(getPlayer().getClass().getPackage()) || plugin instanceof IUIService) {
+            } else {
+                plugin.start(gameData, world);
+            }
+        }
+
     }
 }

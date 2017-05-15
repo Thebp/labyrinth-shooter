@@ -79,6 +79,8 @@
         <module>CommonAudio</module>
         <module>CommonEnemy</module>
         <module>EnemyAI</module>
+        <module>CommonVictory</module>
+        <module>LevelExit</module>
     </modules>
 
     <properties>

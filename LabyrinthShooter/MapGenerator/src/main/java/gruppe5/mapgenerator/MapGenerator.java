@@ -144,8 +144,10 @@ public class MapGenerator implements MapSPI, IGameInitService {
     public void stop(GameData gameData, World world) {
         System.out.println("MapPlugin stopped.");
 
+        if(mazeEntities != null){
         for (Entity entity : mazeEntities) {
             world.removeEntity(entity);
+        }
         }
         mazeEntities = null;
 
