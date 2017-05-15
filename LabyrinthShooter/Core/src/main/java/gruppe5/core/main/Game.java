@@ -46,7 +46,7 @@ import org.openide.util.lookup.ServiceProvider;
 
 @ServiceProvider(service = AudioSPI.class)
 
-public class Game implements ApplicationListener, AudioSPI {
+public class Game implements ApplicationListener, AudioSPI, VictorySPI {
 
     private ShapeRenderer sr;
     private BitmapFont bitmapfont;

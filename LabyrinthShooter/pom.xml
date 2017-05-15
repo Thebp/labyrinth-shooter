@@ -77,6 +77,8 @@
         <module>FPSCounter</module>
         <module>commonCollision</module>
         <module>CommonAudio</module>
+        <module>CommonVictory</module>
+        <module>LevelExit</module>
     </modules>
 
     <properties>
