@@ -40,6 +40,8 @@ public class EnemyAIProcessor implements IEntityProcessingService {
     private PlayerSPI playerSPI = null;
     private CollisionSPI collisionSPI = null;
 
+    private Entity currentTargetBullet;
+
     @Override
     public void process(GameData gameData, World world) {
         mapSPI = Lookup.getDefault().lookup(MapSPI.class);
@@ -47,13 +49,11 @@ public class EnemyAIProcessor implements IEntityProcessingService {
         collisionSPI = Lookup.getDefault().lookup(CollisionSPI.class);
         Entity player = playerSPI.getPlayer(world);
         if (mapSPI != null) {
+            checkBullets(world);
             for (Entity entity : world.getEntities(Enemy.class)) {
                 Enemy enemy = (Enemy) entity;
                 checkPlayerProximity(enemy, player, world);
-                if (enemy.getTarget() == null) {
-                    checkBullets(enemy, world);
-                }
-
+                
                 if (enemy.getTarget() != null) {
                     enemyAttack(enemy, world, gameData);
                 } else {
@@ -64,16 +64,23 @@ public class EnemyAIProcessor implements IEntityProcessingService {
         }
     }
 
-    private void checkBullets(Enemy enemy, World world) {
+    private void checkBullets(World world) {
         List<Entity> bullets = world.getEntities(Bullet.class);
 
         if (bullets.size() >= 1) {
-
-            MapNode closestNode = getClosestNode(bullets.get(0).getX(), bullets.get(0).getY());
-            if (closestNode != null) {
-                enemy.setTargetNode(closestNode);
+            Entity bullet = bullets.get(0);
+            if (bullet != currentTargetBullet) {
+                MapNode closestNode = getClosestNode(bullets.get(0).getX(), bullets.get(0).getY());
+                if (closestNode != null) {
+                    for(Entity entity : world.getEntities(Enemy.class)) {
+                        Enemy enemy = (Enemy) entity;
+                        if(enemy.getTarget() == null) {
+                            enemy.setTargetNode(closestNode);
+                        }
+                    }
+                }
+                currentTargetBullet = bullet;
             }
-
         }
     }
 
