@@ -77,7 +77,16 @@ public class PlayerProcessor implements IEntityProcessingService, PlayerSPI {
 //            double diffy = player.getY() - gameData.getMouseY();
             radians = (float) Math.atan2(diffy, diffx);
 
+            //if Player dies
             if (player.getLife() <= 0) {
+                Entity deadPlayer = new Entity();
+                deadPlayer.setPosition(player.getX(), player.getY());
+                deadPlayer.setImagePath("Player/target/Player-1.0.0-SNAPSHOT.jar!/assets/images/deadplayer.png");
+                deadPlayer.setRadius(player.getRadius());
+                deadPlayer.setRadians(player.getRadians());
+                deadPlayer.setIsBackground(false);
+                world.addEntity(deadPlayer);
+                System.out.println("dead player" + deadPlayer.toString());
                 world.removeEntity(player);
                 if (audioSPI != null) {
                     audioSPI.playAudio(player.getSoundPath(), player);
