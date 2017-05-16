@@ -28,7 +28,8 @@ public class EnemyPlugin implements IGamePluginService {
         rand = new Random();
         
         WeaponSPI weaponSPI = Lookup.getDefault().lookup(WeaponSPI.class);
-        for (int i = 0; i < 5; i++) {
+        int enemies = 6 + gameData.getLevel() * 2;
+        for (int i = 0; i < enemies; i++) {
             Entity enemy = createEnemy(gameData);
 
             if (weaponSPI != null) {
