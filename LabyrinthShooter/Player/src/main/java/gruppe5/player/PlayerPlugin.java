@@ -50,7 +50,7 @@ public class PlayerPlugin implements IGamePluginService {
         player.setRotationSpeed(3);
         player.setCollidable(true);
         player.setDynamic(true);
-        player.setLife(3);
+        player.setLife(10);
         player.setImagePath("Player/target/Player-1.0.0-SNAPSHOT.jar!/assets/images/player.png");
         player.setSoundPath("Player/target/Player-1.0.0-SNAPSHOT.jar!/assets/sound/playerdeath.ogg");
 

@@ -1,7 +1,6 @@
 package gruppe5.mapgenerator;
 
 import gruppe5.common.node.MapNode;
-import gruppe5.common.node.Node;
 import gruppe5.common.data.Entity;
 import gruppe5.common.data.GameData;
 import gruppe5.common.data.World;
@@ -27,8 +26,8 @@ public class MapGenerator implements MapSPI, IGameInitService {
      */
     public static final boolean DEBUG_ENABLED = false;
     
-    public static final int NODES_IN_CORRIDOR = 7; // Must be odd to have a center node
-    public static final float MAP_UNIT_SIZE = GameData.UNIT_SIZE / 2;
+    public static final int NODES_IN_CORRIDOR = 3; // Must be odd to have a center node
+    public static final float MAP_UNIT_SIZE = GameData.UNIT_SIZE;
     
     private Random rand; // Used for seed generation
     

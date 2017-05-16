@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?><module codename="gruppe5.commonCollision">
-    <module_version install_time="1494854967831" last="true" origin="installer" specification_version="1.0.0">
-        <file crc="2206300660" name="config/Modules/gruppe5-commonCollision.xml"/>
-        <file crc="3470876010" name="modules/gruppe5-commonCollision.jar"/>
-    </module_version>
-</module>

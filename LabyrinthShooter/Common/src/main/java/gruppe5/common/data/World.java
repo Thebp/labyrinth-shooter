@@ -8,10 +8,6 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class World {
 
-    public World() {
-        
-    }
-    
     private final Map<String, Entity> entityMap = new ConcurrentHashMap<>();
     private int worldWidth;
     private int worldHeight;
