@@ -56,6 +56,8 @@ import org.openide.util.lookup.ServiceProviders;
 
 public class Game implements ApplicationListener, AudioSPI, VictorySPI {
 
+    private static final boolean DRAW_HITBOXES = false;
+
     private ShapeRenderer sr;
     private BitmapFont bitmapfont;
     private SpriteBatch spriteBatch;
@@ -207,33 +209,39 @@ public class Game implements ApplicationListener, AudioSPI, VictorySPI {
 
         for (Entity entity : world.getBackgroundEntities()) {
             drawSprite(entity, player);
+            if (DRAW_HITBOXES) 
+                drawHitbox(entity);
         }
 
         for (Entity entity : world.getForegroundEntities()) {
-//            sr.setColor(1, 1, 1, 1);
-//
-//            sr.begin(ShapeRenderer.ShapeType.Line);
-//
-//            float[] shapex = entity.getShapeX();
-//            float[] shapey = entity.getShapeY();
-//
-//            for (int i = 0, j = shapex.length - 1;
-//                    i < shapex.length;
-//                    j = i++) {
-//
-//                sr.line(shapex[i], shapey[i], shapex[j], shapey[j]);
-//            }
-//
-//            sr.end();
-
             drawSprite(entity, player);
-
+            if (DRAW_HITBOXES)
+                drawHitbox(entity);
         }
 
         for (UIElement element : gameData.getUIElements()) {
             drawUIElement(element);
         }
+    }
+    
+    private void drawHitbox(Entity entity) {
+        if (DRAW_HITBOXES) {
+                sr.setColor(1, 1, 1, 1);
 
+                sr.begin(ShapeRenderer.ShapeType.Line);
+
+                float[] shapex = entity.getShapeX();
+                float[] shapey = entity.getShapeY();
+
+                for (int i = 0, j = shapex.length - 1;
+                        i < shapex.length;
+                        j = i++) {
+
+                    sr.line(shapex[i], shapey[i], shapex[j], shapey[j]);
+                }
+
+                sr.end();
+        }
     }
 
     private void drawSprite(Entity entity, Entity player) {
