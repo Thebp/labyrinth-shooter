@@ -278,8 +278,7 @@ public class EnemyAIProcessor implements IEntityProcessingService {
         longer distances.
      */
     private List<MapNode> findPath(MapNode startNode, MapNode targetNode, Enemy enemy, GameData gameData) {
-        //node = Lookup.getDefault().lookup(Node.class);
-
+        // Sets the sent startNode and targetNode to be Hearistics
         Heuristics startHeuristics = new Heuristics(startNode);
         Heuristics targetHeuristics = new Heuristics(targetNode);
 
@@ -290,24 +289,21 @@ public class EnemyAIProcessor implements IEntityProcessingService {
 
         while (openList.size() > 0) {
             Heuristics current = openList.remove();
-            //System.out.println(current.getX());
-            //System.out.println(current.getY());
             closedList.add(current.getNode());
 
+            // Returns call to retracePath method. Happens when the targetNode has been reached
             if (current.equals(targetHeuristics)) {
                 return retracePath(startHeuristics, targetHeuristics, enemy);
             }
 
-            //Alt kører som det skal indtil her
             for (MapNode neighbour : current.getNode().getNeighbours()) {
-                if (closedList.contains(neighbour)) {               // Tror fejlen ligger her et sted
-                    continue; //Så vidt jeg forstår skal denne gøre at den går "tilbage" til for loopet 
-                    //(springer) alt nedenunder over for denne neighbour, og så itererer videre i for loopet
+                if (closedList.contains(neighbour)) {
+                    continue; //Skips code underneath for this neighbour, and repeats with next.
                 }
 
                 Heuristics neighbourHeuristics = new Heuristics(neighbour);
 
-                // Selve A* calculation der vælger vejen. Setter nogle variabler ved node der calculeres fra
+                // The A* calculation which finds and sets the "cost" of a node
                 int newMovementCostToNeighbour = current.getgCost() + getDistance(current.getNode(), neighbour);
                 if (newMovementCostToNeighbour < neighbourHeuristics.getgCost() || !openList.contains(neighbourHeuristics)) {
                     neighbourHeuristics.setgCost(newMovementCostToNeighbour);
@@ -337,11 +333,11 @@ public class EnemyAIProcessor implements IEntityProcessingService {
     private List<MapNode> retracePath(Heuristics startNode, Heuristics targetNode, Enemy enemy) {
         List<MapNode> path = enemy.getPath();
         Heuristics current = targetNode;
-        //System.out.println("retracePath called");
         while (current != startNode) {
             path.add(current.getNode());
             current = current.getParent();
         }
+        // Reverses the path, as it was made from targetNode to startNode
         Collections.reverse(path);
         return path;
     }
@@ -393,6 +389,9 @@ public class EnemyAIProcessor implements IEntityProcessingService {
 
     }
 
+    /*
+        Returns the distance between 2 nodes. 
+     */
     private int getDistance(MapNode pos1, MapNode pos2) {
         int xDis = Math.round(Math.abs(pos1.getX() - pos2.getX()));
         int yDis = Math.round(Math.abs(pos1.getY() - pos2.getY()));

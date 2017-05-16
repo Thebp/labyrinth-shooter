@@ -14,6 +14,10 @@ import java.util.Comparator;
  */
 public class HeapComparator implements Comparator<Object> {
 
+    /*
+        Compare method for the openList PriorityQueue.
+        Sorts based on fCost.
+     */
     @Override
     public int compare(Object t, Object t1) {
         Heuristics n1 = (Heuristics) t;
