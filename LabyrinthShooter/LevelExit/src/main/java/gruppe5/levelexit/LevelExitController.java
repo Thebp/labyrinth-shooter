@@ -88,7 +88,6 @@ public class LevelExitController implements IGamePluginService, IEntityProcessin
     public void process(GameData gameData, World world) {
         PlayerSPI playerSPI = Lookup.getDefault().lookup(PlayerSPI.class);
         if (playerSPI == null) {
-            System.out.println("LevelExit: Could not find PlayerSPI");
             return;
         }
         
@@ -121,9 +120,7 @@ public class LevelExitController implements IGamePluginService, IEntityProcessin
                     }
                     gameData.removeUIElement(text);
                 }).start();
-            } else {
-                System.out.println("LevelExit: Level is complete, but cannot find VictorySPI");
-            }
+            } 
         }
     }
     

@@ -23,7 +23,7 @@ import org.openide.util.lookup.ServiceProviders;
     @ServiceProvider(service = IGamePluginService.class)
 })
 public class HUD implements IUIService, IGamePluginService {
-
+    
     private static final String HEART_REL_PATH = "/assets/images/heart_64.png";
     private static final int HEART_SIZE = 42; // Used for scaling of heart
     private BufferedImage heart; // Holds the heart sprite
@@ -70,7 +70,6 @@ public class HUD implements IUIService, IGamePluginService {
         // Get player
         PlayerSPI playerSPI = Lookup.getDefault().lookup(PlayerSPI.class);
         if (playerSPI == null) {
-            System.out.println("HUD: PlayerSPI module not found.");
             return;
         }
 
