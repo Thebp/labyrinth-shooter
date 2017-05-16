@@ -9,18 +9,24 @@ import gruppe5.common.map.MapSPI;
 import gruppe5.common.services.IGamePluginService;
 import gruppe5.common.weapon.Weapon;
 import gruppe5.common.weapon.WeaponSPI;
+import java.util.Random;
 import org.openide.util.Lookup;
 import org.openide.util.lookup.ServiceProvider;
 
 @ServiceProvider(service = IGamePluginService.class)
 public class EnemyPlugin implements IGamePluginService {
-
+    private static final int N_ENEMY_SPRITES = 2; // Number of sprites available
+    private Random rand;
+    
+    
     public EnemyPlugin() {
 
     }
 
     @Override
     public void start(GameData gameData, World world) {
+        rand = new Random();
+        
         WeaponSPI weaponSPI = Lookup.getDefault().lookup(WeaponSPI.class);
         for (int i = 0; i < 5; i++) {
             Entity enemy = createEnemy(gameData);
@@ -57,11 +63,12 @@ public class EnemyPlugin implements IGamePluginService {
         enemy.setAcceleration(10);
         enemy.setDeacceleration(15);
         enemy.setRotationSpeed(20);
-        enemy.setRadius(GameData.UNIT_SIZE / 2);
+        enemy.setRadius(GameData.UNIT_SIZE);
         enemy.setRadians(3.1415f / 1);
         enemy.setCollidable(true);
         enemy.setDynamic(true);
         enemy.setLife(2);
+        enemy.setImagePath("Enemy/target/Enemy-1.0.0-SNAPSHOT.jar!/assets/images/enemy" + rand.nextInt(N_ENEMY_SPRITES) + ".png");
         enemy.setSoundPath("Enemy/target/Enemy-1.0.0-SNAPSHOT.jar!/assets/sound/enemydeath.ogg");
         enemy.setNextNode(spawnlocation.getNeighbours().get(0));
         

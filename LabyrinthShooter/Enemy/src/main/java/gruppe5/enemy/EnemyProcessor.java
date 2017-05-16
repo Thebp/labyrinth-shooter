@@ -41,7 +41,7 @@ public class EnemyProcessor implements IEntityProcessingService {
             float x = enemy.getX();
             float y = enemy.getY();
             float radians = enemy.getRadians();
-            float radius = enemy.getRadius();
+            float radius = enemy.getRadius() / 2;
 
             shapex[0] = x + (float) Math.cos(radians) * radius;
             shapey[0] = y + (float) Math.sin(radians) * radius;
