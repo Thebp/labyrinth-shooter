@@ -23,7 +23,7 @@ import org.openide.util.lookup.ServiceProviders;
     @ServiceProvider(service = IGamePluginService.class)
 })
 public class HUD implements IUIService, IGamePluginService {
-    
+
     private static final String HEART_REL_PATH = "/assets/images/heart_64.png";
     private static final int HEART_SIZE = 42; // Used for scaling of heart
     private BufferedImage heart; // Holds the heart sprite
@@ -105,17 +105,17 @@ public class HUD implements IUIService, IGamePluginService {
     }
 
     private void updateHealthbar(GameData gameData, Entity player) {
+        int playerLife = 0;
         if (player != null) {
-            int playerLife = player.getLife();
-
-            // Only draw healthbar if player life has changed
-            if (playerLife != prevPlayerLife) {
-                prevPlayerLife = playerLife;
-                BufferedImage image = createPlayerHealthbar(playerLife);
-                healthbarElement.setImage(createPlayerHealthbar(player.getLife()));
-                healthbarElement.setX(gameData.getDisplayWidth() - image.getWidth());
-                healthbarElement.setY(gameData.getDisplayHeight() - 10);
-            }
+            playerLife = player.getLife();
+        }
+        // Only draw healthbar if player life has changed
+        if (playerLife != prevPlayerLife) {
+            prevPlayerLife = playerLife;
+            BufferedImage image = createPlayerHealthbar(playerLife);
+            healthbarElement.setImage(createPlayerHealthbar(playerLife));
+            healthbarElement.setX(gameData.getDisplayWidth() - image.getWidth());
+            healthbarElement.setY(gameData.getDisplayHeight() - 10);
         }
     }
 
