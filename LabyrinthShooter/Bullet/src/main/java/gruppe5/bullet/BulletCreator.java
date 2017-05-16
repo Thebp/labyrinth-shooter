@@ -4,12 +4,15 @@ import gruppe5.common.bullet.Bullet;
 import gruppe5.common.bullet.BulletSPI;
 import gruppe5.common.data.Entity;
 import gruppe5.common.data.GameData;
+import java.util.Random;
 import org.openide.util.lookup.ServiceProvider;
 
 @ServiceProvider(service = BulletSPI.class)
 
 public class BulletCreator implements BulletSPI {
-
+    private static final int N_BULLET_SPRITES = 2; // Number of bullet sprites
+    private static final Random rand = new Random();
+    
     @Override
     public Entity createBullet(Entity creator) {
         Entity bullet = new Bullet();
@@ -26,11 +29,11 @@ public class BulletCreator implements BulletSPI {
         bullet.setX(creator.getX() + (float) Math.cos(creator.getRadians()) * (creator.getRadius() / 3));
         bullet.setY(creator.getY() + (float) Math.sin(creator.getRadians()) * (creator.getRadius() / 3));
         bullet.setRadians(creator.getRadians());
-        bullet.setRadius(GameData.UNIT_SIZE / 15);
+        bullet.setRadius(GameData.UNIT_SIZE / 4);
         bullet.setRotationSpeed(0);
         bullet.setShapeX(new float[4]);
         bullet.setShapeY(new float[4]);
-        bullet.setImagePath("Bullet/target/Bullet-1.0.0-SNAPSHOT.jar!/assets/images/bullet01.png");
+        bullet.setImagePath("Bullet/target/Bullet-1.0.0-SNAPSHOT.jar!/assets/images/bullet" + rand.nextInt(N_BULLET_SPRITES) + ".png");
 
         return bullet;
     }
