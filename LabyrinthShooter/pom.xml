@@ -81,6 +81,7 @@
         <module>EnemyAI</module>
         <module>CommonVictory</module>
         <module>LevelExit</module>
+        <module>SilentUpdate</module>
     </modules>
 
     <properties>
