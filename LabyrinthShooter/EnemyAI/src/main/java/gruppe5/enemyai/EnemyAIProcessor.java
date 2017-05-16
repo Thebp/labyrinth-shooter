@@ -48,7 +48,10 @@ public class EnemyAIProcessor implements IEntityProcessingService {
         mapSPI = Lookup.getDefault().lookup(MapSPI.class);
         playerSPI = Lookup.getDefault().lookup(PlayerSPI.class);
         collisionSPI = Lookup.getDefault().lookup(CollisionSPI.class);
-        Entity player = playerSPI.getPlayer(world);
+        Entity player = null;
+        if(playerSPI != null) {
+            player = playerSPI.getPlayer(world);
+        }
         if (mapSPI != null) {
             checkBullets(world);
             for (Entity entity : world.getEntities(Enemy.class)) {
@@ -186,7 +189,6 @@ public class EnemyAIProcessor implements IEntityProcessingService {
     }
 
     private void enemyAttack(Enemy enemy, World world, GameData gameData) {
-        AudioSPI shootaudio = Lookup.getDefault().lookup(AudioSPI.class);
         if (playerSPI != null) {
             Entity player = playerSPI.getPlayer(world);
             if (player != null) {
