@@ -122,14 +122,16 @@ public class Game implements ApplicationListener, AudioSPI, VictorySPI {
         am = new AssetManager(jfhr);
 
         ResourceSPI musicSPI = Lookup.getDefault().lookup(ResourceSPI.class);
-        String musicURL = musicSPI.getResourceUrl("Core/target/Core-1.0.0-SNAPSHOT.jar!/assets/sound/musictwo.ogg");
-        am.load(musicURL, Music.class);
-        am.finishLoading();
+        if (musicSPI != null) {
+            String musicURL = musicSPI.getResourceUrl("Core/target/Core-1.0.0-SNAPSHOT.jar!/assets/sound/musictwo.ogg");
+            am.load(musicURL, Music.class);
+            am.finishLoading();
 
-        music = am.get(musicURL, Music.class);
-        music.setLooping(true);
-        music.setVolume(0.15f);
-        music.play();
+            music = am.get(musicURL, Music.class);
+            music.setLooping(true);
+            music.setVolume(0.15f);
+            music.play();
+        }
     }
 
     @Override
@@ -242,19 +244,21 @@ public class Game implements ApplicationListener, AudioSPI, VictorySPI {
             if (entity.getImagePath() != null) {
                 //uses ResourceSPI that takes entity.getImagePath as argument (string url).
                 ResourceSPI spriteSPI = Lookup.getDefault().lookup(ResourceSPI.class);
-                String url = spriteSPI.getResourceUrl(entity.getImagePath());
+                if (spriteSPI != null) {
+                    String url = spriteSPI.getResourceUrl(entity.getImagePath());
 
-                am.load(url, Texture.class);
-                am.finishLoading();
-                texture = am.get(url, Texture.class);
-                spriteBatch.begin();
-                sprite = new Sprite(texture);
-                sprite.setSize(entity.getRadius(), entity.getRadius());
-                sprite.setPosition(entity.getX() - (entity.getRadius() / 2), entity.getY() - (entity.getRadius() / 2));
-                sprite.setOrigin(sprite.getWidth() / 2, sprite.getHeight() / 2);
-                sprite.setRotation((float) Math.toDegrees(entity.getRadians()));
-                sprite.draw(spriteBatch);
-                spriteBatch.end();
+                    am.load(url, Texture.class);
+                    am.finishLoading();
+                    texture = am.get(url, Texture.class);
+                    spriteBatch.begin();
+                    sprite = new Sprite(texture);
+                    sprite.setSize(entity.getRadius(), entity.getRadius());
+                    sprite.setPosition(entity.getX() - (entity.getRadius() / 2), entity.getY() - (entity.getRadius() / 2));
+                    sprite.setOrigin(sprite.getWidth() / 2, sprite.getHeight() / 2);
+                    sprite.setRotation((float) Math.toDegrees(entity.getRadians()));
+                    sprite.draw(spriteBatch);
+                    spriteBatch.end();
+                }
             }
         }
     }

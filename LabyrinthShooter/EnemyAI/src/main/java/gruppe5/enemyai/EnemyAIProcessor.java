@@ -49,7 +49,7 @@ public class EnemyAIProcessor implements IEntityProcessingService {
         playerSPI = Lookup.getDefault().lookup(PlayerSPI.class);
         collisionSPI = Lookup.getDefault().lookup(CollisionSPI.class);
         Entity player = null;
-        if(playerSPI != null) {
+        if (playerSPI != null) {
             player = playerSPI.getPlayer(world);
         }
         if (mapSPI != null) {
@@ -57,9 +57,9 @@ public class EnemyAIProcessor implements IEntityProcessingService {
             for (Entity entity : world.getEntities(Enemy.class)) {
                 Enemy enemy = (Enemy) entity;
                 checkPlayerProximity(enemy, player, world);
-                
+
                 if (enemy.getTarget() != null) {
-                    enemyAttack(enemy, world, gameData);
+                    enemyAttack(enemy, world, gameData, player);
                 } else {
                     pathRequest(enemy, gameData);
                 }
@@ -76,9 +76,9 @@ public class EnemyAIProcessor implements IEntityProcessingService {
             if (bullet != currentTargetBullet) {
                 MapNode closestNode = getClosestNode(bullets.get(0).getX(), bullets.get(0).getY());
                 if (closestNode != null) {
-                    for(Entity entity : world.getEntities(Enemy.class)) {
+                    for (Entity entity : world.getEntities(Enemy.class)) {
                         Enemy enemy = (Enemy) entity;
-                        if(enemy.getTarget() == null) {
+                        if (enemy.getTarget() == null) {
                             enemy.setTargetNode(closestNode);
                         }
                     }
@@ -188,56 +188,54 @@ public class EnemyAIProcessor implements IEntityProcessingService {
         return false;
     }
 
-    private void enemyAttack(Enemy enemy, World world, GameData gameData) {
-        if (playerSPI != null) {
-            Entity player = playerSPI.getPlayer(world);
-            if (player != null) {
+    private void enemyAttack(Enemy enemy, World world, GameData gameData, Entity player) {
+        if (player != null) {
 
-                float dx = player.getX() - enemy.getX();
-                float dy = player.getY() - enemy.getY();
+            float dx = player.getX() - enemy.getX();
+            float dy = player.getY() - enemy.getY();
 
-                float radians = (float) Math.atan2(dy, dx);
-                enemy.setRadians(radians);
+            float radians = (float) Math.atan2(dy, dx);
+            enemy.setRadians(radians);
 
-                MapNode nextNode = enemy.getNextNode();
-                MapNode closestNode = nextNode;
-                float closestDistance = (float) Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2));
+            MapNode nextNode = enemy.getNextNode();
+            MapNode closestNode = nextNode;
+            float closestDistance = (float) Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2));
 
-                if (enemy.getX() == closestNode.getX() && enemy.getY() == closestNode.getY()) {
-                    for (MapNode mapNode : nextNode.getNeighbours()) {
-                        float xDiff = player.getX() - mapNode.getX();
-                        float yDiff = player.getY() - mapNode.getY();
-                        float nodeDistance = (float) Math.sqrt(Math.pow(xDiff, 2) + Math.pow(yDiff, 2));
+            if (enemy.getX() == closestNode.getX() && enemy.getY() == closestNode.getY()) {
+                for (MapNode mapNode : nextNode.getNeighbours()) {
+                    float xDiff = player.getX() - mapNode.getX();
+                    float yDiff = player.getY() - mapNode.getY();
+                    float nodeDistance = (float) Math.sqrt(Math.pow(xDiff, 2) + Math.pow(yDiff, 2));
 
-                        if (nodeDistance < closestDistance && mapNode.getNeighbours().size() > 0) {
-                            closestDistance = nodeDistance;
-                            closestNode = mapNode;
-                        }
+                    if (nodeDistance < closestDistance && mapNode.getNeighbours().size() > 0) {
+                        closestDistance = nodeDistance;
+                        closestNode = mapNode;
                     }
                 }
-
-                if (checkPlayerVisibility(enemy, player, world)) {
-                    Weapon weapon = null;
-                    for (Entity subEntity : enemy.getEntities(Weapon.class)) {
-                        weapon = (Weapon) subEntity;
-                    }
-
-                    if (weapon != null) {
-                        WeaponSPI weaponSPI = Lookup.getDefault().lookup(WeaponSPI.class);
-                        if (weaponSPI != null) {
-                            weaponSPI.shoot(world, weapon);
-                        }
-                    }
-                }
-
-                enemy.setNextNode(closestNode);
             }
+
+            if (checkPlayerVisibility(enemy, player, world)) {
+                Weapon weapon = null;
+                for (Entity subEntity : enemy.getEntities(Weapon.class)) {
+                    weapon = (Weapon) subEntity;
+                }
+
+                if (weapon != null) {
+                    WeaponSPI weaponSPI = Lookup.getDefault().lookup(WeaponSPI.class);
+                    if (weaponSPI != null) {
+                        weaponSPI.shoot(world, weapon);
+                    }
+                }
+            }
+
+            enemy.setNextNode(closestNode);
         }
+
     }
 
     private void moveTowardsNextNode(Enemy enemy, GameData gameData) {
         MapNode nextNode = enemy.getNextNode();
-        if (enemy.getX() != nextNode.getX() || enemy.getY() != nextNode.getY()) {
+        if (enemy.getNextNode() != null && enemy.getX() != nextNode.getX() || enemy.getY() != nextNode.getY()) {
             float dx = nextNode.getX() - enemy.getX();
             float dy = nextNode.getY() - enemy.getY();
             float dt = gameData.getDelta();
@@ -280,7 +278,6 @@ public class EnemyAIProcessor implements IEntityProcessingService {
         longer distances.
      */
     private List<MapNode> findPath(MapNode startNode, MapNode targetNode, Enemy enemy, GameData gameData) {
-        mapSPI = Lookup.getDefault().lookup(MapSPI.class);
         //node = Lookup.getDefault().lookup(Node.class);
 
         Heuristics startHeuristics = new Heuristics(startNode);
