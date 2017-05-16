@@ -105,7 +105,7 @@ public class LevelExitController implements IGamePluginService, IEntityProcessin
             AudioSPI audioSPI = Lookup.getDefault().lookup(AudioSPI.class);
             if (victorySPI != null) {
                 // Play winning audio
-                audioSPI.playAudio("LevelExit/target/LevelExit-1.0.0-SNAPSHOT.jar!/assets/sounds/winning.ogg", exit);
+                audioSPI.playAudio("LevelExit/target/LevelExit-1.0.0-SNAPSHOT.jar!/assets/sounds/winning2.ogg", exit);
                 // Increase level
                 gameData.setLevel(gameData.getLevel() + 1);
                 // Set win

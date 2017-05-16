@@ -127,7 +127,7 @@ public class Game implements ApplicationListener, AudioSPI, VictorySPI {
 
         music = am.get(musicURL, Music.class);
         music.setLooping(true);
-        music.setVolume(0.3f);
+        music.setVolume(0.15f);
         music.play();
     }
 
@@ -209,21 +209,21 @@ public class Game implements ApplicationListener, AudioSPI, VictorySPI {
         }
 
         for (Entity entity : world.getForegroundEntities()) {
-            sr.setColor(1, 1, 1, 1);
-
-            sr.begin(ShapeRenderer.ShapeType.Line);
-
-            float[] shapex = entity.getShapeX();
-            float[] shapey = entity.getShapeY();
-
-            for (int i = 0, j = shapex.length - 1;
-                    i < shapex.length;
-                    j = i++) {
-
-                sr.line(shapex[i], shapey[i], shapex[j], shapey[j]);
-            }
-
-            sr.end();
+//            sr.setColor(1, 1, 1, 1);
+//
+//            sr.begin(ShapeRenderer.ShapeType.Line);
+//
+//            float[] shapex = entity.getShapeX();
+//            float[] shapey = entity.getShapeY();
+//
+//            for (int i = 0, j = shapex.length - 1;
+//                    i < shapex.length;
+//                    j = i++) {
+//
+//                sr.line(shapex[i], shapey[i], shapex[j], shapey[j]);
+//            }
+//
+//            sr.end();
 
             drawSprite(entity, player);
 
