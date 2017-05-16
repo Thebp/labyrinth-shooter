@@ -16,8 +16,10 @@ import org.openide.util.lookup.ServiceProvider;
 import org.openide.util.lookup.ServiceProviders;
 
 @ServiceProviders(value = {
-    @ServiceProvider(service = IEntityProcessingService.class),
-    @ServiceProvider(service = IGamePluginService.class),
+    @ServiceProvider(service = IEntityProcessingService.class)
+    ,
+    @ServiceProvider(service = IGamePluginService.class)
+    ,
     @ServiceProvider(service = WeaponSPI.class)
 })
 
@@ -32,7 +34,7 @@ public class WeaponProcessor implements IEntityProcessingService, IGamePluginSer
         for (Entity entity : world.getEntities(Weapon.class)) {
             Weapon weapon = (Weapon) entity;
             moveWeapon(weapon);
-            
+
             weapon.reduceCooldown(gameData.getDelta());
         }
     }
@@ -40,8 +42,8 @@ public class WeaponProcessor implements IEntityProcessingService, IGamePluginSer
     private void moveWeapon(Weapon weapon) {
         Entity owner = weapon.getOwner();
         if (owner != null) {
-            weapon.setX((float) (owner.getX() + Math.cos(owner.getRadians())* weapon.getRadius()));
-            weapon.setY((float) (owner.getY() + Math.sin(owner.getRadians())* weapon.getRadius()));
+            weapon.setX((float) (owner.getX() + Math.cos(owner.getRadians()) * weapon.getRadius()));
+            weapon.setY((float) (owner.getY() + Math.sin(owner.getRadians()) * weapon.getRadius()));
             weapon.setRadians(owner.getRadians());
         }
     }
@@ -50,9 +52,9 @@ public class WeaponProcessor implements IEntityProcessingService, IGamePluginSer
     public void start(GameData gameData, World world) {
         System.out.println("WeaponPlugin started");
         MapSPI mapSPI = Lookup.getDefault().lookup(MapSPI.class);
-        
+
         if (mapSPI != null) {
-            for(int i = 0; i < 10; i++) {
+            for (int i = 0; i < 10; i++) {
                 MapNode node = mapSPI.getRandomSpawnNode();
                 Weapon weapon = createWeapon(world);
                 weapon.setPosition(node.getX(), node.getY());
@@ -91,14 +93,18 @@ public class WeaponProcessor implements IEntityProcessingService, IGamePluginSer
     @Override
     public void shoot(World world, Entity entity) {
         Weapon weapon = (Weapon) entity;
+
         if (weapon.getCooldown() <= 0) {
-            Entity bullet = Lookup.getDefault().lookup(BulletSPI.class).createBullet(entity);
-            world.addEntity(bullet);
-            weapon.setCooldown(0.5f);
-            AudioSPI audioSPI = Lookup.getDefault().lookup(AudioSPI.class);
-            
-            if(audioSPI != null) {
-                audioSPI.playAudio("", weapon);
+            BulletSPI bulletSPI = Lookup.getDefault().lookup(BulletSPI.class);
+            if (bulletSPI != null) {
+                Entity bullet = bulletSPI.createBullet(entity);
+                world.addEntity(bullet);
+                weapon.setCooldown(0.5f);
+                AudioSPI audioSPI = Lookup.getDefault().lookup(AudioSPI.class);
+
+                if (audioSPI != null) {
+                    audioSPI.playAudio("", weapon);
+                }
             }
         }
     }
@@ -110,7 +116,7 @@ public class WeaponProcessor implements IEntityProcessingService, IGamePluginSer
         weapon.setDynamic(true);
         weapon.setRadius(GameData.UNIT_SIZE);
         weapon.setImagePath("Weapon/target/Weapon-1.0.0-SNAPSHOT.jar!/assets/images/weapon01.png");
-        
+
         return weapon;
     }
 }
