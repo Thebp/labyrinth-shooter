@@ -48,11 +48,14 @@ import org.openide.util.lookup.ServiceProvider;
 import org.openide.util.lookup.ServiceProviders;
 
 @ServiceProviders(value = {
-        @ServiceProvider(service = AudioSPI.class),
-        @ServiceProvider(service = VictorySPI.class)
+    @ServiceProvider(service = AudioSPI.class)
+    ,
+    @ServiceProvider(service = VictorySPI.class)
 })
 
 public class Game implements ApplicationListener, AudioSPI, VictorySPI {
+    // For debugging
+    private final static boolean DRAW_HITBOXES = false;
 
     private ShapeRenderer sr;
     private BitmapFont bitmapfont;
@@ -206,26 +209,27 @@ public class Game implements ApplicationListener, AudioSPI, VictorySPI {
         for (Entity entity : world.getBackgroundEntities()) {
             drawSprite(entity, player);
         }
-
+        
         for (Entity entity : world.getForegroundEntities()) {
-            sr.setColor(1, 1, 1, 1);
+            // Only draw hitboxes if enabled
+            if (DRAW_HITBOXES) {
+                sr.setColor(1, 1, 1, 1);
 
-            sr.begin(ShapeRenderer.ShapeType.Line);
+                sr.begin(ShapeRenderer.ShapeType.Line);
 
-            float[] shapex = entity.getShapeX();
-            float[] shapey = entity.getShapeY();
+                float[] shapex = entity.getShapeX();
+                float[] shapey = entity.getShapeY();
 
-            for (int i = 0, j = shapex.length - 1;
-                    i < shapex.length;
-                    j = i++) {
+                for (int i = 0, j = shapex.length - 1;
+                        i < shapex.length;
+                        j = i++) {
 
-                sr.line(shapex[i], shapey[i], shapex[j], shapey[j]);
+                    sr.line(shapex[i], shapey[i], shapex[j], shapey[j]);
+                }
+
+                sr.end();
             }
-
-            sr.end();
-
             drawSprite(entity, player);
-
         }
 
         for (UIElement element : gameData.getUIElements()) {
@@ -371,7 +375,7 @@ public class Game implements ApplicationListener, AudioSPI, VictorySPI {
                 plugin.stop(gameData, world);
             }
         }
-        
+
         for (IGameInitService initService : lookup.lookupAll(IGameInitService.class)) {
             initService.start(gameData, world);
         }
