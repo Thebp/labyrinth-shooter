@@ -49,7 +49,8 @@ import org.openide.util.lookup.ServiceProvider;
 import org.openide.util.lookup.ServiceProviders;
 
 @ServiceProviders(value = {
-        @ServiceProvider(service = AudioSPI.class),
+    @ServiceProvider(service = AudioSPI.class)
+    ,
         @ServiceProvider(service = VictorySPI.class)
 })
 
@@ -349,35 +350,28 @@ public class Game implements ApplicationListener, AudioSPI, VictorySPI {
             //if (newsound == null) {
             AssetsJarFileResolver ajfr = new AssetsJarFileResolver();
             ResourceSPI soundSPI = Lookup.getDefault().lookup(ResourceSPI.class);
-            List<String> soundPaths = new ArrayList<>();
             soundURL = soundSPI.getResourceUrl(entity.getSoundPath());
-            soundPaths.add(soundURL);
-            for (int i = 0; i < soundPaths.size(); i++) {
-                newsound = Gdx.audio.newSound(ajfr.resolve(soundPaths.get(i)));
-                newsound.play();
-            }
-
+            newsound = Gdx.audio.newSound(ajfr.resolve(soundURL));
+            newsound.play();
         }
     }
 
     @Override
     public void setLevelComplete(GameData gameData, World world) {
         for (IGamePluginService plugin : lookup.lookupAll(IGamePluginService.class)) {
-            if (plugin.getClass().getPackage().equals(getPlayer().getClass().getPackage()) || plugin instanceof IUIService) {
-            } else {
+            if (!(plugin instanceof IUIService)) {
                 plugin.stop(gameData, world);
             }
         }
         for (IGameInitService initService : lookup.lookupAll(IGameInitService.class)) {
             initService.stop(gameData, world);
         }
-        
+
         for (IGameInitService initService : lookup.lookupAll(IGameInitService.class)) {
             initService.start(gameData, world);
         }
         for (IGamePluginService plugin : lookup.lookupAll(IGamePluginService.class)) {
-            if (plugin.getClass().getPackage().equals(getPlayer().getClass().getPackage()) || plugin instanceof IUIService) {
-            } else {
+            if (!(plugin instanceof IUIService)) {
                 plugin.start(gameData, world);
             }
         }
