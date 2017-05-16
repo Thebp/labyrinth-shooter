@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package gruppe5.bullet;
 
 import gruppe5.common.bullet.Bullet;
@@ -12,13 +7,9 @@ import gruppe5.common.data.World;
 import gruppe5.common.services.IGamePluginService;
 import org.openide.util.lookup.ServiceProvider;
 
-
 @ServiceProvider(service = IGamePluginService.class)
-/**
- *
- * @author marcn
- */
-public class BulletPlugin implements IGamePluginService{
+
+public class BulletPlugin implements IGamePluginService {
 
     @Override
     public void start(GameData gameData, World world) {
@@ -27,9 +18,10 @@ public class BulletPlugin implements IGamePluginService{
 
     @Override
     public void stop(GameData gameData, World world) {
-        for(Entity bullet : world.getEntities(Bullet.class)) {
+        for (Entity bullet : world.getEntities(Bullet.class)) {
             world.removeEntity(bullet);
         }
+        System.out.println("Bullet plugin stopped");
     }
-    
+
 }

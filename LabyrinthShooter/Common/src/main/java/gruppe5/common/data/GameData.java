@@ -1,7 +1,5 @@
 package gruppe5.common.data;
 
-import gruppe5.common.events.Event;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -10,21 +8,39 @@ public class GameData {
     private float delta;
     private int displayWidth;
     private int displayHeight;
+    private int worldWidth;
+    private int worldHeight;
+    private int mouseX;
+    private int mouseY;
+    private int level = 0; // The level the player is at
+    private boolean noclip;
+
     private final GameKeys keys = new GameKeys();
-    private List<Event> events = new CopyOnWriteArrayList<>();
     private List<UIElement> uiElements = new CopyOnWriteArrayList<>();
     public static final float UNIT_SIZE = 25;
 
-    public void addEvent(Event e) {
-        events.add(e);
+    public boolean isNoclip() {
+        return noclip;
     }
 
-    public void removeEvent(Event e) {
-        events.remove(e);
+    public void setNoclip(boolean noclip) {
+        this.noclip = noclip;
+    }
+    
+    public int getMouseX() {
+        return mouseX;
     }
 
-    public List<Event> getEvents() {
-        return events;
+    public void setMouseX(int mouseX) {
+        this.mouseX = mouseX;
+    }
+
+    public int getMouseY() {
+        return mouseY;
+    }
+
+    public void setMouseY(int mouseY) {
+        this.mouseY = mouseY;
     }
     
     public void addUIElement(UIElement element) {
@@ -67,14 +83,11 @@ public class GameData {
         return displayHeight;
     }
 
-    public <E extends Event> List<Event> getEvents(Class<E> type, String sourceID) {
-        List<Event> r = new ArrayList();
-        for (Event event : events) {
-            if (event.getClass().equals(type) && event.getSource().getID().equals(sourceID)) {
-                r.add(event);
-            }
-        }
+    public int getLevel() {
+        return level;
+    }
 
-        return r;
+    public void setLevel(int level) {
+        this.level = level;
     }
 }

@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package gruppe5.fpscounter;
 
 import gruppe5.common.data.GameData;
@@ -17,10 +12,6 @@ import java.awt.Font;
 import org.openide.util.lookup.ServiceProvider;
 import org.openide.util.lookup.ServiceProviders;
 
-/**
- *
- * @author nick
- */
 @ServiceProviders(value = {
     @ServiceProvider(service = IUIService.class),
     @ServiceProvider(service = IGamePluginService.class)
@@ -36,14 +27,14 @@ public class FPSCounter implements IGamePluginService, IUIService {
     
     @Override
     public void start(GameData gameData, World world) {
-        System.out.println("FPSCounter started");
+        System.out.println("FPSCounter plugin started");
         counter = new UIElement();
         gameData.addUIElement(counter);
     }
 
     @Override
     public void stop(GameData gameData, World world) {
-        System.out.println("FPSCounter stopped");
+        System.out.println("FPSCounter plugin stopped");
         gameData.removeUIElement(counter);
     }
     
@@ -60,7 +51,7 @@ public class FPSCounter implements IGamePluginService, IUIService {
     }
     
     private BufferedImage createCounterImage(GameData gameData, World world) {
-        BufferedImage image = new BufferedImage(120, 50, BufferedImage.TYPE_INT_ARGB);
+        BufferedImage image = new BufferedImage(200, 75, BufferedImage.TYPE_INT_ARGB);
         Graphics2D g = image.createGraphics();
         
         int fps = Math.round(calcAverageFPS(gameData.getDelta()));
@@ -69,7 +60,9 @@ public class FPSCounter implements IGamePluginService, IUIService {
         g.setColor(Color.GREEN);
         
         g.drawString("FPS: " + fps, 0, 20);
-        g.drawString("Entities: " + world.getEntities().size(), 0, 35);
+        g.drawString("foreground entities: "+ world.getForegroundEntities().size(),0, 35);
+        g.drawString("background entities: " + world.getBackgroundEntities().size(), 0, 50);
+        g.drawString("Total entities: " + world.getEntities().size(), 0, 65);
         g.dispose();
         
         return image;

@@ -1,9 +1,5 @@
 package gruppe5.collision;
 
-/**
- *
- * @author Daniel
- */
 public class Projection {
 
     double min;

@@ -11,27 +11,7 @@
 
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
-/LabyrinthShooter/branding/target/
-/LabyrinthShooter/application/target/
-/LabyrinthShooter/Core/target/
-/LabyrinthShooter/Common/target/
-/LabyrinthShooter/CommonMap/target/
-/LabyrinthShooter/CommonBullet/target/
-/LabyrinthShooter/CommonItem/target/
-/LabyrinthShooter/CommonPlayer/target/
-/LabyrinthShooter/CommonWeapon/target/
-/LabyrinthShooter/Renderer/target/
-/LabyrinthShooter/MapGenerator/target/
-/LabyrinthShooter/Collision/target/
-/LabyrinthShooter/Bullet/target/
-/LabyrinthShooter/Weapon/target/
-/LabyrinthShooter/Enemy/target/
-/LabyrinthShooter/Player/target/
+/*/*/target/
 *.properties
 *.netbeans_automatic_build
-/LabyrinthShooter/HUD/target/
-/LabyrinthShooter/DynamicSpriteManager/target/
-/LabyrinthShooter/CommonSprites/target/
-/LabyrinthShooter/CommonResources/target/
-/LabyrinthShooter/ResourceManager/target/
-/LabyrinthShooter/FPSCounter/target/
+

@@ -2,31 +2,39 @@ package gruppe5.collision;
 
 import gruppe5.common.data.Entity;
 import com.badlogic.gdx.math.Vector2;
+import gruppe5.common.collision.CollisionSPI;
 import gruppe5.common.data.GameData;
 import gruppe5.common.data.World;
 import gruppe5.common.services.IEntityProcessingService;
 import org.openide.util.lookup.ServiceProvider;
 
-/**
- *
- * @author Daniel
- */
 @ServiceProvider(service = IEntityProcessingService.class)
 
-public class CollisionControlSystem implements IEntityProcessingService {
+public class CollisionControlSystem implements IEntityProcessingService, CollisionSPI {
 
     Vector2 mtv = new Vector2();    //MTV: Minimum Translation Vector
 
     @Override
     public void process(GameData gameData, World world) {
-        for (Entity shape1 : world.getEntities()) {
+        for (Entity shape1 : world.getForegroundEntities()) {
             if (shape1.isDynamic()) {
-                for (Entity shape2 : world.getEntities()) {
-                    Vector2 velocity = new Vector2(shape1.getDx(), shape1.getDy());
-                    if (checkConditions(shape1, shape2, mtv, velocity)) {
-                        shape1.setPosition(shape1.getX() + (velocity.x + mtv.x), shape1.getY() + (velocity.y + mtv.y));
-                        shape1.setLife(shape1.getLife() - shape2.getDamage());
-                        shape1.setIsHit(true);
+                for (Entity shape2 : world.getForegroundEntities()) {
+                    float distance = (float) Math.sqrt(Math.pow(shape2.getX() - shape1.getX(), 2) + Math.pow(shape2.getY() - shape1.getY(), 2));
+                    if (distance < 200) {
+                        Vector2 velocity = new Vector2(shape1.getDx(), shape1.getDy());
+                        if (checkConditions(shape1, shape2, mtv, velocity)) {
+                            shape1.setPosition(shape1.getX() + (velocity.x + mtv.x), shape1.getY() + (velocity.y + mtv.y));
+
+                            if (!shape1.isHit()) {
+                                shape1.setLife(shape1.getLife() - shape2.getDamage());
+                                shape1.setIsHit(true);
+                            }
+                            if (!shape2.isHit()) {
+                                shape2.setLife(shape2.getLife() - shape1.getDamage());
+                                shape2.setIsHit(true);
+                            }
+
+                        }
                     }
                 }
             }
@@ -38,6 +46,9 @@ public class CollisionControlSystem implements IEntityProcessingService {
             return false;
         }
         if (!shape1.isCollidable() || !shape2.isCollidable()) {
+            return false;
+        }
+        if (shape1.getClass().equals(shape2.getClass())) {
             return false;
         }
         if (!polyCollideMTV(shape2, shape1, mtv, velocity)) {
@@ -256,6 +267,19 @@ public class CollisionControlSystem implements IEntityProcessingService {
 
         //no separating axis found so p1 and p2 are colliding
         return true;
+    }
+
+    @Override
+    public Boolean checkCollision(Entity entity, World world) {
+        Vector2 emptyVector = new Vector2();
+        for (Entity e : world.getForegroundEntities()) {
+            if (!e.isDynamic() && e.isCollidable()) {
+                if (checkConditions(entity, e, emptyVector, emptyVector)) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
 }
