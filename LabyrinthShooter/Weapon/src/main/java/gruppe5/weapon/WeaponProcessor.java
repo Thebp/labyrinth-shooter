@@ -20,7 +20,6 @@ import org.openide.util.lookup.ServiceProviders;
     @ServiceProvider(service = IGamePluginService.class),
     @ServiceProvider(service = WeaponSPI.class)
 })
-@ServiceProvider(service = IEntityProcessingService.class)
 
 /**
  *
@@ -102,7 +101,6 @@ public class WeaponProcessor implements IEntityProcessingService, IGamePluginSer
                 audioSPI.playAudio("", weapon);
             }
         }
-
     }
 
     @Override
