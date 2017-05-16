@@ -364,8 +364,8 @@ public class Game implements ApplicationListener, AudioSPI, VictorySPI {
 
     @Override
     public void setLevelComplete(GameData gameData, World world) {
+        // Stop all services
         for (IGameInitService initService : lookup.lookupAll(IGameInitService.class)) {
-            System.out.println("Stopping init");
             initService.stop(gameData, world);
         }
         for (IGamePluginService plugin : lookup.lookupAll(IGamePluginService.class)) {
@@ -375,6 +375,7 @@ public class Game implements ApplicationListener, AudioSPI, VictorySPI {
             }
         }
 
+        // Start them again
         for (IGameInitService initService : lookup.lookupAll(IGameInitService.class)) {
             initService.start(gameData, world);
         }
@@ -384,6 +385,5 @@ public class Game implements ApplicationListener, AudioSPI, VictorySPI {
                 plugin.start(gameData, world);
             }
         }
-
     }
 }
