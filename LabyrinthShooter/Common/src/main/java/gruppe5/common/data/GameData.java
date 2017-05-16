@@ -12,6 +12,7 @@ public class GameData {
     private int worldHeight;
     private int mouseX;
     private int mouseY;
+    private int level = 0; // The level the player is at
     private boolean noclip;
 
     private final GameKeys keys = new GameKeys();
@@ -80,5 +81,13 @@ public class GameData {
 
     public int getDisplayHeight() {
         return displayHeight;
+    }
+
+    public int getLevel() {
+        return level;
+    }
+
+    public void setLevel(int level) {
+        this.level = level;
     }
 }

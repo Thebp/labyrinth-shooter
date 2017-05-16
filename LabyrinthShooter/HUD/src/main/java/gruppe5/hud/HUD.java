@@ -18,7 +18,8 @@ import org.openide.util.lookup.ServiceProvider;
 import org.openide.util.lookup.ServiceProviders;
 
 @ServiceProviders(value = {
-    @ServiceProvider(service = IUIService.class),
+    @ServiceProvider(service = IUIService.class)
+    ,
     @ServiceProvider(service = IGamePluginService.class)
 })
 public class HUD implements IUIService, IGamePluginService {
@@ -30,7 +31,7 @@ public class HUD implements IUIService, IGamePluginService {
     private UIElement healthbarElement;
     private UIElement scoreElement;
     private int prevPlayerLife; // Holds previous player life
-    private int prevScore = -1;
+    private int prevLebel = -1;
 
     @Override
     public void start(GameData gameData, World world) {
@@ -42,7 +43,7 @@ public class HUD implements IUIService, IGamePluginService {
         } catch (IOException ex) {
             System.out.println("HUD.process(): Error when reading image '" + HEART_REL_PATH + "' :\n" + ex);
         }
-        
+
         healthbarElement = new UIElement();
         scoreElement = new UIElement();
         gameData.addUIElement(healthbarElement);
@@ -65,57 +66,57 @@ public class HUD implements IUIService, IGamePluginService {
             System.out.println("HUD has not been initialized.");
             return;
         }
-        
+
         // Get player
         PlayerSPI playerSPI = Lookup.getDefault().lookup(PlayerSPI.class);
         if (playerSPI == null) {
             System.out.println("HUD: PlayerSPI module not found.");
             return;
         }
-       
+
         Entity player = playerSPI.getPlayer(world);
-        if(player != null){
-        updateHealthbar(gameData, player);
-        updateScore(gameData);
+        if (player != null) {
+            updateHealthbar(gameData, player);
+            updateLevel(gameData);
         }
     }
-    
-    private void updateScore(GameData gameData) {
-        int score = 0;
-        
-        if (score != prevScore) {
-            prevScore = score;
-            BufferedImage image = createPlayerScore(score);
+
+    private void updateLevel(GameData gameData) {
+        int level = gameData.getLevel();
+
+        if (level != prevLebel) {
+            prevLebel = level;
+            BufferedImage image = createPlayerScore(level);
             scoreElement.setImage(image);
             scoreElement.setX(10);
             scoreElement.setY(image.getHeight() + 10);
         }
     }
-    
-    private BufferedImage createPlayerScore(int score) {
+
+    private BufferedImage createPlayerScore(int level) {
         BufferedImage image = new BufferedImage(80, 15, BufferedImage.TYPE_INT_ARGB);
         Graphics2D g2d = image.createGraphics();
-        
+
         g2d.setFont(new Font("Consolas", 1, 20));
-        g2d.drawString("SCORE:" + score, 0, 15);
-        
+        g2d.drawString("LEVEL:" + level, 0, 15);
+
         g2d.dispose();
-        
+
         return image;
     }
-    
+
     private void updateHealthbar(GameData gameData, Entity player) {
-        if(player != null){
-        int playerLife = player.getLife();
-        
-        // Only draw healthbar if player life has changed
-        if (playerLife != prevPlayerLife) {
-            prevPlayerLife = playerLife;
-            BufferedImage image = createPlayerHealthbar(playerLife);
-            healthbarElement.setImage(createPlayerHealthbar(player.getLife()));
-            healthbarElement.setX(gameData.getDisplayWidth() - image.getWidth());
-            healthbarElement.setY(gameData.getDisplayHeight() - 10);
-        }
+        if (player != null) {
+            int playerLife = player.getLife();
+
+            // Only draw healthbar if player life has changed
+            if (playerLife != prevPlayerLife) {
+                prevPlayerLife = playerLife;
+                BufferedImage image = createPlayerHealthbar(playerLife);
+                healthbarElement.setImage(createPlayerHealthbar(player.getLife()));
+                healthbarElement.setX(gameData.getDisplayWidth() - image.getWidth());
+                healthbarElement.setY(gameData.getDisplayHeight() - 10);
+            }
         }
     }
 
@@ -127,7 +128,7 @@ public class HUD implements IUIService, IGamePluginService {
         int heartWidth = HEART_SIZE + 10;
         int heartHeight = HEART_SIZE;
         BufferedImage image = new BufferedImage(heartWidth * playerLife, heartHeight, BufferedImage.TYPE_INT_ARGB);
-        
+
         Graphics2D g2d = image.createGraphics();
 
         // Draw heart for each life onto image
