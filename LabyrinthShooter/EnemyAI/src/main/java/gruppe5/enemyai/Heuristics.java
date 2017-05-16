@@ -8,18 +8,23 @@ package gruppe5.enemyai;
 import gruppe5.common.node.MapNode;
 import java.util.Objects;
 
-
-
 /**
  *
  * @author Gyhuji
  */
-public class Heuristics{
+public class Heuristics {
+
+    /*
+        Cost to the startNode
+     */
     private int gCost;
+    /*
+        Cost to the targetNode
+     */
     private int hCost;
     private Heuristics parent;
     private MapNode node;
-    
+
     public Heuristics(MapNode node) {
         this.node = node;
     }
@@ -47,15 +52,15 @@ public class Heuristics{
     public void sethCost(int newhCost) {
         this.hCost = newhCost;
     }
-    
-    public float fCost(){
+
+    public float fCost() {
         return gCost + hCost;
     }
-    
+
     public MapNode getNode() {
         return node;
     }
-    
+
     public void setNode(MapNode node) {
         this.node = node;
     }
@@ -68,6 +73,4 @@ public class Heuristics{
         }
         return true;
     }
-    
-    
 }
