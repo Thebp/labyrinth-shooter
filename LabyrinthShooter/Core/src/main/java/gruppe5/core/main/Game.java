@@ -15,6 +15,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.BufferUtils;
+import com.badlogic.gdx.utils.Timer;
 import gruppe5.common.audio.AudioSPI;
 import gruppe5.common.data.Entity;
 import gruppe5.common.data.GameData;
@@ -40,6 +41,7 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
+import org.openide.util.Exceptions;
 import org.openide.util.Lookup;
 import org.openide.util.LookupEvent;
 import org.openide.util.LookupListener;
@@ -47,14 +49,11 @@ import org.openide.util.lookup.ServiceProvider;
 import org.openide.util.lookup.ServiceProviders;
 
 @ServiceProviders(value = {
-    @ServiceProvider(service = AudioSPI.class)
-    ,
-    @ServiceProvider(service = VictorySPI.class)
+        @ServiceProvider(service = AudioSPI.class),
+        @ServiceProvider(service = VictorySPI.class)
 })
 
 public class Game implements ApplicationListener, AudioSPI, VictorySPI {
-    // For debugging
-    private final static boolean DRAW_HITBOXES = false;
 
     private ShapeRenderer sr;
     private BitmapFont bitmapfont;
@@ -122,7 +121,7 @@ public class Game implements ApplicationListener, AudioSPI, VictorySPI {
         am = new AssetManager(jfhr);
 
         ResourceSPI musicSPI = Lookup.getDefault().lookup(ResourceSPI.class);
-        String musicURL = musicSPI.getResourceUrl("Core/target/Core-1.0.0-SNAPSHOT.jar!/assets/sound/music.ogg");
+        String musicURL = musicSPI.getResourceUrl("Core/target/Core-1.0.0-SNAPSHOT.jar!/assets/sound/musictwo.ogg");
         am.load(musicURL, Music.class);
         am.finishLoading();
 
@@ -208,27 +207,26 @@ public class Game implements ApplicationListener, AudioSPI, VictorySPI {
         for (Entity entity : world.getBackgroundEntities()) {
             drawSprite(entity, player);
         }
-        
+
         for (Entity entity : world.getForegroundEntities()) {
-            // Only draw hitboxes if enabled
-            if (DRAW_HITBOXES) {
-                sr.setColor(1, 1, 1, 1);
+            sr.setColor(1, 1, 1, 1);
 
-                sr.begin(ShapeRenderer.ShapeType.Line);
+            sr.begin(ShapeRenderer.ShapeType.Line);
 
-                float[] shapex = entity.getShapeX();
-                float[] shapey = entity.getShapeY();
+            float[] shapex = entity.getShapeX();
+            float[] shapey = entity.getShapeY();
 
-                for (int i = 0, j = shapex.length - 1;
-                        i < shapex.length;
-                        j = i++) {
+            for (int i = 0, j = shapex.length - 1;
+                    i < shapex.length;
+                    j = i++) {
 
-                    sr.line(shapex[i], shapey[i], shapex[j], shapey[j]);
-                }
-
-                sr.end();
+                sr.line(shapex[i], shapey[i], shapex[j], shapey[j]);
             }
+
+            sr.end();
+
             drawSprite(entity, player);
+
         }
 
         for (UIElement element : gameData.getUIElements()) {
@@ -364,18 +362,16 @@ public class Game implements ApplicationListener, AudioSPI, VictorySPI {
 
     @Override
     public void setLevelComplete(GameData gameData, World world) {
-        // Stop all services
-        for (IGameInitService initService : lookup.lookupAll(IGameInitService.class)) {
-            initService.stop(gameData, world);
-        }
         for (IGamePluginService plugin : lookup.lookupAll(IGamePluginService.class)) {
             if (plugin.getClass().getPackage().equals(getPlayer().getClass().getPackage()) || plugin instanceof IUIService) {
             } else {
                 plugin.stop(gameData, world);
             }
         }
-
-        // Start them again
+        for (IGameInitService initService : lookup.lookupAll(IGameInitService.class)) {
+            initService.stop(gameData, world);
+        }
+        
         for (IGameInitService initService : lookup.lookupAll(IGameInitService.class)) {
             initService.start(gameData, world);
         }
@@ -385,5 +381,6 @@ public class Game implements ApplicationListener, AudioSPI, VictorySPI {
                 plugin.start(gameData, world);
             }
         }
+
     }
 }
