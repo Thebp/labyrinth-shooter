@@ -52,7 +52,7 @@ public class WeaponProcessor implements IEntityProcessingService, IGamePluginSer
         MapSPI mapSPI = Lookup.getDefault().lookup(MapSPI.class);
         
         if (mapSPI != null) {
-            for(int i = 0; i < 20; i++) {
+            for(int i = 0; i < 10; i++) {
                 MapNode node = mapSPI.getRandomSpawnNode();
                 Weapon weapon = createWeapon(world);
                 weapon.setPosition(node.getX(), node.getY());

@@ -124,7 +124,7 @@ public class EnemyAIProcessor implements IEntityProcessingService {
             float yDiff = player.getY() - enemy.getY();
             float distance = (float) Math.sqrt(Math.pow(xDiff, 2) + Math.pow(yDiff, 2));
 
-            if (distance < 9 * GameData.UNIT_SIZE && checkPlayerVisibility(enemy, player, world)) {
+            if (distance < 7 * GameData.UNIT_SIZE && checkPlayerVisibility(enemy, player, world)) {
                 enemy.setTarget(player);
             } else if (enemy.getTarget() != null) {
                 if (mapSPI != null) {
