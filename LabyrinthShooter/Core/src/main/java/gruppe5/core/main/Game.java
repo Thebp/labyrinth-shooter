@@ -15,7 +15,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.BufferUtils;
-import com.badlogic.gdx.utils.Timer;
 import gruppe5.common.audio.AudioSPI;
 import gruppe5.common.data.Entity;
 import gruppe5.common.data.GameData;
@@ -120,7 +119,7 @@ public class Game implements ApplicationListener, AudioSPI, VictorySPI {
         am = new AssetManager(jfhr);
 
         ResourceSPI musicSPI = Lookup.getDefault().lookup(ResourceSPI.class);
-        String musicURL = musicSPI.getResourceUrl("Core/target/Core-1.0.0-SNAPSHOT.jar!/assets/sound/musictwo.ogg");
+        String musicURL = musicSPI.getResourceUrl("Core/target/Core-1.0.0-SNAPSHOT.jar!/assets/sound/music.ogg");
         am.load(musicURL, Music.class);
         am.finishLoading();
 

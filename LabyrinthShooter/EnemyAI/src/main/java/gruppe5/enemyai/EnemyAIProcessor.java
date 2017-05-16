@@ -5,6 +5,7 @@
  */
 package gruppe5.enemyai;
 
+import gruppe5.common.audio.AudioSPI;
 import gruppe5.common.bullet.Bullet;
 import gruppe5.common.collision.CollisionSPI;
 import gruppe5.common.enemy.Enemy;
@@ -185,6 +186,7 @@ public class EnemyAIProcessor implements IEntityProcessingService {
     }
 
     private void enemyAttack(Enemy enemy, World world, GameData gameData) {
+        AudioSPI shootaudio = Lookup.getDefault().lookup(AudioSPI.class);
         if (playerSPI != null) {
             Entity player = playerSPI.getPlayer(world);
             if (player != null) {

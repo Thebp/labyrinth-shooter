@@ -28,9 +28,11 @@ public class EnemyPlugin implements IGamePluginService {
             if (weaponSPI != null) {
                 Weapon weapon = weaponSPI.createWeapon(world);
                 weapon.setPosition(enemy.getX(), enemy.getY());
+                weapon.setSoundPath("Enemy/target/Enemy-1.0.0-SNAPSHOT.jar!/assets/sound/enemyshoot.ogg");
                 weapon.setOwner(enemy);
                 enemy.addSubEntity(weapon);
                 world.addEntity(weapon);
+                
             }
 
             world.addEntity(enemy);
