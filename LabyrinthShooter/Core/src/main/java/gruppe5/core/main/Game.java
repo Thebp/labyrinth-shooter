@@ -124,7 +124,7 @@ public class Game implements ApplicationListener, AudioSPI, VictorySPI {
         am = new AssetManager(jfhr);
 
         ResourceSPI musicSPI = Lookup.getDefault().lookup(ResourceSPI.class);
-        String musicURL = musicSPI.getResourceUrl("Core/target/Core-1.0.0-SNAPSHOT.jar!/assets/sound/musictwo.ogg");
+        String musicURL = musicSPI.getResourceUrl("Core/target/Core-1.0.0-SNAPSHOT.jar!/assets/sound/music.ogg");
         am.load(musicURL, Music.class);
         am.finishLoading();
 
