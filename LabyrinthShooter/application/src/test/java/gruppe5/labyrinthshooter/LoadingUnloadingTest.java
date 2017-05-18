@@ -5,10 +5,10 @@ import junit.framework.Test;
 import org.netbeans.junit.NbModuleSuite;
 import org.netbeans.junit.NbTestCase;
 
-public class ApplicationTest extends NbTestCase {
+public class LoadingUnloadingTest extends NbTestCase {
 
     public static Test suite() {
-        return NbModuleSuite.createConfiguration(ApplicationTest.class).
+        return NbModuleSuite.createConfiguration(LoadingUnloadingTest.class).
                 gui(false).
                 failOnMessage(Level.WARNING). // works at least in RELEASE71
                 failOnException(Level.INFO).
@@ -17,7 +17,7 @@ public class ApplicationTest extends NbTestCase {
                 suite(); // RELEASE71+, else use NbModuleSuite.create(NbModuleSuite.createConfiguration(...))
     }
 
-    public ApplicationTest(String n) {
+    public LoadingUnloadingTest(String n) {
         super(n);
     }
 

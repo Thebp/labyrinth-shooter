@@ -14,3 +14,6 @@ hs_err_pid*
 *.properties
 *.netbeans_automatic_build
 
+/LabyrinthShooter/Collision/nbproject/
+/LabyrinthShooter/Enemy/nbproject/
+/LabyrinthShooter/EnemyAI/nbproject/

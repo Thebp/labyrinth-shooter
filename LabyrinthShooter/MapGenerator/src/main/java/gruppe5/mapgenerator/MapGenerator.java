@@ -14,8 +14,7 @@ import org.openide.util.lookup.ServiceProvider;
 import org.openide.util.lookup.ServiceProviders;
 
 @ServiceProviders(value = {
-    @ServiceProvider(service = IGameInitService.class)
-    ,
+    @ServiceProvider(service = IGameInitService.class),
     @ServiceProvider(service = MapSPI.class)
 })
 
@@ -30,8 +29,6 @@ public class MapGenerator implements MapSPI, IGameInitService {
     public static final float MAP_UNIT_SIZE = GameData.UNIT_SIZE;
     
     private Random rand; // Used for seed generation
-    
-    
     
     // Used for MapSPI
     private List<MapNode> nodeList;
