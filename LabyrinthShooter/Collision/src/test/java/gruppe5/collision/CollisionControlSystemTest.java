@@ -20,8 +20,6 @@ import static org.junit.Assert.*;
  * @author Nick
  */
 public class CollisionControlSystemTest {
-    World world;
-    GameData gameData;
     String e1ID;
     String e2ID;
     String e3ID;
@@ -45,25 +43,6 @@ public class CollisionControlSystemTest {
     
     @Before
     public void setUp() {
-        world = new World();
-        gameData = new GameData();
-        
-        E1 e1 = (E1)createTestEntity(0, 0, E1.class);
-        e1.setLife(100);
-        E2 e2 = (E2)createTestEntity(2, 2, E2.class);
-        e2.setLife(20);
-        E3 e3 = (E3)createTestEntity(15, 15, E3.class);
-        e3.setLife(70);
-        Entity entity1 = (Entity)createTestEntity(50, 50, Entity.class);
-        entity1.setLife(100);
-        Entity entity2 = (Entity)createTestEntity(51, 50, Entity.class);
-        entity2.setLife(80);
-        
-        e1ID = world.addEntity(e1);
-        e2ID = world.addEntity(e2);
-        e3ID = world.addEntity(e3);
-        entity1ID = world.addEntity(entity1);
-        entity2ID = world.addEntity(entity2);
     }
     
     private Object createTestEntity(float x, float y, Class<? extends Entity> type) {
@@ -113,6 +92,26 @@ public class CollisionControlSystemTest {
 
     @Test
     public void testEntityProcessing() {
+        World world = new World();
+        GameData gameData = new GameData();
+        
+        E1 e1 = (E1)createTestEntity(0, 0, E1.class);
+        e1.setLife(100);
+        E2 e2 = (E2)createTestEntity(2, 2, E2.class);
+        e2.setLife(20);
+        E3 e3 = (E3)createTestEntity(15, 15, E3.class);
+        e3.setLife(70);
+        Entity entity1 = (Entity)createTestEntity(50, 50, Entity.class);
+        entity1.setLife(100);
+        Entity entity2 = (Entity)createTestEntity(51, 50, Entity.class);
+        entity2.setLife(80);
+        
+        e1ID = world.addEntity(e1);
+        e2ID = world.addEntity(e2);
+        e3ID = world.addEntity(e3);
+        entity1ID = world.addEntity(entity1);
+        entity2ID = world.addEntity(entity2);
+        
         CollisionControlSystem collision = new CollisionControlSystem();
         collision.process(gameData, world);
         
@@ -123,7 +122,27 @@ public class CollisionControlSystemTest {
         assert(!world.getEntity(e3ID).isHit());
         assert(world.getEntity(e3ID).getLife() == 70);
         assert(!world.getEntity(entity1ID).isHit());
-        assert(world.getEntity(entity1ID).getLife() == 80);
+        assert(world.getEntity(entity1ID).getLife() == 100);
         assert(!world.getEntity(entity2ID).isHit());
+        assert(world.getEntity(entity2ID).getLife() == 80);
+    }
+    
+    @Test
+    public void testCheckCollision() {
+        E1 e1 = (E1)createTestEntity(0, 0, E1.class);
+        E2 e2 = (E2)createTestEntity(0, 0, E2.class);
+        e2.setDynamic(false);
+        E2 e3 = (E2)createTestEntity(0, 0, E2.class);
+        
+        World world = new World();
+        world.addEntity(e1);
+        world.addEntity(e2);
+        world.addEntity(e3);
+        
+        CollisionControlSystem collision = new CollisionControlSystem();
+        
+        assert(collision.checkCollision(e1, world));
+        assert(!collision.checkCollision(e2, world));
+        assert(!collision.checkCollision(e3, world));
     }
 }
