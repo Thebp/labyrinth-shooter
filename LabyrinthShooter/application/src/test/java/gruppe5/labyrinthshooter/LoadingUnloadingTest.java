@@ -1,9 +1,13 @@
 package gruppe5.labyrinthshooter;
 
+import gruppe5.common.services.IEntityProcessingService;
+import gruppe5.common.services.IGamePluginService;
+import java.util.List;
 import java.util.logging.Level;
 import junit.framework.Test;
 import org.netbeans.junit.NbModuleSuite;
 import org.netbeans.junit.NbTestCase;
+import org.openide.util.Lookup;
 
 public class LoadingUnloadingTest extends NbTestCase {
 
@@ -20,13 +24,19 @@ public class LoadingUnloadingTest extends NbTestCase {
     public LoadingUnloadingTest(String n) {
         super(n);
     }
-
+    
     public void testApplication() {
-        // pass if there are merely no warnings/exceptions
-        /* Example of using Jelly Tools (additional test dependencies required) with gui(true):
-        new ActionNoBlock("Help|About", null).performMenu();
-        new NbDialogOperator("About").closeByButton();
-         */
+        assert(true);
+    }
+    
+
+    private void waitForUpdate(List<IEntityProcessingService> processors,List<IGamePluginService> plugins) throws InterruptedException{
+        Thread.sleep(10000);
+        processors.clear();
+        processors.addAll(Lookup.getDefault().lookupAll(IEntityProcessingService.class));
+        
+        plugins.clear();
+        plugins.addAll(Lookup.getDefault().lookupAll(IGamePluginService.class));
     }
 
 }

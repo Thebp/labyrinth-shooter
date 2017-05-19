@@ -26,10 +26,14 @@ import org.netbeans.api.autoupdate.UpdateUnitProviderFactory;
  */
 public final class UpdateHandler {
 
-    public static final String SILENT_UC_CODE_NAME = "org_netbeans_modules_autoupdate_silentupdate_update_center"; // NOI18N
+    private static String SILENT_UC_CODE_NAME = "org_netbeans_modules_autoupdate_silentupdate_update_center"; // NOI18N
     private static Collection<UpdateElement> locallyInstalled = new ArrayList<>();
     private static final Logger LOGGER = Logger.getLogger(UpdateHandler.class.getPackage().getName());
 
+    public static void setUCCodeName(String codeName) {
+        SILENT_UC_CODE_NAME = codeName;
+    }
+    
     public static boolean timeToCheck() {
         // every startup
         return true;

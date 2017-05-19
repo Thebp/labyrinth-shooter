@@ -154,33 +154,10 @@ public class MapGenerator implements MapSPI, IGameInitService {
     }
 
     private void debugNodes(World world) {
-        System.out.println("Starting MapNode debugging...");
-        
         for (MapNode n : nodeList) {
             // Spawn node entities into world
             world.addEntity(MapEntityCreator.createNodeEntity(n));
-
-            // Print out debug info
-            if (n.getNeighbours().size() <= 1) {
-                System.out.println("- Node " + n + " has " + n.getNeighbours().size() + " neighbours!");
-            }
-
-            // Check that all nodes neighbors are contained in nodeList
-            for (MapNode neighbor : n.getNeighbours()) {
-                if (!nodeList.contains(neighbor)) {
-                    System.out.println("- Node " + neighbor + " is not contained in nodeList!");
-                }
-            }
-
-            // Check that duplicates aren't contained in nodeList
-            for (int i = 0; i < nodeList.size(); i++) {
-                if (n.equals(nodeList.get(i)) && nodeList.indexOf(n) != i) {
-                    System.out.println("- Node " + n + " has a duplicate!");
-                }
-            }
         }
-        
-        System.out.println("MapNode debugging done.");
     }
 
     /**
@@ -270,15 +247,15 @@ public class MapGenerator implements MapSPI, IGameInitService {
      */
     private void createNodes(Node parent, ArrayList<MapNode> nodeList, boolean[][] maze, int x, int y, boolean[][] originalMaze) {
         if (!safelyGetValue(maze, x, y)) {
-            //Create child node
+            // Create child node
             Node child = null;
             for (MapNode existingNode : nodeList) {
-                //If there is already a node at the chosen position, choose that node
+                // If there is already a node at the chosen position, choose that node
                 if (existingNode.getX() == MAP_UNIT_SIZE * x && existingNode.getY() == MAP_UNIT_SIZE * y) {
                     child = (Node) existingNode;
                 }
             }
-            //If child is still null create a new Node at the chosen position and at it to nodeList
+            // If child is still null create a new Node at the chosen position and add it to nodeList
             if (child == null) {
                 child = createNode(x, y, isCenter(maze, x, y, originalMaze));
                 nodeList.add(child);
@@ -377,7 +354,7 @@ public class MapGenerator implements MapSPI, IGameInitService {
      * @param maze
      * @param x
      * @param y
-     * @return The specified maze value or false if out of bounds
+     * @return The specified maze value or true if out of bounds
      */
     private boolean safelyGetValue(boolean[][] maze, int x, int y) {
         if (x > 0 && y > 0 && x < maze.length && y < maze[x].length) {
