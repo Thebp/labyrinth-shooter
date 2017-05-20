@@ -15,7 +15,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.BufferUtils;
-import com.badlogic.gdx.utils.Timer;
 import gruppe5.common.audio.AudioSPI;
 import gruppe5.common.data.Entity;
 import gruppe5.common.data.GameData;
@@ -25,7 +24,6 @@ import gruppe5.common.data.World;
 import gruppe5.common.services.IEntityProcessingService;
 import gruppe5.common.services.IGameInitService;
 import gruppe5.common.services.IGamePluginService;
-import gruppe5.common.services.IRenderService;
 import gruppe5.common.player.PlayerSPI;
 import gruppe5.common.resources.ResourceSPI;
 import gruppe5.common.services.IUIService;
@@ -35,13 +33,11 @@ import gruppe5.core.managers.GameInputProcessor;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
 import java.nio.IntBuffer;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
-import org.openide.util.Exceptions;
 import org.openide.util.Lookup;
 import org.openide.util.LookupEvent;
 import org.openide.util.LookupListener;
@@ -321,10 +317,6 @@ public class Game implements ApplicationListener, AudioSPI, VictorySPI {
 
     private Collection<? extends IEntityProcessingService> getEntityProcessingServices() {
         return lookup.lookupAll(IEntityProcessingService.class);
-    }
-
-    private Collection<? extends IRenderService> getRenderServices() {
-        return lookup.lookupAll(IRenderService.class);
     }
 
     private Collection<? extends IUIService> getUIServices() {
