@@ -1,5 +1,6 @@
 package gruppe5.mapgenerator;
 
+import gruppe5.Entity.MapEntityCreator;
 import gruppe5.common.node.MapNode;
 import gruppe5.common.data.Entity;
 import gruppe5.common.data.GameData;

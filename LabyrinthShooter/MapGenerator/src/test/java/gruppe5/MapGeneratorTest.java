@@ -49,14 +49,16 @@ public class MapGeneratorTest {
     }
 
     @Test
-    public void testStartStopEntityCreation() {
+    public void testStartStopEntityNodeCreation() {
         map.start(gameData, world);
         
         assert(!world.getEntities().isEmpty());
+        assert(!map.getMap().isEmpty());
         
         map.stop(gameData, world);
         
         assert(world.getEntities().isEmpty());
+        assert(map.getMap() == null);
     }
     
     @Test

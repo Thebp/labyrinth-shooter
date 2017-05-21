@@ -121,7 +121,8 @@ public class Game implements ApplicationListener, AudioSPI, VictorySPI {
 
         ResourceSPI musicSPI = Lookup.getDefault().lookup(ResourceSPI.class);
         if (musicSPI != null) {
-            String musicURL = musicSPI.getResourceUrl("Core/target/Core-1.0.0-SNAPSHOT.jar!/assets/sound/musictwo.ogg");
+            String musicURL = getClass().getResource("/assets/sound/musictwo.ogg").toString();
+            //String musicURL = musicSPI.getResourceUrl("target/labyrinthshooter/labyrinthshooter/modules/gruppe5-Core-1.0.0-SNAPSHOT.jar!/assets/sound/musictwo.ogg");
             am.load(musicURL, Music.class);
             am.finishLoading();
 
