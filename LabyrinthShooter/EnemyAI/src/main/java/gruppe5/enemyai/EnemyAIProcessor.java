@@ -283,21 +283,22 @@ public class EnemyAIProcessor implements IEntityProcessingService {
         Heuristics targetHeuristics = new Heuristics(targetNode);
 
         List map = mapSPI.getMap();
-        Queue<Heuristics> openList = new PriorityQueue<Heuristics>(map.size(), new HeapComparator());
-        Set<MapNode> closedList = new HashSet();
-        openList.add(startHeuristics);
+        Queue<Heuristics> frontier = new PriorityQueue<Heuristics>(map.size(), new HeapComparator());
+        Set<MapNode> explored = new HashSet();
+        frontier.add(startHeuristics);
 
-        while (openList.size() > 0) {
-            Heuristics current = openList.remove();
-            closedList.add(current.getNode());
+        while (frontier.size() > 0) {
+            Heuristics current = frontier.remove();
 
             // Returns call to retracePath method. Happens when the targetNode has been reached
             if (current.equals(targetHeuristics)) {
                 return retracePath(startHeuristics, targetHeuristics, enemy);
             }
+            
+            explored.add(current.getNode());
 
             for (MapNode neighbour : current.getNode().getNeighbours()) {
-                if (closedList.contains(neighbour)) {
+                if (explored.contains(neighbour)) {
                     continue; //Skips code underneath for this neighbour, and repeats with next.
                 }
 
@@ -305,13 +306,13 @@ public class EnemyAIProcessor implements IEntityProcessingService {
 
                 // The A* calculation which finds and sets the "cost" of a node
                 int newMovementCostToNeighbour = current.getgCost() + getDistance(current.getNode(), neighbour);
-                if (newMovementCostToNeighbour < neighbourHeuristics.getgCost() || !openList.contains(neighbourHeuristics)) {
+                if (newMovementCostToNeighbour < neighbourHeuristics.getgCost() || !frontier.contains(neighbourHeuristics)) {
                     neighbourHeuristics.setgCost(newMovementCostToNeighbour);
                     neighbourHeuristics.sethCost(getDistance(neighbour, targetHeuristics.getNode()));
                     neighbourHeuristics.setParent(current);
 
-                    if (!openList.contains(neighbourHeuristics)) {
-                        openList.add(neighbourHeuristics);
+                    if (!frontier.contains(neighbourHeuristics)) {
+                        frontier.add(neighbourHeuristics);
 
                         if (neighbourHeuristics.equals(startHeuristics)) {
                             startHeuristics = neighbourHeuristics;
