@@ -4,6 +4,7 @@
  * and open the template in the editor.
  */
 
+import gruppe5.bullet.BulletCreator;
 import gruppe5.common.bullet.BulletSPI;
 import gruppe5.common.data.Entity;
 import gruppe5.common.data.GameData;
@@ -15,6 +16,12 @@ import gruppe5.common.player.PlayerSPI;
 import gruppe5.common.services.IEntityProcessingService;
 import gruppe5.common.services.IGameInitService;
 import gruppe5.common.services.IGamePluginService;
+import gruppe5.bullet.BulletPlugin;
+import gruppe5.enemy.EnemyMovementSystem;
+import gruppe5.enemy.EnemyPlugin;
+import gruppe5.enemy.EnemyProcessor;
+import gruppe5.mapgenerator.MapGenerator;
+import gruppe5.player.PlayerPlugin;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -77,7 +84,15 @@ public class EnemyAIProcessorTester {
         gameData.setDelta(1.0f);
         World world = new World();
         
-        BulletSPI bulletSPI = Lookup.getDefault().lookup(BulletSPI.class);
+        MapGenerator map = new MapGenerator();
+        BulletSPI bulletSPI = new BulletCreator();
+        EnemyPlugin enemyPlugin = new EnemyPlugin();
+        EnemyProcessor enemyProcessor = new EnemyProcessor();
+        EnemyMovementSystem enemyMovement = new EnemyMovementSystem();
+        PlayerPlugin playerPlugin = new PlayerPlugin();
+        
+        // Register with lookup?
+        
         Map<Enemy, MapNode> initalEnemyTargetNodes = new HashMap();
         
         for (IGameInitService init : Lookup.getDefault().lookupResult(IGameInitService.class).allInstances()) {
