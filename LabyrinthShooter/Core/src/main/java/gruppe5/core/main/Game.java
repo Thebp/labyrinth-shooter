@@ -99,10 +99,11 @@ public class Game implements ApplicationListener, AudioSPI, VictorySPI {
         Gdx.input.setInputProcessor(new GameInputProcessor(gameData));
 
         gameInitResult = lookup.lookupResult(IGameInitService.class);
+        gameInitResult.addLookupListener(gameInitLookupListener);
         gameInitResult.allItems();
 
         gamePluginResult = lookup.lookupResult(IGamePluginService.class);
-        gamePluginResult.addLookupListener(lookupListener);
+        gamePluginResult.addLookupListener(gamePluginlookupListener);
         gamePluginResult.allItems();
 
         for (IGameInitService initService : gameInitResult.allInstances()) {
@@ -207,38 +208,40 @@ public class Game implements ApplicationListener, AudioSPI, VictorySPI {
 
         for (Entity entity : world.getBackgroundEntities()) {
             drawSprite(entity, player);
-            if (DRAW_HITBOXES) 
+            if (DRAW_HITBOXES) {
                 drawHitbox(entity);
+            }
         }
 
         for (Entity entity : world.getForegroundEntities()) {
             drawSprite(entity, player);
-            if (DRAW_HITBOXES)
+            if (DRAW_HITBOXES) {
                 drawHitbox(entity);
+            }
         }
 
         for (UIElement element : gameData.getUIElements()) {
             drawUIElement(element);
         }
     }
-    
+
     private void drawHitbox(Entity entity) {
         if (DRAW_HITBOXES) {
-                sr.setColor(1, 1, 1, 1);
+            sr.setColor(1, 1, 1, 1);
 
-                sr.begin(ShapeRenderer.ShapeType.Line);
+            sr.begin(ShapeRenderer.ShapeType.Line);
 
-                float[] shapex = entity.getShapeX();
-                float[] shapey = entity.getShapeY();
+            float[] shapex = entity.getShapeX();
+            float[] shapey = entity.getShapeY();
 
-                for (int i = 0, j = shapex.length - 1;
-                        i < shapex.length;
-                        j = i++) {
+            for (int i = 0, j = shapex.length - 1;
+                    i < shapex.length;
+                    j = i++) {
 
-                    sr.line(shapex[i], shapey[i], shapex[j], shapey[j]);
-                }
+                sr.line(shapex[i], shapey[i], shapex[j], shapey[j]);
+            }
 
-                sr.end();
+            sr.end();
         }
     }
 
@@ -323,13 +326,13 @@ public class Game implements ApplicationListener, AudioSPI, VictorySPI {
         return lookup.lookupAll(IUIService.class);
     }
 
-    private final LookupListener lookupListener = new LookupListener() {
+    private final LookupListener gamePluginlookupListener = new LookupListener() {
         @Override
         public void resultChanged(LookupEvent le) {
+            // Handle IGamePluginService
+            Collection<? extends IGamePluginService> updatedGamePlugins = gamePluginResult.allInstances();
 
-            Collection<? extends IGamePluginService> updated = gamePluginResult.allInstances();
-
-            for (IGamePluginService us : updated) {
+            for (IGamePluginService us : updatedGamePlugins) {
                 // Newly installed modules
                 if (!gamePlugins.contains(us)) {
                     us.start(gameData, world);
@@ -339,13 +342,34 @@ public class Game implements ApplicationListener, AudioSPI, VictorySPI {
 
             // Stop and remove module
             for (IGamePluginService gs : gamePlugins) {
-                if (!updated.contains(gs)) {
+                if (!updatedGamePlugins.contains(gs)) {
                     gs.stop(gameData, world);
                     gamePlugins.remove(gs);
                 }
             }
         }
+    };
 
+    private final LookupListener gameInitLookupListener = new LookupListener() {
+        @Override
+        public void resultChanged(LookupEvent le) {
+            // Handle IGameInitService
+            Collection<? extends IGameInitService> updatedGameInits = gameInitResult.allInstances();
+
+            for (IGameInitService is : updatedGameInits) {
+                if (!gameInits.contains(is)) {
+                    is.start(gameData, world);
+                    gameInits.add(is);
+                }
+            }
+
+            for (IGameInitService is : gameInits) {
+                if (!updatedGameInits.contains(is)) {
+                    is.stop(gameData, world);
+                    gameInits.remove(is);
+                }
+            }
+        }
     };
 
     @Override

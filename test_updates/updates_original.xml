@@ -1,95 +1,169 @@
-﻿<?xml version="1.0" encoding="UTF-8" ?>
+<?xml version="1.0" encoding="UTF-8" ?>
 
 <!DOCTYPE module_updates PUBLIC "-//NetBeans//DTD Autoupdate Catalog 2.5//EN" "http://www.netbeans.org/dtds/autoupdate-catalog-2_5.dtd">
-<module_updates timestamp="28/39/10/16/05/2017">
-
-  <module codenamebase="gruppe5.Enemy" distribution="Enemy-1.0.0-SNAPSHOT.nbm" downloadsize="67099" license="AF77BD25" needsrestart="false" releasedate="2017/05/16" targetcluster="labyrinthshooter">
-      <manifest OpenIDE-Module="gruppe5.Enemy" OpenIDE-Module-Display-Category="gruppe5" OpenIDE-Module-Implementation-Version="1.0.0-20170516" OpenIDE-Module-Long-Description="&lt;undefined&gt;" OpenIDE-Module-Module-Dependencies="org.netbeans.api.annotations.common/1 &gt; 1.27.1, gruppe5.Common &gt; 1.0.0, org.openide.util.lookup &gt; 8.33.1, gruppe5.CommonMap &gt; 1.0.0, gruppe5.CommonAudio &gt; 1.0.0, gruppe5.CommonEnemy &gt; 1.0.0, gruppe5.CommonWeapon &gt; 1.0.0" OpenIDE-Module-Name="Enemy" OpenIDE-Module-Requires="org.openide.modules.ModuleFormat1" OpenIDE-Module-Short-Description="&lt;undefined&gt;" OpenIDE-Module-Specification-Version="1.0.0"/>
-
-  </module>
+<module_updates timestamp="38/58/10/22/05/2017">
 
 
-  <module codenamebase="gruppe5.FPSCounter" distribution="FPSCounter-1.0.0-SNAPSHOT.nbm" downloadsize="5794" license="AF77BD25" needsrestart="false" releasedate="2017/05/16" targetcluster="labyrinthshooter">
-      <manifest OpenIDE-Module="gruppe5.FPSCounter" OpenIDE-Module-Display-Category="gruppe5" OpenIDE-Module-Implementation-Version="1.0.0-20170516" OpenIDE-Module-Long-Description="&lt;undefined&gt;" OpenIDE-Module-Module-Dependencies="org.netbeans.api.annotations.common/1 &gt; 1.27.1, gruppe5.Common &gt; 1.0.0, org.openide.util.lookup &gt; 8.33.1" OpenIDE-Module-Name="FPSCounter" OpenIDE-Module-Requires="org.openide.modules.ModuleFormat1" OpenIDE-Module-Short-Description="&lt;undefined&gt;" OpenIDE-Module-Specification-Version="1.0.0"/>
 
-  </module>
-
-  <module codenamebase="gruppe5.HUD" distribution="HUD-1.0.0-SNAPSHOT.nbm" downloadsize="8028" license="AF77BD25" needsrestart="false" releasedate="2017/05/16" targetcluster="labyrinthshooter">
-      <manifest OpenIDE-Module="gruppe5.HUD" OpenIDE-Module-Display-Category="gruppe5" OpenIDE-Module-Implementation-Version="1.0.0-20170516" OpenIDE-Module-Long-Description="&lt;undefined&gt;" OpenIDE-Module-Module-Dependencies="org.netbeans.api.annotations.common/1 &gt; 1.27.1, gruppe5.Common &gt; 1.0.0, org.openide.util.lookup &gt; 8.33.1, gruppe5.CommonPlayer &gt; 1.0.0" OpenIDE-Module-Name="HUD" OpenIDE-Module-Requires="org.openide.modules.ModuleFormat1" OpenIDE-Module-Short-Description="&lt;undefined&gt;" OpenIDE-Module-Specification-Version="1.0.0"/>
-
-  </module>
-
-  <module codenamebase="gruppe5.MapGenerator" distribution="MapGenerator-1.0.0-SNAPSHOT.nbm" downloadsize="486036" license="AF77BD25" needsrestart="false" releasedate="2017/05/16" targetcluster="labyrinthshooter">
-      <manifest OpenIDE-Module="gruppe5.MapGenerator" OpenIDE-Module-Display-Category="gruppe5" OpenIDE-Module-Implementation-Version="1.0.0-20170516" OpenIDE-Module-Long-Description="&lt;undefined&gt;" OpenIDE-Module-Module-Dependencies="org.netbeans.api.annotations.common/1 &gt; 1.27.1, gruppe5.CommonMap &gt; 1.0.0, gruppe5.Common &gt; 1.0.0, org.openide.util.lookup &gt; 8.33.1" OpenIDE-Module-Name="MapGenerator" OpenIDE-Module-Requires="org.openide.modules.ModuleFormat1" OpenIDE-Module-Short-Description="&lt;undefined&gt;" OpenIDE-Module-Specification-Version="1.0.0"/>
-
-  </module>
-
-  <module codenamebase="gruppe5.Player" distribution="Player-1.0.0-SNAPSHOT.nbm" downloadsize="54911" license="AF77BD25" needsrestart="false" releasedate="2017/05/16" targetcluster="labyrinthshooter">
-      <manifest OpenIDE-Module="gruppe5.Player" OpenIDE-Module-Display-Category="gruppe5" OpenIDE-Module-Implementation-Version="1.0.0-20170516" OpenIDE-Module-Long-Description="&lt;undefined&gt;" OpenIDE-Module-Module-Dependencies="org.netbeans.api.annotations.common/1 &gt; 1.27.1, gruppe5.CommonPlayer &gt; 1.0.0, gruppe5.Common &gt; 1.0.0, org.openide.util.lookup &gt; 8.33.1, gruppe5.CommonWeapon &gt; 1.0.0, gruppe5.CommonMap &gt; 1.0.0, gruppe5.CommonAudio &gt; 1.0.0" OpenIDE-Module-Name="Player" OpenIDE-Module-Requires="org.openide.modules.ModuleFormat1" OpenIDE-Module-Short-Description="&lt;undefined&gt;" OpenIDE-Module-Specification-Version="1.0.0"/>
-
-  </module>
-
-  <module codenamebase="gruppe5.ResourceManager" distribution="ResourceManager-1.0.0-SNAPSHOT.nbm" downloadsize="1581813" license="AF77BD25" needsrestart="false" releasedate="2017/05/16" targetcluster="labyrinthshooter">
-      <manifest OpenIDE-Module="gruppe5.ResourceManager" OpenIDE-Module-Display-Category="gruppe5" OpenIDE-Module-Implementation-Version="1.0.0-20170516" OpenIDE-Module-Long-Description="&lt;undefined&gt;" OpenIDE-Module-Module-Dependencies="org.netbeans.api.annotations.common/1 &gt; 1.27.1, gruppe5.Common &gt; 1.0.0, org.openide.util.lookup &gt; 8.32.1, gruppe5.CommonResources &gt; 1.0.0" OpenIDE-Module-Name="ResourceManager" OpenIDE-Module-Requires="org.openide.modules.ModuleFormat1" OpenIDE-Module-Short-Description="&lt;undefined&gt;" OpenIDE-Module-Specification-Version="1.0.0"/>
-
-  </module>
-
-  <module codenamebase="gruppe5.Weapon" distribution="Weapon-1.0.0-SNAPSHOT.nbm" downloadsize="77577" license="AF77BD25" needsrestart="false" releasedate="2017/05/16" targetcluster="labyrinthshooter">
-      <manifest OpenIDE-Module="gruppe5.Weapon" OpenIDE-Module-Display-Category="gruppe5" OpenIDE-Module-Implementation-Version="1.0.0-20170516" OpenIDE-Module-Long-Description="&lt;undefined&gt;" OpenIDE-Module-Module-Dependencies="org.netbeans.api.annotations.common/1 &gt; 1.27.1, gruppe5.Common &gt; 1.0.0, gruppe5.CommonBullet &gt; 1.0.0, org.openide.util.lookup &gt; 8.33.1, gruppe5.CommonMap &gt; 1.0.0, gruppe5.CommonAudio &gt; 1.0.0, gruppe5.CommonWeapon &gt; 1.0.0" OpenIDE-Module-Name="Weapon" OpenIDE-Module-Requires="org.openide.modules.ModuleFormat1" OpenIDE-Module-Short-Description="&lt;undefined&gt;" OpenIDE-Module-Specification-Version="1.0.0"/>
-
-  </module>
-
-<module codenamebase="gruppe5.CommonAudio" distribution="CommonAudio-1.0.0-SNAPSHOT.nbm" downloadsize="3911" license="AF77BD25" needsrestart="false" releasedate="2017/05/16" targetcluster="labyrinthshooter">
-    <manifest OpenIDE-Module="gruppe5.CommonAudio" OpenIDE-Module-Display-Category="gruppe5" OpenIDE-Module-Implementation-Version="1.0.0-20170516" OpenIDE-Module-Long-Description="&lt;undefined&gt;" OpenIDE-Module-Module-Dependencies="org.netbeans.api.annotations.common/1 &gt; 1.27.1, gruppe5.Common &gt; 1.0.0" OpenIDE-Module-Name="CommonAudio" OpenIDE-Module-Requires="org.openide.modules.ModuleFormat1" OpenIDE-Module-Short-Description="&lt;undefined&gt;" OpenIDE-Module-Specification-Version="1.0.0"/>
-
+<module codenamebase="org.openide.util" distribution="org-openide-util-RELEASE82.nbm" downloadsize="164990" homepage="http://www.netbeans.org/" license="14E6055" moduleauthor="" needsrestart="false" releasedate="2016/09/30" targetcluster="platform">
+    <manifest AutoUpdate-Show-In-Client="false" OpenIDE-Module="org.openide.util" OpenIDE-Module-Display-Category="Infrastructure" OpenIDE-Module-Implementation-Version="201609300101" OpenIDE-Module-Java-Dependencies="Java &gt; 1.6" OpenIDE-Module-Long-Description="Various helper methods and basic concept definitions including lookup, parallel execution and branding support." OpenIDE-Module-Module-Dependencies="org.openide.util.lookup &gt; 8.14" OpenIDE-Module-Name="Base Utilities API" OpenIDE-Module-Short-Description="Base Utilities API." OpenIDE-Module-Specification-Version="9.7.1"/>
+    
 </module>
 
-<module codenamebase="gruppe5.CommonBullet" distribution="CommonBullet-1.0.0-SNAPSHOT.nbm" downloadsize="4166" license="AF77BD25" needsrestart="false" releasedate="2017/05/16" targetcluster="labyrinthshooter">
-    <manifest OpenIDE-Module="gruppe5.CommonBullet" OpenIDE-Module-Display-Category="gruppe5" OpenIDE-Module-Implementation-Version="1.0.0-20170516" OpenIDE-Module-Long-Description="&lt;undefined&gt;" OpenIDE-Module-Module-Dependencies="gruppe5.Common &gt; 1.0.0" OpenIDE-Module-Name="CommonBullet" OpenIDE-Module-Requires="org.openide.modules.ModuleFormat1" OpenIDE-Module-Short-Description="&lt;undefined&gt;" OpenIDE-Module-Specification-Version="1.0.0"/>
-
+<module codenamebase="org.netbeans.bootstrap" distribution="org-netbeans-bootstrap-RELEASE82.nbm" downloadsize="803074" homepage="http://www.netbeans.org/" license="14E6055" moduleauthor="" needsrestart="false" releasedate="2016/09/30" targetcluster="platform">
+    <manifest AutoUpdate-Show-In-Client="false" OpenIDE-Module="org.netbeans.bootstrap/1" OpenIDE-Module-Display-Category="Infrastructure" OpenIDE-Module-Implementation-Version="201609300101" OpenIDE-Module-Java-Dependencies="Java &gt; 1.7" OpenIDE-Module-Long-Description="This module provides the initial infrastructure that loads all other parts of the application. It cannot be disabled." OpenIDE-Module-Module-Dependencies="org.openide.modules &gt; 7.44, org.openide.util.ui &gt; 9.3, org.openide.util &gt; 9.3, org.openide.util.lookup &gt; 8.0" OpenIDE-Module-Name="Bootstrap" OpenIDE-Module-Recommends="org.netbeans.NetigsoFramework" OpenIDE-Module-Short-Description="The core bootstrap of NetBeans-based applications." OpenIDE-Module-Specification-Version="2.76.1"/>
+    
 </module>
 
-<module codenamebase="gruppe5.commonCollision" distribution="commonCollision-1.0.0-SNAPSHOT.nbm" downloadsize="3937" license="AF77BD25" needsrestart="false" releasedate="2017/05/16" targetcluster="labyrinthshooter">
-    <manifest OpenIDE-Module="gruppe5.commonCollision" OpenIDE-Module-Display-Category="gruppe5" OpenIDE-Module-Implementation-Version="1.0.0-20170516" OpenIDE-Module-Long-Description="&lt;undefined&gt;" OpenIDE-Module-Module-Dependencies="org.netbeans.api.annotations.common/1 &gt; 1.27.1, gruppe5.Common &gt; 1.0.0" OpenIDE-Module-Name="commonCollision" OpenIDE-Module-Requires="org.openide.modules.ModuleFormat1" OpenIDE-Module-Short-Description="&lt;undefined&gt;" OpenIDE-Module-Specification-Version="1.0.0"/>
-
+<module codenamebase="gruppe5.Bullet" distribution="Bullet-1.0.0-SNAPSHOT.nbm" downloadsize="7621" license="AF77BD25" needsrestart="false" releasedate="2017/05/22" targetcluster="labyrinthshooter">
+    <manifest OpenIDE-Module="gruppe5.Bullet" OpenIDE-Module-Display-Category="gruppe5" OpenIDE-Module-Implementation-Version="1.0.0-20170522" OpenIDE-Module-Long-Description="&lt;undefined&gt;" OpenIDE-Module-Module-Dependencies="org.netbeans.api.annotations.common/1 &gt; 1.27.1, gruppe5.Common &gt; 1.0.0, gruppe5.CommonBullet &gt; 1.0.0, org.openide.util.lookup &gt; 8.33.1" OpenIDE-Module-Name="Bullet" OpenIDE-Module-Requires="org.openide.modules.ModuleFormat1" OpenIDE-Module-Short-Description="&lt;undefined&gt;" OpenIDE-Module-Specification-Version="1.0.0"/>
+    
 </module>
 
-<module codenamebase="gruppe5.CommonEnemy" distribution="CommonEnemy-1.0.0-SNAPSHOT.nbm" downloadsize="4346" license="AF77BD25" needsrestart="false" releasedate="2017/05/16" targetcluster="labyrinthshooter">
-    <manifest OpenIDE-Module="gruppe5.CommonEnemy" OpenIDE-Module-Display-Category="gruppe5" OpenIDE-Module-Implementation-Version="1.0.0-20170516" OpenIDE-Module-Long-Description="&lt;undefined&gt;" OpenIDE-Module-Module-Dependencies="org.netbeans.api.annotations.common/1 &gt; 1.27.1, gruppe5.Common &gt; 1.0.0, gruppe5.CommonMap &gt; 1.0.0" OpenIDE-Module-Name="CommonEnemy" OpenIDE-Module-Requires="org.openide.modules.ModuleFormat1" OpenIDE-Module-Short-Description="&lt;undefined&gt;" OpenIDE-Module-Specification-Version="1.0.0"/>
-
+<module codenamebase="gruppe5.Collision" distribution="Collision-1.0.0-SNAPSHOT.nbm" downloadsize="1585000" license="AF77BD25" needsrestart="false" releasedate="2017/05/22" targetcluster="labyrinthshooter">
+    <manifest OpenIDE-Module="gruppe5.Collision" OpenIDE-Module-Display-Category="gruppe5" OpenIDE-Module-Implementation-Version="1.0.0-20170522" OpenIDE-Module-Long-Description="&lt;undefined&gt;" OpenIDE-Module-Module-Dependencies="org.netbeans.api.annotations.common/1 &gt; 1.27.1, gruppe5.Common &gt; 1.0.0, org.openide.util.lookup &gt; 8.32.1, gruppe5.commonCollision &gt; 1.0.0" OpenIDE-Module-Name="Collision" OpenIDE-Module-Requires="org.openide.modules.ModuleFormat1" OpenIDE-Module-Short-Description="&lt;undefined&gt;" OpenIDE-Module-Specification-Version="1.0.0"/>
+    
 </module>
 
-<module codenamebase="gruppe5.CommonMap" distribution="CommonMap-1.0.0-SNAPSHOT.nbm" downloadsize="4259" license="AF77BD25" needsrestart="false" releasedate="2017/05/16" targetcluster="labyrinthshooter">
-    <manifest OpenIDE-Module="gruppe5.CommonMap" OpenIDE-Module-Display-Category="gruppe5" OpenIDE-Module-Implementation-Version="1.0.0-20170516" OpenIDE-Module-Long-Description="&lt;undefined&gt;" OpenIDE-Module-Module-Dependencies="org.netbeans.api.annotations.common/1 &gt; 1.27.1" OpenIDE-Module-Name="CommonMap" OpenIDE-Module-Requires="org.openide.modules.ModuleFormat1" OpenIDE-Module-Short-Description="&lt;undefined&gt;" OpenIDE-Module-Specification-Version="1.0.0"/>
-
+<module codenamebase="gruppe5.Common" distribution="Common-1.0.0-SNAPSHOT.nbm" downloadsize="11029" license="AF77BD25" needsrestart="false" releasedate="2017/05/22" targetcluster="labyrinthshooter">
+    <manifest OpenIDE-Module="gruppe5.Common" OpenIDE-Module-Display-Category="gruppe5" OpenIDE-Module-Implementation-Version="1.0.0-20170522" OpenIDE-Module-Long-Description="&lt;undefined&gt;" OpenIDE-Module-Module-Dependencies="org.netbeans.api.annotations.common/1 &gt; 1.27.1" OpenIDE-Module-Name="Common" OpenIDE-Module-Requires="org.openide.modules.ModuleFormat1" OpenIDE-Module-Short-Description="&lt;undefined&gt;" OpenIDE-Module-Specification-Version="1.0.0"/>
+    
 </module>
 
-<module codenamebase="gruppe5.CommonPlayer" distribution="CommonPlayer-1.0.0-SNAPSHOT.nbm" downloadsize="3933" license="AF77BD25" needsrestart="false" releasedate="2017/05/16" targetcluster="labyrinthshooter">
-    <manifest OpenIDE-Module="gruppe5.CommonPlayer" OpenIDE-Module-Display-Category="gruppe5" OpenIDE-Module-Implementation-Version="1.0.0-20170516" OpenIDE-Module-Long-Description="&lt;undefined&gt;" OpenIDE-Module-Module-Dependencies="org.netbeans.api.annotations.common/1 &gt; 1.27.1, gruppe5.Common &gt; 1.0.0" OpenIDE-Module-Name="CommonPlayer" OpenIDE-Module-Requires="org.openide.modules.ModuleFormat1" OpenIDE-Module-Short-Description="&lt;undefined&gt;" OpenIDE-Module-Specification-Version="1.0.0"/>
-
+<module autoload="true" codenamebase="org.netbeans.api.annotations.common" distribution="org-netbeans-api-annotations-common-RELEASE82.nbm" downloadsize="86526" homepage="http://www.netbeans.org/" license="14E6055" moduleauthor="" needsrestart="false" releasedate="2016/09/30" targetcluster="platform">
+    <manifest AutoUpdate-Show-In-Client="false" OpenIDE-Module="org.netbeans.api.annotations.common/1" OpenIDE-Module-Implementation-Version="201609300101" OpenIDE-Module-Java-Dependencies="Java &gt; 1.6" OpenIDE-Module-Long-Description="Contains annotations useful for static analysis, such as a @SuppressWarnings usable by FindBugs." OpenIDE-Module-Name="Common Annotations" OpenIDE-Module-Requires="org.openide.modules.ModuleFormat1" OpenIDE-Module-Short-Description="Common annotations, namely for defect detection." OpenIDE-Module-Specification-Version="1.27.1"/>
+    
 </module>
 
-<module codenamebase="gruppe5.CommonResources" distribution="CommonResources-1.0.0-SNAPSHOT.nbm" downloadsize="1580768" license="AF77BD25" needsrestart="false" releasedate="2017/05/16" targetcluster="labyrinthshooter">
-    <manifest OpenIDE-Module="gruppe5.CommonResources" OpenIDE-Module-Display-Category="gruppe5" OpenIDE-Module-Implementation-Version="1.0.0-20170516" OpenIDE-Module-Long-Description="&lt;undefined&gt;" OpenIDE-Module-Module-Dependencies="org.netbeans.api.annotations.common/1 &gt; 1.27.1, gruppe5.Common &gt; 1.0.0" OpenIDE-Module-Name="CommonResources" OpenIDE-Module-Requires="org.openide.modules.ModuleFormat1" OpenIDE-Module-Short-Description="&lt;undefined&gt;" OpenIDE-Module-Specification-Version="1.0.0"/>
-
+<module codenamebase="gruppe5.CommonAudio" distribution="CommonAudio-1.0.0-SNAPSHOT.nbm" downloadsize="3898" license="AF77BD25" needsrestart="false" releasedate="2017/05/22" targetcluster="labyrinthshooter">
+    <manifest OpenIDE-Module="gruppe5.CommonAudio" OpenIDE-Module-Display-Category="gruppe5" OpenIDE-Module-Implementation-Version="1.0.0-20170522" OpenIDE-Module-Long-Description="&lt;undefined&gt;" OpenIDE-Module-Module-Dependencies="org.netbeans.api.annotations.common/1 &gt; 1.27.1, gruppe5.Common &gt; 1.0.0" OpenIDE-Module-Name="CommonAudio" OpenIDE-Module-Requires="org.openide.modules.ModuleFormat1" OpenIDE-Module-Short-Description="&lt;undefined&gt;" OpenIDE-Module-Specification-Version="1.0.0"/>
+    
 </module>
 
-<module codenamebase="gruppe5.CommonVictory" distribution="CommonVictory-1.0.0-SNAPSHOT.nbm" downloadsize="3949" license="AF77BD25" needsrestart="false" releasedate="2017/05/16" targetcluster="labyrinthshooter">
-    <manifest OpenIDE-Module="gruppe5.CommonVictory" OpenIDE-Module-Display-Category="gruppe5" OpenIDE-Module-Implementation-Version="1.0.0-20170516" OpenIDE-Module-Long-Description="&lt;undefined&gt;" OpenIDE-Module-Module-Dependencies="org.netbeans.api.annotations.common/1 &gt; 1.27.1, gruppe5.Common &gt; 1.0.0" OpenIDE-Module-Name="CommonVictory" OpenIDE-Module-Requires="org.openide.modules.ModuleFormat1" OpenIDE-Module-Short-Description="&lt;undefined&gt;" OpenIDE-Module-Specification-Version="1.0.0"/>
-
+<module codenamebase="gruppe5.CommonBullet" distribution="CommonBullet-1.0.0-SNAPSHOT.nbm" downloadsize="4184" license="AF77BD25" needsrestart="false" releasedate="2017/05/22" targetcluster="labyrinthshooter">
+    <manifest OpenIDE-Module="gruppe5.CommonBullet" OpenIDE-Module-Display-Category="gruppe5" OpenIDE-Module-Implementation-Version="1.0.0-20170522" OpenIDE-Module-Long-Description="&lt;undefined&gt;" OpenIDE-Module-Module-Dependencies="gruppe5.Common &gt; 1.0.0" OpenIDE-Module-Name="CommonBullet" OpenIDE-Module-Requires="org.openide.modules.ModuleFormat1" OpenIDE-Module-Short-Description="&lt;undefined&gt;" OpenIDE-Module-Specification-Version="1.0.0"/>
+    
 </module>
 
-<module codenamebase="gruppe5.CommonWeapon" distribution="CommonWeapon-1.0.0-SNAPSHOT.nbm" downloadsize="4408" license="AF77BD25" needsrestart="false" releasedate="2017/05/16" targetcluster="labyrinthshooter">
-    <manifest OpenIDE-Module="gruppe5.CommonWeapon" OpenIDE-Module-Display-Category="gruppe5" OpenIDE-Module-Implementation-Version="1.0.0-20170516" OpenIDE-Module-Long-Description="&lt;undefined&gt;" OpenIDE-Module-Module-Dependencies="org.netbeans.api.annotations.common/1 &gt; 1.27.1, gruppe5.Common &gt; 1.0.0" OpenIDE-Module-Name="CommonWeapon" OpenIDE-Module-Requires="org.openide.modules.ModuleFormat1" OpenIDE-Module-Short-Description="&lt;undefined&gt;" OpenIDE-Module-Specification-Version="1.0.0"/>
-
+<module codenamebase="gruppe5.commonCollision" distribution="commonCollision-1.0.0-SNAPSHOT.nbm" downloadsize="3939" license="AF77BD25" needsrestart="false" releasedate="2017/05/22" targetcluster="labyrinthshooter">
+    <manifest OpenIDE-Module="gruppe5.commonCollision" OpenIDE-Module-Display-Category="gruppe5" OpenIDE-Module-Implementation-Version="1.0.0-20170522" OpenIDE-Module-Long-Description="&lt;undefined&gt;" OpenIDE-Module-Module-Dependencies="org.netbeans.api.annotations.common/1 &gt; 1.27.1, gruppe5.Common &gt; 1.0.0" OpenIDE-Module-Name="commonCollision" OpenIDE-Module-Requires="org.openide.modules.ModuleFormat1" OpenIDE-Module-Short-Description="&lt;undefined&gt;" OpenIDE-Module-Specification-Version="1.0.0"/>
+    
 </module>
 
-<module codenamebase="gruppe5.Core" distribution="Core-1.0.0-SNAPSHOT.nbm" downloadsize="15564898" license="AF77BD25" needsrestart="false" releasedate="2017/05/16" targetcluster="labyrinthshooter">
-    <manifest OpenIDE-Module="gruppe5.Core" OpenIDE-Module-Display-Category="gruppe5" OpenIDE-Module-Implementation-Version="1.0.0-20170516" OpenIDE-Module-Long-Description="&lt;undefined&gt;" OpenIDE-Module-Module-Dependencies="org.netbeans.api.annotations.common/1 &gt; 1.27.1, org.openide.modules &gt; 7.48.1, org.openide.util &gt; 9.7.1, org.openide.util.lookup &gt; 8.33.1, gruppe5.Common &gt; 1.0.0, org.openide.util.ui &gt; 9.6.1, gruppe5.CommonPlayer &gt; 1.0.0, gruppe5.CommonResources &gt; 1.0.0, gruppe5.CommonAudio &gt; 1.0.0, gruppe5.CommonVictory &gt; 1.0.0" OpenIDE-Module-Name="Core" OpenIDE-Module-Requires="org.openide.modules.ModuleFormat1" OpenIDE-Module-Short-Description="&lt;undefined&gt;" OpenIDE-Module-Specification-Version="1.0.0"/>
-
+<module codenamebase="gruppe5.CommonEnemy" distribution="CommonEnemy-1.0.0-SNAPSHOT.nbm" downloadsize="4356" license="AF77BD25" needsrestart="false" releasedate="2017/05/22" targetcluster="labyrinthshooter">
+    <manifest OpenIDE-Module="gruppe5.CommonEnemy" OpenIDE-Module-Display-Category="gruppe5" OpenIDE-Module-Implementation-Version="1.0.0-20170522" OpenIDE-Module-Long-Description="&lt;undefined&gt;" OpenIDE-Module-Module-Dependencies="org.netbeans.api.annotations.common/1 &gt; 1.27.1, gruppe5.Common &gt; 1.0.0, gruppe5.CommonMap &gt; 1.0.0" OpenIDE-Module-Name="CommonEnemy" OpenIDE-Module-Requires="org.openide.modules.ModuleFormat1" OpenIDE-Module-Short-Description="&lt;undefined&gt;" OpenIDE-Module-Specification-Version="1.0.0"/>
+    
 </module>
 
+<module codenamebase="gruppe5.CommonMap" distribution="CommonMap-1.0.0-SNAPSHOT.nbm" downloadsize="4258" license="AF77BD25" needsrestart="false" releasedate="2017/05/22" targetcluster="labyrinthshooter">
+    <manifest OpenIDE-Module="gruppe5.CommonMap" OpenIDE-Module-Display-Category="gruppe5" OpenIDE-Module-Implementation-Version="1.0.0-20170522" OpenIDE-Module-Long-Description="&lt;undefined&gt;" OpenIDE-Module-Module-Dependencies="org.netbeans.api.annotations.common/1 &gt; 1.27.1" OpenIDE-Module-Name="CommonMap" OpenIDE-Module-Requires="org.openide.modules.ModuleFormat1" OpenIDE-Module-Short-Description="&lt;undefined&gt;" OpenIDE-Module-Specification-Version="1.0.0"/>
+    
+</module>
 
+<module codenamebase="gruppe5.CommonPlayer" distribution="CommonPlayer-1.0.0-SNAPSHOT.nbm" downloadsize="3912" license="AF77BD25" needsrestart="false" releasedate="2017/05/22" targetcluster="labyrinthshooter">
+    <manifest OpenIDE-Module="gruppe5.CommonPlayer" OpenIDE-Module-Display-Category="gruppe5" OpenIDE-Module-Implementation-Version="1.0.0-20170522" OpenIDE-Module-Long-Description="&lt;undefined&gt;" OpenIDE-Module-Module-Dependencies="org.netbeans.api.annotations.common/1 &gt; 1.27.1, gruppe5.Common &gt; 1.0.0" OpenIDE-Module-Name="CommonPlayer" OpenIDE-Module-Requires="org.openide.modules.ModuleFormat1" OpenIDE-Module-Short-Description="&lt;undefined&gt;" OpenIDE-Module-Specification-Version="1.0.0"/>
+    
+</module>
+
+<module codenamebase="gruppe5.CommonResources" distribution="CommonResources-1.0.0-SNAPSHOT.nbm" downloadsize="1580771" license="AF77BD25" needsrestart="false" releasedate="2017/05/22" targetcluster="labyrinthshooter">
+    <manifest OpenIDE-Module="gruppe5.CommonResources" OpenIDE-Module-Display-Category="gruppe5" OpenIDE-Module-Implementation-Version="1.0.0-20170522" OpenIDE-Module-Long-Description="&lt;undefined&gt;" OpenIDE-Module-Module-Dependencies="org.netbeans.api.annotations.common/1 &gt; 1.27.1, gruppe5.Common &gt; 1.0.0" OpenIDE-Module-Name="CommonResources" OpenIDE-Module-Requires="org.openide.modules.ModuleFormat1" OpenIDE-Module-Short-Description="&lt;undefined&gt;" OpenIDE-Module-Specification-Version="1.0.0"/>
+    
+</module>
+
+<module codenamebase="gruppe5.CommonVictory" distribution="CommonVictory-1.0.0-SNAPSHOT.nbm" downloadsize="4170" license="AF77BD25" needsrestart="false" releasedate="2017/05/22" targetcluster="labyrinthshooter">
+    <manifest OpenIDE-Module="gruppe5.CommonVictory" OpenIDE-Module-Display-Category="gruppe5" OpenIDE-Module-Implementation-Version="1.0.0-20170522" OpenIDE-Module-Long-Description="&lt;undefined&gt;" OpenIDE-Module-Module-Dependencies="org.netbeans.api.annotations.common/1 &gt; 1.27.1, gruppe5.Common &gt; 1.0.0" OpenIDE-Module-Name="CommonVictory" OpenIDE-Module-Requires="org.openide.modules.ModuleFormat1" OpenIDE-Module-Short-Description="&lt;undefined&gt;" OpenIDE-Module-Specification-Version="1.0.0"/>
+    
+</module>
+
+<module codenamebase="gruppe5.CommonWeapon" distribution="CommonWeapon-1.0.0-SNAPSHOT.nbm" downloadsize="4407" license="AF77BD25" needsrestart="false" releasedate="2017/05/22" targetcluster="labyrinthshooter">
+    <manifest OpenIDE-Module="gruppe5.CommonWeapon" OpenIDE-Module-Display-Category="gruppe5" OpenIDE-Module-Implementation-Version="1.0.0-20170522" OpenIDE-Module-Long-Description="&lt;undefined&gt;" OpenIDE-Module-Module-Dependencies="org.netbeans.api.annotations.common/1 &gt; 1.27.1, gruppe5.Common &gt; 1.0.0" OpenIDE-Module-Name="CommonWeapon" OpenIDE-Module-Requires="org.openide.modules.ModuleFormat1" OpenIDE-Module-Short-Description="&lt;undefined&gt;" OpenIDE-Module-Specification-Version="1.0.0"/>
+    
+</module>
+
+<module codenamebase="gruppe5.Core" distribution="Core-1.0.0-SNAPSHOT.nbm" downloadsize="15564949" license="AF77BD25" needsrestart="false" releasedate="2017/05/22" targetcluster="labyrinthshooter">
+    <manifest OpenIDE-Module="gruppe5.Core" OpenIDE-Module-Display-Category="gruppe5" OpenIDE-Module-Implementation-Version="1.0.0-20170522" OpenIDE-Module-Long-Description="&lt;undefined&gt;" OpenIDE-Module-Module-Dependencies="org.netbeans.api.annotations.common/1 &gt; 1.27.1, org.openide.modules &gt; 7.48.1, org.openide.util &gt; 9.7.1, org.openide.util.lookup &gt; 8.33.1, gruppe5.Common &gt; 1.0.0, org.openide.util.ui &gt; 9.6.1, gruppe5.CommonPlayer &gt; 1.0.0, gruppe5.CommonResources &gt; 1.0.0, gruppe5.CommonAudio &gt; 1.0.0, gruppe5.CommonVictory &gt; 1.0.0" OpenIDE-Module-Name="Core" OpenIDE-Module-Requires="org.openide.modules.ModuleFormat1" OpenIDE-Module-Short-Description="&lt;undefined&gt;" OpenIDE-Module-Specification-Version="1.0.0"/>
+    
+</module>
+
+<module codenamebase="gruppe5.Enemy" distribution="Enemy-1.0.0-SNAPSHOT.nbm" downloadsize="67146" license="AF77BD25" needsrestart="false" releasedate="2017/05/22" targetcluster="labyrinthshooter">
+    <manifest OpenIDE-Module="gruppe5.Enemy" OpenIDE-Module-Display-Category="gruppe5" OpenIDE-Module-Implementation-Version="1.0.0-20170522" OpenIDE-Module-Long-Description="&lt;undefined&gt;" OpenIDE-Module-Module-Dependencies="org.netbeans.api.annotations.common/1 &gt; 1.27.1, gruppe5.Common &gt; 1.0.0, org.openide.util.lookup &gt; 8.33.1, gruppe5.CommonMap &gt; 1.0.0, gruppe5.CommonAudio &gt; 1.0.0, gruppe5.CommonEnemy &gt; 1.0.0, gruppe5.CommonWeapon &gt; 1.0.0" OpenIDE-Module-Name="Enemy" OpenIDE-Module-Requires="org.openide.modules.ModuleFormat1" OpenIDE-Module-Short-Description="&lt;undefined&gt;" OpenIDE-Module-Specification-Version="1.0.0"/>
+    
+</module>
+
+<module codenamebase="gruppe5.EnemyAI" distribution="EnemyAI-1.0.0-SNAPSHOT.nbm" downloadsize="11667" license="AF77BD25" needsrestart="false" releasedate="2017/05/22" targetcluster="labyrinthshooter">
+    <manifest OpenIDE-Module="gruppe5.EnemyAI" OpenIDE-Module-Display-Category="gruppe5" OpenIDE-Module-Implementation-Version="1.0.0-20170522" OpenIDE-Module-Long-Description="&lt;undefined&gt;" OpenIDE-Module-Module-Dependencies="org.netbeans.api.annotations.common/1 &gt; 1.27.1, gruppe5.Common &gt; 1.0.0, org.openide.util.lookup &gt; 8.33.1, gruppe5.CommonEnemy &gt; 1.0.0, gruppe5.CommonMap &gt; 1.0.0, gruppe5.CommonPlayer &gt; 1.0.0, gruppe5.commonCollision &gt; 1.0.0, gruppe5.CommonWeapon &gt; 1.0.0, gruppe5.CommonBullet &gt; 1.0.0, gruppe5.CommonAudio &gt; 1.0.0" OpenIDE-Module-Name="EnemyAI" OpenIDE-Module-Requires="org.openide.modules.ModuleFormat1" OpenIDE-Module-Short-Description="&lt;undefined&gt;" OpenIDE-Module-Specification-Version="1.0.0"/>
+    
+</module>
+
+<module codenamebase="org.openide.filesystems" distribution="org-openide-filesystems-RELEASE82.nbm" downloadsize="222399" homepage="http://www.netbeans.org/" license="14E6055" moduleauthor="" needsrestart="false" releasedate="2016/09/30" targetcluster="platform">
+    <manifest AutoUpdate-Show-In-Client="false" OpenIDE-Module="org.openide.filesystems" OpenIDE-Module-Display-Category="Infrastructure" OpenIDE-Module-Implementation-Version="201609300101" OpenIDE-Module-Java-Dependencies="Java &gt; 1.8" OpenIDE-Module-Long-Description="Allows access to file like resources in a way independent on actual OS files. Supports notification of changes on disk." OpenIDE-Module-Module-Dependencies="org.openide.util &gt; 9.3, org.openide.util.lookup &gt; 8.17" OpenIDE-Module-Name="File System API" OpenIDE-Module-Requires="org.openide.modules.ModuleFormat1" OpenIDE-Module-Short-Description="Virtual File System API." OpenIDE-Module-Specification-Version="9.10.1"/>
+    
+</module>
+
+<module codenamebase="gruppe5.FPSCounter" distribution="FPSCounter-1.0.0-SNAPSHOT.nbm" downloadsize="5783" license="AF77BD25" needsrestart="false" releasedate="2017/05/22" targetcluster="labyrinthshooter">
+    <manifest OpenIDE-Module="gruppe5.FPSCounter" OpenIDE-Module-Display-Category="gruppe5" OpenIDE-Module-Implementation-Version="1.0.0-20170522" OpenIDE-Module-Long-Description="&lt;undefined&gt;" OpenIDE-Module-Module-Dependencies="org.netbeans.api.annotations.common/1 &gt; 1.27.1, gruppe5.Common &gt; 1.0.0, org.openide.util.lookup &gt; 8.33.1" OpenIDE-Module-Name="FPSCounter" OpenIDE-Module-Requires="org.openide.modules.ModuleFormat1" OpenIDE-Module-Short-Description="&lt;undefined&gt;" OpenIDE-Module-Specification-Version="1.0.0"/>
+    
+</module>
+
+<module codenamebase="gruppe5.HUD" distribution="HUD-1.0.0-SNAPSHOT.nbm" downloadsize="7989" license="AF77BD25" needsrestart="false" releasedate="2017/05/22" targetcluster="labyrinthshooter">
+    <manifest OpenIDE-Module="gruppe5.HUD" OpenIDE-Module-Display-Category="gruppe5" OpenIDE-Module-Implementation-Version="1.0.0-20170522" OpenIDE-Module-Long-Description="&lt;undefined&gt;" OpenIDE-Module-Module-Dependencies="org.netbeans.api.annotations.common/1 &gt; 1.27.1, gruppe5.Common &gt; 1.0.0, org.openide.util.lookup &gt; 8.33.1, gruppe5.CommonPlayer &gt; 1.0.0" OpenIDE-Module-Name="HUD" OpenIDE-Module-Requires="org.openide.modules.ModuleFormat1" OpenIDE-Module-Short-Description="&lt;undefined&gt;" OpenIDE-Module-Specification-Version="1.0.0"/>
+    
+</module>
+
+<module codenamebase="gruppe5.LevelExit" distribution="LevelExit-1.0.0-SNAPSHOT.nbm" downloadsize="148581" license="AF77BD25" needsrestart="false" releasedate="2017/05/22" targetcluster="labyrinthshooter">
+    <manifest OpenIDE-Module="gruppe5.LevelExit" OpenIDE-Module-Display-Category="gruppe5" OpenIDE-Module-Implementation-Version="1.0.0-20170522" OpenIDE-Module-Long-Description="&lt;undefined&gt;" OpenIDE-Module-Module-Dependencies="org.netbeans.api.annotations.common/1 &gt; 1.27.1, gruppe5.Common &gt; 1.0.0, org.openide.util.lookup &gt; 8.33.1, gruppe5.CommonMap &gt; 1.0.0, gruppe5.CommonPlayer &gt; 1.0.0, gruppe5.CommonVictory &gt; 1.0.0, gruppe5.CommonAudio &gt; 1.0.0" OpenIDE-Module-Name="LevelExit" OpenIDE-Module-Requires="org.openide.modules.ModuleFormat1" OpenIDE-Module-Short-Description="&lt;undefined&gt;" OpenIDE-Module-Specification-Version="1.0.0"/>
+    
+</module>
+
+<module codenamebase="org.openide.util.lookup" distribution="org-openide-util-lookup-RELEASE82.nbm" downloadsize="130737" homepage="http://www.netbeans.org/" license="14E6055" moduleauthor="" needsrestart="false" releasedate="2016/09/30" targetcluster="platform">
+    <manifest AutoUpdate-Show-In-Client="false" OpenIDE-Module="org.openide.util.lookup" OpenIDE-Module-Implementation-Version="201609300101" OpenIDE-Module-Java-Dependencies="Java &gt; 1.7" OpenIDE-Module-Long-Description="Many APIs in NetBeans use Lookup as an observable collection of services. The default lookup is the global service registry; selections, project capabilities, and more are also modeled as Lookup instances." OpenIDE-Module-Name="Lookup API" OpenIDE-Module-Short-Description="Generic service discovery mechanism used throughout NetBeans." OpenIDE-Module-Specification-Version="8.33.1"/>
+    
+</module>
+
+<module codenamebase="gruppe5.MapGenerator" distribution="MapGenerator-1.0.0-SNAPSHOT.nbm" downloadsize="485700" license="AF77BD25" needsrestart="false" releasedate="2017/05/22" targetcluster="labyrinthshooter">
+    <manifest OpenIDE-Module="gruppe5.MapGenerator" OpenIDE-Module-Display-Category="gruppe5" OpenIDE-Module-Implementation-Version="1.0.0-20170522" OpenIDE-Module-Long-Description="&lt;undefined&gt;" OpenIDE-Module-Module-Dependencies="org.netbeans.api.annotations.common/1 &gt; 1.27.1, gruppe5.CommonMap &gt; 1.0.0, gruppe5.Common &gt; 1.0.0, org.openide.util.lookup &gt; 8.33.1" OpenIDE-Module-Name="MapGenerator" OpenIDE-Module-Requires="org.openide.modules.ModuleFormat1" OpenIDE-Module-Short-Description="&lt;undefined&gt;" OpenIDE-Module-Specification-Version="1.0.0"/>
+    
+</module>
+
+<module codenamebase="org.openide.modules" distribution="org-openide-modules-RELEASE82.nbm" downloadsize="95562" homepage="http://www.netbeans.org/" license="14E6055" moduleauthor="" needsrestart="false" releasedate="2016/09/30" targetcluster="platform">
+    <manifest AutoUpdate-Show-In-Client="false" OpenIDE-Module="org.openide.modules" OpenIDE-Module-Display-Category="Infrastructure" OpenIDE-Module-Implementation-Version="201609300101" OpenIDE-Module-Java-Dependencies="Java &gt; 1.7" OpenIDE-Module-Long-Description="Allows to get list of installed modules, inspect their properties and dependencies." OpenIDE-Module-Module-Dependencies="org.openide.util.ui &gt; 9.3, org.openide.util &gt; 9.3, org.openide.util.lookup &gt; 8.0" OpenIDE-Module-Name="Module System API" OpenIDE-Module-Short-Description="APIs for getting information about installed modules." OpenIDE-Module-Specification-Version="7.48.1"/>
+    
+</module>
+
+<module codenamebase="org.netbeans.libs.asm" distribution="org-netbeans-libs-asm-RELEASE82.nbm" downloadsize="155156" homepage="http://www.netbeans.org/" license="14E6055" moduleauthor="" needsrestart="false" releasedate="2016/09/30" targetcluster="platform">
+    <manifest AutoUpdate-Show-In-Client="false" OpenIDE-Module="org.netbeans.libs.asm" OpenIDE-Module-Display-Category="Libraries" OpenIDE-Module-Implementation-Version="201609300101" OpenIDE-Module-Java-Dependencies="Java &gt; 1.7" OpenIDE-Module-Long-Description="This module bundles OW2 ASM (bytecode manipulation library)." OpenIDE-Module-Name="OW2 ASM" OpenIDE-Module-Requires="org.openide.modules.ModuleFormat1" OpenIDE-Module-Short-Description="Bundles OW2 ASM (bytecode manipulation)" OpenIDE-Module-Specification-Version="5.3.1"/>
+    
+</module>
+
+<module codenamebase="gruppe5.Player" distribution="Player-1.0.0-SNAPSHOT.nbm" downloadsize="54898" license="AF77BD25" needsrestart="false" releasedate="2017/05/22" targetcluster="labyrinthshooter">
+    <manifest OpenIDE-Module="gruppe5.Player" OpenIDE-Module-Display-Category="gruppe5" OpenIDE-Module-Implementation-Version="1.0.0-20170522" OpenIDE-Module-Long-Description="&lt;undefined&gt;" OpenIDE-Module-Module-Dependencies="org.netbeans.api.annotations.common/1 &gt; 1.27.1, gruppe5.CommonPlayer &gt; 1.0.0, gruppe5.Common &gt; 1.0.0, org.openide.util.lookup &gt; 8.33.1, gruppe5.CommonWeapon &gt; 1.0.0, gruppe5.CommonMap &gt; 1.0.0, gruppe5.CommonAudio &gt; 1.0.0" OpenIDE-Module-Name="Player" OpenIDE-Module-Requires="org.openide.modules.ModuleFormat1" OpenIDE-Module-Short-Description="&lt;undefined&gt;" OpenIDE-Module-Specification-Version="1.0.0"/>
+    
+</module>
+
+<module codenamebase="gruppe5.ResourceManager" distribution="ResourceManager-1.0.0-SNAPSHOT.nbm" downloadsize="1581809" license="AF77BD25" needsrestart="false" releasedate="2017/05/22" targetcluster="labyrinthshooter">
+    <manifest OpenIDE-Module="gruppe5.ResourceManager" OpenIDE-Module-Display-Category="gruppe5" OpenIDE-Module-Implementation-Version="1.0.0-20170522" OpenIDE-Module-Long-Description="&lt;undefined&gt;" OpenIDE-Module-Module-Dependencies="org.netbeans.api.annotations.common/1 &gt; 1.27.1, gruppe5.Common &gt; 1.0.0, org.openide.util.lookup &gt; 8.32.1, gruppe5.CommonResources &gt; 1.0.0" OpenIDE-Module-Name="ResourceManager" OpenIDE-Module-Requires="org.openide.modules.ModuleFormat1" OpenIDE-Module-Short-Description="&lt;undefined&gt;" OpenIDE-Module-Specification-Version="1.0.0"/>
+    
+</module>
+
+<module codenamebase="org.netbeans.core.startup" distribution="org-netbeans-core-startup-RELEASE82.nbm" downloadsize="421380" homepage="http://www.netbeans.org/" license="14E6055" moduleauthor="" needsrestart="false" releasedate="2016/09/30" targetcluster="platform">
+    <manifest AutoUpdate-Show-In-Client="false" OpenIDE-Module="org.netbeans.core.startup/1" OpenIDE-Module-Display-Category="Infrastructure" OpenIDE-Module-Implementation-Version="201609300101" OpenIDE-Module-Java-Dependencies="Java &gt; 1.7" OpenIDE-Module-Long-Description="This module provides the central additional functionality to Bootstrap to locate and enable the right modules." OpenIDE-Module-Module-Dependencies="org.netbeans.bootstrap/1 &gt; 2.61, org.openide.filesystems &gt; 9.0, org.openide.modules &gt; 7.41, org.openide.util.ui &gt; 9.3, org.openide.util &gt; 9.3, org.openide.util.lookup &gt; 8.1, org.netbeans.libs.asm &gt; 5.0, org.netbeans.core.startup.base = 1" OpenIDE-Module-Name="Startup" OpenIDE-Module-Provides="org.openide.modules.InstalledFileLocator" OpenIDE-Module-Requires="org.openide.modules.ModuleFormat1" OpenIDE-Module-Short-Description="Loads and enables modules." OpenIDE-Module-Specification-Version="1.62.1.1"/>
+    
+</module>
+
+<module codenamebase="org.netbeans.core.startup.base" distribution="org-netbeans-core-startup-base-RELEASE82.nbm" downloadsize="100343" homepage="http://www.netbeans.org/" license="14E6055" moduleauthor="" needsrestart="false" releasedate="2016/09/30" targetcluster="platform">
+    <manifest AutoUpdate-Show-In-Client="false" OpenIDE-Module="org.netbeans.core.startup.base" OpenIDE-Module-Display-Category="Infrastructure" OpenIDE-Module-Implementation-Version="1" OpenIDE-Module-Java-Dependencies="Java &gt; 1.6" OpenIDE-Module-Module-Dependencies="org.openide.filesystems &gt; 9.4, org.openide.modules &gt; 7.46, org.openide.util &gt; 9.3, org.openide.util.lookup &gt; 8.30" OpenIDE-Module-Name="Startup Base" OpenIDE-Module-Requires="org.openide.modules.ModuleFormat1" OpenIDE-Module-Short-Description="NetBeans startup commons" OpenIDE-Module-Specification-Version="1.62.1.1"/>
+    
+</module>
+
+<module codenamebase="org.openide.util.ui" distribution="org-openide-util-ui-RELEASE82.nbm" downloadsize="134495" homepage="http://www.netbeans.org/" license="14E6055" moduleauthor="" needsrestart="false" releasedate="2016/09/30" targetcluster="platform">
+    <manifest AutoUpdate-Show-In-Client="false" OpenIDE-Module="org.openide.util.ui" OpenIDE-Module-Display-Category="Infrastructure" OpenIDE-Module-Implementation-Version="201609300101" OpenIDE-Module-Java-Dependencies="Java &gt; 1.7" OpenIDE-Module-Long-Description="Various helper methods and basic concept definitions related to thick client desktop environment including actions and image handling." OpenIDE-Module-Module-Dependencies="org.openide.util &gt; 9.3, org.openide.util.lookup &gt; 8.14" OpenIDE-Module-Name="Utilities API" OpenIDE-Module-Short-Description="Desktop Utilities API." OpenIDE-Module-Specification-Version="9.6.1"/>
+    
+</module>
+
+<module codenamebase="gruppe5.Weapon" distribution="Weapon-1.0.0-SNAPSHOT.nbm" downloadsize="77607" license="AF77BD25" needsrestart="false" releasedate="2017/05/22" targetcluster="labyrinthshooter">
+    <manifest OpenIDE-Module="gruppe5.Weapon" OpenIDE-Module-Display-Category="gruppe5" OpenIDE-Module-Implementation-Version="1.0.0-20170522" OpenIDE-Module-Long-Description="&lt;undefined&gt;" OpenIDE-Module-Module-Dependencies="org.netbeans.api.annotations.common/1 &gt; 1.27.1, gruppe5.Common &gt; 1.0.0, gruppe5.CommonBullet &gt; 1.0.0, org.openide.util.lookup &gt; 8.33.1, gruppe5.CommonMap &gt; 1.0.0, gruppe5.CommonAudio &gt; 1.0.0, gruppe5.CommonWeapon &gt; 1.0.0" OpenIDE-Module-Name="Weapon" OpenIDE-Module-Requires="org.openide.modules.ModuleFormat1" OpenIDE-Module-Short-Description="&lt;undefined&gt;" OpenIDE-Module-Specification-Version="1.0.0"/>
+    
+</module>
 
 <license name="AF77BD25">Copyright  2017
 -----------------------------------------------------
@@ -416,13 +490,13 @@ Participant Software against such Participant either
 unilaterally or pursuant to a written agreement with
 Participant.
 
-6.3. If You assert a patent infringement claim against
-Participant alleging that the Participant Software directly
-or indirectly infringes any patent where such claim is
-resolved (such as by license or settlement) prior to the
-initiation of patent infringement litigation, then the
-reasonable value of the licenses granted by such Participant
-under Sections 2.1 or 2.2 shall be taken into account in
+6.3. If You assert a patent infringement claim against 
+Participant alleging that the Participant Software directly 
+or indirectly infringes any patent where such claim is 
+resolved (such as by license or settlement) prior to the 
+initiation of patent infringement litigation, then the 
+reasonable value of the licenses granted by such Participant 
+under Sections 2.1 or 2.2 shall be taken into account in 
 determining the amount or value of any payment or license.
 
 6.4. In the event of termination under Sections 6.1 or 6.2
@@ -498,15 +572,15 @@ distribute such responsibility on an equitable basis. Nothing
 herein is intended or shall be deemed to constitute any admission
 of liability.
 
-NOTICE PURSUANT TO SECTION 9 OF THE COMMON DEVELOPMENT AND
+NOTICE PURSUANT TO SECTION 9 OF THE COMMON DEVELOPMENT AND 
 DISTRIBUTION LICENSE (CDDL)
 
-The code released under the CDDL shall be governed by the laws
-of the State of California (excluding conflict-of-law provisions).
-Any litigation relating to this License shall be subject to the
-jurisdiction of the Federal Courts of the Northern District of
-California and the state courts of the State of California, with
-venue lying in Santa Clara County, California.
+The code released under the CDDL shall be governed by the laws 
+of the State of California (excluding conflict-of-law provisions). 
+Any litigation relating to this License shall be subject to the 
+jurisdiction of the Federal Courts of the Northern District of 
+California and the state courts of the State of California, with 
+venue lying in Santa Clara County, California. 
 
 
 The GNU General Public License (GPL)
@@ -936,3 +1010,4 @@ do not wish to do so, delete this exception statement from
 your version.
 </license>
 </module_updates>
+
