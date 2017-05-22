@@ -95,9 +95,11 @@ public class EnemyAIProcessorTester {
         
         Map<Enemy, MapNode> initalEnemyTargetNodes = new HashMap();
         
-        for (IGameInitService init : Lookup.getDefault().lookupResult(IGameInitService.class).allInstances()) {
-            init.start(gameData, world);
-        }
+        map.start(gameData, world);
+        enemyPlugin.start(gameData, world);
+        playerPlugin.start(gameData, world);
+        
+        
         for (IGamePluginService plugin : Lookup.getDefault().lookupResult(IGamePluginService.class).allInstances()) {
             plugin.start(gameData, world);
         }
