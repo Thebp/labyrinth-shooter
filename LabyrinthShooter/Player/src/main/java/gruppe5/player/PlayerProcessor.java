@@ -89,7 +89,7 @@ public class PlayerProcessor implements IEntityProcessingService, PlayerSPI {
                 System.out.println("dead player" + deadPlayer.toString());
                 world.removeEntity(player);
                 if (audioSPI != null) {
-                    audioSPI.playAudio(player.getSoundPath(), player);
+                    audioSPI.playAudio(player);
                 }
             }
             //Movement

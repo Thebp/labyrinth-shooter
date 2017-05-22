@@ -48,7 +48,7 @@ public class LevelExitController implements IGamePluginService, IEntityProcessin
         exit.setCollidable(false);
         exit.setDynamic(false);
         exit.setRadius(GameData.UNIT_SIZE);
-        exit.setSoundPath("LevelExit/target/LevelExit-1.0.0-SNAPSHOT.jar!/assets/sounds/winning.ogg");
+        exit.setSoundPath("LevelExit/target/LevelExit-1.0.0-SNAPSHOT.jar!/assets/sounds/winning2.ogg");
         
         // Set position on a spawn node
         MapSPI map = Lookup.getDefault().lookup(MapSPI.class);
@@ -104,7 +104,7 @@ public class LevelExitController implements IGamePluginService, IEntityProcessin
             AudioSPI audioSPI = Lookup.getDefault().lookup(AudioSPI.class);
             if (victorySPI != null) {
                 // Play winning audio
-                audioSPI.playAudio("LevelExit/target/LevelExit-1.0.0-SNAPSHOT.jar!/assets/sounds/winning2.ogg", exit);
+                audioSPI.playAudio(exit);
                 // Increase level
                 gameData.setLevel(gameData.getLevel() + 1);
                 // Set win

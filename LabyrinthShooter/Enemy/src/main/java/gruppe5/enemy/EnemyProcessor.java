@@ -64,7 +64,7 @@ public class EnemyProcessor implements IEntityProcessingService {
             AudioSPI audio = Lookup.getDefault().lookup(AudioSPI.class);
             if (enemy.getLife() <= 0) {
                 world.removeEntity(enemy);
-                audio.playAudio(enemy.getSoundPath(), enemy);
+                audio.playAudio(enemy);
             }
 
             //Saving the dx and dy before movement for moveForwards() gets called

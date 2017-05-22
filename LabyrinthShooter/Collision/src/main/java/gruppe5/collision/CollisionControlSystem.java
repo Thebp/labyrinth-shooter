@@ -1,5 +1,7 @@
 package gruppe5.collision;
 
+//This code is inspired by http://back2basic.phatcode.net/?Issue-%231/2D-Convex-Polygon-Collision-using-SAT
+
 import gruppe5.common.data.Entity;
 import com.badlogic.gdx.math.Vector2;
 import gruppe5.common.collision.CollisionSPI;
@@ -41,6 +43,16 @@ public class CollisionControlSystem implements IEntityProcessingService, Collisi
         }
     }
 
+    /**
+     * Checks if the entities is not collidable, if the are the same entity
+     * or comes from the same class e.g. Enemy.class
+     * 
+     * @param shape1 1st entity's hitbox
+     * @param shape2 2nd entity's hitbox
+     * @param mtv the minimum translation vector
+     * @param velocity
+     * @return 
+     */
     private boolean checkConditions(Entity shape1, Entity shape2, Vector2 mtv, Vector2 velocity) {
         if (shape1 == shape2) {
             return false;
@@ -69,7 +81,11 @@ public class CollisionControlSystem implements IEntityProcessingService, Collisi
         }
     }
 
-    //gets each corner from the entity, at returns an array of vectors.
+    /**
+     * Gets each point from the entitys hitbox, at returns an array of vectors.
+     * @param shape
+     * @return 
+     */
     public Vector2[] getVertices(Entity shape) {
         Vector2[] axes = new Vector2[shape.getShapeX().length];
         float[] verticesX = shape.getShapeX();
@@ -80,6 +96,12 @@ public class CollisionControlSystem implements IEntityProcessingService, Collisi
         return axes;
     }
 
+    /**
+     * Gets and return the projection.
+     * @param axis the normal. 
+     * @param shape
+     * @return 
+     */
     private Projection project(Vector2 axis, Entity shape) {
         Projection proj = new Projection(min, max);
         float p;
@@ -108,8 +130,16 @@ public class CollisionControlSystem implements IEntityProcessingService, Collisi
         proj.max = max;
         return proj;
     }
-
-    //  returns a perpendicular vector(normal) of a line segment
+    
+    /**
+     *returns a perpendicular vector(normal) of a line segment, which is normalized.  
+     * @param x1 x coordinate of one end of the line
+     * @param y1 y coordinate of one end of the line
+     * @param x2 x coordinate of other end of the line
+     * @param y2 y coordinate of other end of the line
+     * @param s 
+     * @return 
+     */
     private Vector2 get2dnormal(float x1, float y1, float x2, float y2, boolean s) {
         Vector2 normal = new Vector2();
         if (s) {
@@ -145,16 +175,15 @@ public class CollisionControlSystem implements IEntityProcessingService, Collisi
         Vector2 axis;
         float interval_distance;
         float overlap;
-        // ' project all the verts of the poly to each axis (normal)
-        // ' of the poly we are testing and find out if the projections
-        // ' overlap (ie: length if proj1 and proj2 are intersecting).
-        // ' if they are intersecting, there is an axis (line perpendicular 
-        // ' to the axis tested or the "edge" of the poly where the normal connects)
-        // ' that separates the two polygons so we do an early out from the function.
-        // ' polygon1
+        // project all the verts of the poly to each axis (normal)
+        // of the poly we are testing and find out if the projections
+        // overlap (ie: length if proj1 and proj2 are intersecting).
+        // if they are intersecting, there is an axis (line perpendicular 
+        // to the axis tested or the "edge" of the poly where the normal connects)
+        // that separates the two polygons so we do an early out from the function.
+        // polygon1
         float magnitude = 9999999;
-        // ' uber large numbah
-
+        
         //1. Polygon
         for (int i = 0; (i <= (getVertices(p1).length) - 1); i++) {
             axis = p1normals[i];

@@ -103,7 +103,7 @@ public class WeaponProcessor implements IEntityProcessingService, IGamePluginSer
                 AudioSPI audioSPI = Lookup.getDefault().lookup(AudioSPI.class);
 
                 if (audioSPI != null) {
-                    audioSPI.playAudio("", weapon);
+                    audioSPI.playAudio(weapon);
                 }
             }
         }

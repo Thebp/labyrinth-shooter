@@ -3,5 +3,5 @@ package gruppe5.common.audio;
 import gruppe5.common.data.Entity;
 
 public interface AudioSPI {
-    void playAudio(String soundURL, Entity entity);
+    void playAudio(Entity entity);
 }

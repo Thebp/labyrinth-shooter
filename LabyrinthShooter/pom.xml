@@ -62,7 +62,6 @@
         <module>Common</module>
         <module>CommonMap</module>
         <module>CommonBullet</module>
-        <module>CommonItem</module>
         <module>CommonPlayer</module>
         <module>CommonWeapon</module>
         <module>MapGenerator</module>

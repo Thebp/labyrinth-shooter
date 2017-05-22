@@ -349,12 +349,12 @@ public class Game implements ApplicationListener, AudioSPI, VictorySPI {
     };
 
     @Override
-    public void playAudio(String soundURL, Entity entity) {
+    public void playAudio(Entity entity) {
         if (entity.getSoundPath() != null) {
             //if (newsound == null) {
             AssetsJarFileResolver ajfr = new AssetsJarFileResolver();
             ResourceSPI soundSPI = Lookup.getDefault().lookup(ResourceSPI.class);
-            soundURL = soundSPI.getResourceUrl(entity.getSoundPath());
+            String soundURL = soundSPI.getResourceUrl(entity.getSoundPath());
             newsound = Gdx.audio.newSound(ajfr.resolve(soundURL));
             newsound.play();
         }
