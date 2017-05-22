@@ -55,11 +55,6 @@
     
 </module>
 
-<module codenamebase="gruppe5.CommonItem" distribution="CommonItem-1.0.0-SNAPSHOT.nbm" downloadsize="3922" license="AF77BD25" needsrestart="false" releasedate="2017/05/22" targetcluster="labyrinthshooter">
-    <manifest OpenIDE-Module="gruppe5.CommonItem" OpenIDE-Module-Display-Category="gruppe5" OpenIDE-Module-Implementation-Version="1.0.0-20170522" OpenIDE-Module-Long-Description="&lt;undefined&gt;" OpenIDE-Module-Module-Dependencies="org.netbeans.api.annotations.common/1 &gt; 1.27.1, gruppe5.Common &gt; 1.0.0" OpenIDE-Module-Name="CommonItem" OpenIDE-Module-Requires="org.openide.modules.ModuleFormat1" OpenIDE-Module-Short-Description="&lt;undefined&gt;" OpenIDE-Module-Specification-Version="1.0.0"/>
-    
-</module>
-
 <module codenamebase="gruppe5.CommonMap" distribution="CommonMap-1.0.0-SNAPSHOT.nbm" downloadsize="4258" license="AF77BD25" needsrestart="false" releasedate="2017/05/22" targetcluster="labyrinthshooter">
     <manifest OpenIDE-Module="gruppe5.CommonMap" OpenIDE-Module-Display-Category="gruppe5" OpenIDE-Module-Implementation-Version="1.0.0-20170522" OpenIDE-Module-Long-Description="&lt;undefined&gt;" OpenIDE-Module-Module-Dependencies="org.netbeans.api.annotations.common/1 &gt; 1.27.1" OpenIDE-Module-Name="CommonMap" OpenIDE-Module-Requires="org.openide.modules.ModuleFormat1" OpenIDE-Module-Short-Description="&lt;undefined&gt;" OpenIDE-Module-Specification-Version="1.0.0"/>
     
