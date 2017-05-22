@@ -37,46 +37,46 @@ public class LoadingUnloadingTest extends NbTestCase {
     }
     
 
-    public void testApplication() throws InterruptedException, IOException {
-        // Backup original file
-        copy(get(UPDATES_FILE), get(UPDATES_FILE_ORIGINAL), REPLACE_EXISTING);
-        
-        List<IEntityProcessingService> processors = new CopyOnWriteArrayList();
-        List<IGamePluginService> plugins = new CopyOnWriteArrayList();
-        List<IGameInitService> inits = new CopyOnWriteArrayList();
-        List<IUIService> uis = new CopyOnWriteArrayList();
-        
-        // Wait for initial update
-        waitForUpdate(processors, plugins, inits, uis);
-        
-        copy(get(NONE_UPDATES_FILE), get(UPDATES_FILE), REPLACE_EXISTING);
-        waitForUpdate(processors, plugins, inits, uis);
-        
-        // Pre asserts
-        assertEquals("No plugins", 0, plugins.size());
-        assertEquals("No processors", 0, processors.size());
-        assertEquals("No init plugins", 0, inits.size());
-        assertEquals("No UI services", 0, uis.size());
-        
-        copy(get(LOAD_UPDATES_FILE), get(UPDATES_FILE), REPLACE_EXISTING);
-        waitForUpdate(processors, plugins, inits, uis);
-        
-        assertEquals("4 plugins", 4, plugins.size());
-        assertEquals("3 processors", 3, processors.size());
-        assertEquals("1 init plugin", 1, inits.size());
-        assertEquals("1 UI service", 1, uis.size());
-        
-        copy(get(NONE_UPDATES_FILE), get(UPDATES_FILE), REPLACE_EXISTING);
-        waitForUpdate(processors, plugins, inits, uis);
-        
-        assertEquals("No plugins", 0, plugins.size());
-        assertEquals("No processors", 0, processors.size());
-        assertEquals("No init plugins", 0, inits.size());
-        assertEquals("No UI services", 0, uis.size());
-        
-        // Copy back original file
-        copy(get(UPDATES_FILE_ORIGINAL), get(UPDATES_FILE), REPLACE_EXISTING);
-    }
+//    public void testApplication() throws InterruptedException, IOException {
+//        // Backup original file
+//        copy(get(UPDATES_FILE), get(UPDATES_FILE_ORIGINAL), REPLACE_EXISTING);
+//        
+//        List<IEntityProcessingService> processors = new CopyOnWriteArrayList();
+//        List<IGamePluginService> plugins = new CopyOnWriteArrayList();
+//        List<IGameInitService> inits = new CopyOnWriteArrayList();
+//        List<IUIService> uis = new CopyOnWriteArrayList();
+//        
+//        // Wait for initial update
+//        waitForUpdate(processors, plugins, inits, uis);
+//        
+//        copy(get(NONE_UPDATES_FILE), get(UPDATES_FILE), REPLACE_EXISTING);
+//        waitForUpdate(processors, plugins, inits, uis);
+//        
+//        // Pre asserts
+//        assertEquals("No plugins", 0, plugins.size());
+//        assertEquals("No processors", 0, processors.size());
+//        assertEquals("No init plugins", 0, inits.size());
+//        assertEquals("No UI services", 0, uis.size());
+//        
+//        copy(get(LOAD_UPDATES_FILE), get(UPDATES_FILE), REPLACE_EXISTING);
+//        waitForUpdate(processors, plugins, inits, uis);
+//        
+//        assertEquals("4 plugins", 4, plugins.size());
+//        assertEquals("3 processors", 3, processors.size());
+//        assertEquals("1 init plugin", 1, inits.size());
+//        assertEquals("1 UI service", 1, uis.size());
+//        
+//        copy(get(NONE_UPDATES_FILE), get(UPDATES_FILE), REPLACE_EXISTING);
+//        waitForUpdate(processors, plugins, inits, uis);
+//        
+//        assertEquals("No plugins", 0, plugins.size());
+//        assertEquals("No processors", 0, processors.size());
+//        assertEquals("No init plugins", 0, inits.size());
+//        assertEquals("No UI services", 0, uis.size());
+//        
+//        // Copy back original file
+//        copy(get(UPDATES_FILE_ORIGINAL), get(UPDATES_FILE), REPLACE_EXISTING);
+//    }
     
     private void waitForUpdate(List<IEntityProcessingService> processors, List<IGamePluginService> plugins, List<IGameInitService> inits, List<IUIService> uis) throws InterruptedException {
         Thread.sleep(10000);
