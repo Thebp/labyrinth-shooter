@@ -283,7 +283,7 @@ public class EnemyAIProcessor implements IEntityProcessingService {
         Heuristics targetHeuristics = new Heuristics(targetNode);
 
         List map = mapSPI.getMap();
-        Queue<Heuristics> frontier = new PriorityQueue<Heuristics>(map.size(), new HeapComparator());
+        HeuristicsPriorityQueue frontier = new HeuristicsPriorityQueue();
         Set<MapNode> explored = new HashSet();
         frontier.add(startHeuristics);
 
