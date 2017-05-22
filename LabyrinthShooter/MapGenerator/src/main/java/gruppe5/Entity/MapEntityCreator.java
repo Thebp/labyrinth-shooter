@@ -29,8 +29,8 @@ public class MapEntityCreator {
      * @param mazeY
      * @return
      */
-    public static Entity createFloorEntity(int mazeX, int mazeY) {
-        Entity floor = new Entity();
+    public static MapEntity createFloorEntity(int mazeX, int mazeY) {
+        MapEntity floor = new MapEntity();
 
         float floorSize = MAP_UNIT_SIZE * NODES_IN_CORRIDOR;
 
@@ -60,8 +60,8 @@ public class MapEntityCreator {
      * @param neighbors
      * @return
      */
-    public static Entity createWallEntity(int mazeX, int mazeY, boolean[] neighbors) {
-        Entity wall = new Entity();
+    public static MapEntity createWallEntity(int mazeX, int mazeY, boolean[] neighbors) {
+        MapEntity wall = new MapEntity();
 
         float wallSize = MAP_UNIT_SIZE * NODES_IN_CORRIDOR;
 
@@ -122,8 +122,8 @@ public class MapEntityCreator {
      * @param n
      * @return An entity representing a node
      */
-    public static Entity createNodeEntity(MapNode n) {
-        Entity node = new Entity();
+    public static MapEntity createNodeEntity(MapNode n) {
+        MapEntity node = new MapEntity();
 
         float x = n.getX();
         float y = n.getY();
