@@ -68,6 +68,10 @@ public class EnemyAIProcessor implements IEntityProcessingService {
         }
     }
 
+    /**
+     * Checks for bullets and sets target as bullet.
+     * @param world 
+     */
     private void checkBullets(World world) {
         List<Entity> bullets = world.getEntities(Bullet.class);
 
@@ -88,8 +92,13 @@ public class EnemyAIProcessor implements IEntityProcessingService {
         }
     }
 
+    /**
+     * Gets closest node to the coordinates given.
+     * @param x
+     * @param y
+     * @return 
+     */
     private MapNode getClosestNode(float x, float y) {
-
         if (mapSPI != null) {
             List<MapNode> nodes = mapSPI.getCenterMapNodes();
 
@@ -120,8 +129,14 @@ public class EnemyAIProcessor implements IEntityProcessingService {
         return (float) Math.sqrt(Math.pow(xDiff, 2) + Math.pow(yDiff, 2));
     }
 
+    /**
+     * If close to Player and in direct sight, set player as target node.
+     *
+     * @param enemy
+     * @param player
+     * @param world
+     */
     private void checkPlayerProximity(Enemy enemy, Entity player, World world) {
-
         if (player != null) {
             float xDiff = player.getX() - enemy.getX();
             float yDiff = player.getY() - enemy.getY();
@@ -152,6 +167,14 @@ public class EnemyAIProcessor implements IEntityProcessingService {
         }
     }
 
+    /**
+     * Checks if player is in direct sight.
+     *
+     * @param enemy
+     * @param player
+     * @param world
+     * @return
+     */
     private boolean checkPlayerVisibility(Enemy enemy, Entity player, World world) {
         if (collisionSPI != null) {
             //Entity entity = new Entity();
@@ -188,6 +211,15 @@ public class EnemyAIProcessor implements IEntityProcessingService {
         return false;
     }
 
+    /**
+     * Should be called when in attack state. Moves enemy and shoots towards
+     * Player.
+     *
+     * @param enemy
+     * @param world
+     * @param gameData
+     * @param player
+     */
     private void enemyAttack(Enemy enemy, World world, GameData gameData, Entity player) {
         if (player != null) {
 
@@ -233,6 +265,12 @@ public class EnemyAIProcessor implements IEntityProcessingService {
 
     }
 
+    /**
+     * Moves an enemy towards its next node
+     *
+     * @param enemy
+     * @param gameData
+     */
     private void moveTowardsNextNode(Enemy enemy, GameData gameData) {
         MapNode nextNode = enemy.getNextNode();
         if (enemy.getNextNode() != null && enemy.getX() != nextNode.getX() || enemy.getY() != nextNode.getY()) {
@@ -272,10 +310,15 @@ public class EnemyAIProcessor implements IEntityProcessingService {
         }
     }
 
-    /*
-        A* algorythm. Gets called from pathRequest. 
-        Creates a list of mapNodes which is the path enemy takes when moving 
-        longer distances.
+    /**
+     * A* algorythm. Gets called from pathRequest. Creates a list of mapNodes
+     * which is the path enemy takes when moving longer distances.
+     *
+     * @param startNode
+     * @param targetNode
+     * @param enemy
+     * @param gameData
+     * @return
      */
     private List<MapNode> findPath(MapNode startNode, MapNode targetNode, Enemy enemy, GameData gameData) {
         // Sets the sent startNode and targetNode to be Hearistics
@@ -294,7 +337,7 @@ public class EnemyAIProcessor implements IEntityProcessingService {
             if (current.equals(targetHeuristics)) {
                 return retracePath(startHeuristics, targetHeuristics, enemy);
             }
-            
+
             explored.add(current.getNode());
 
             for (MapNode neighbour : current.getNode().getNeighbours()) {

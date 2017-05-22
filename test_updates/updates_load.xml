@@ -3,6 +3,11 @@
 <!DOCTYPE module_updates PUBLIC "-//NetBeans//DTD Autoupdate Catalog 2.5//EN" "http://www.netbeans.org/dtds/autoupdate-catalog-2_5.dtd">
 <module_updates timestamp="28/39/10/16/05/2017">
 
+<module codenamebase="gruppe5.Core" distribution="Core-1.0.0-SNAPSHOT.nbm" downloadsize="15564949" license="AF77BD25" needsrestart="false" releasedate="2017/05/22" targetcluster="labyrinthshooter">
+    <manifest OpenIDE-Module="gruppe5.Core" OpenIDE-Module-Display-Category="gruppe5" OpenIDE-Module-Implementation-Version="1.0.0-20170522" OpenIDE-Module-Long-Description="&lt;undefined&gt;" OpenIDE-Module-Module-Dependencies="org.netbeans.api.annotations.common/1 &gt; 1.27.1, org.openide.modules &gt; 7.48.1, org.openide.util &gt; 9.7.1, org.openide.util.lookup &gt; 8.33.1, gruppe5.Common &gt; 1.0.0, org.openide.util.ui &gt; 9.6.1, gruppe5.CommonPlayer &gt; 1.0.0, gruppe5.CommonResources &gt; 1.0.0, gruppe5.CommonAudio &gt; 1.0.0, gruppe5.CommonVictory &gt; 1.0.0" OpenIDE-Module-Name="Core" OpenIDE-Module-Requires="org.openide.modules.ModuleFormat1" OpenIDE-Module-Short-Description="&lt;undefined&gt;" OpenIDE-Module-Specification-Version="1.0.0"/>
+    
+</module>
+
   <module codenamebase="org.openide.util" distribution="org-openide-util-RELEASE82.nbm" downloadsize="164990" homepage="http://www.netbeans.org/" license="14E6055" moduleauthor="" needsrestart="false" releasedate="2016/09/30" targetcluster="platform">
     <manifest AutoUpdate-Show-In-Client="false" OpenIDE-Module="org.openide.util" OpenIDE-Module-Display-Category="Infrastructure" OpenIDE-Module-Implementation-Version="201609300101" OpenIDE-Module-Java-Dependencies="Java &gt; 1.6" OpenIDE-Module-Long-Description="Various helper methods and basic concept definitions including lookup, parallel execution and branding support." OpenIDE-Module-Module-Dependencies="org.openide.util.lookup &gt; 8.14" OpenIDE-Module-Name="Base Utilities API" OpenIDE-Module-Short-Description="Base Utilities API." OpenIDE-Module-Specification-Version="9.7.1"/>
     
