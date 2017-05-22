@@ -98,7 +98,7 @@ public class CollisionControlSystemTest {
         GameData gameData = new GameData();
         
         /* createTestEntity(float x, float y, int life, int damage, Class<? extends Entity> type) 
-        /  returns entity with 10*10 dimension, 50 damage, collidable=true, dynamic=true, isBackground=false */
+        /  returns entity with 10*10 dimension, collidable=true, dynamic=true, isBackground=false */
         E1 e1 = (E1)createTestEntity(0, 0, 100, 50, E1.class);
         E2 e2 = (E2)createTestEntity(2, 2, 20, 30, E2.class);
         E3 e3 = (E3)createTestEntity(15, 15, 70, 10, E3.class);
@@ -115,7 +115,7 @@ public class CollisionControlSystemTest {
         collision.process(gameData, world);
         
         assert(world.getEntity(e1ID).isHit());
-        assert(world.getEntity(e1ID).getLife() == 70);
+        assert(world.getEntity(e1ID).getLife() == 50);
         assert(world.getEntity(e2ID).isHit());
         assert(world.getEntity(e2ID).getLife() == -30);
         assert(!world.getEntity(e3ID).isHit());
@@ -128,10 +128,10 @@ public class CollisionControlSystemTest {
     
     @Test
     public void testCheckCollision() {
-        E1 e1 = (E1)createTestEntity(0, 0, E1.class);
-        E2 e2 = (E2)createTestEntity(0, 0, E2.class);
+        E1 e1 = (E1)createTestEntity(0, 0, 0, 0, E1.class);
+        E2 e2 = (E2)createTestEntity(0, 0, 0, 0, E2.class);
         e2.setDynamic(false);
-        E2 e3 = (E2)createTestEntity(0, 0, E2.class);
+        E2 e3 = (E2)createTestEntity(0, 0, 0, 0, E2.class);
         
         World world = new World();
         world.addEntity(e1);
@@ -143,5 +143,22 @@ public class CollisionControlSystemTest {
         assert(collision.checkCollision(e1, world));
         assert(!collision.checkCollision(e2, world));
         assert(!collision.checkCollision(e3, world));
+    }
+    
+    @Test
+    public void testNoEntitiesDeleted() {
+        E1 e1 = (E1)createTestEntity(0, 0, 0, 0, E1.class);
+        E2 e2 = (E2)createTestEntity(0, 0, 0, 0, E2.class);
+        
+        GameData gameData = new GameData();
+        World world = new World();
+        world.addEntity(e1);
+        world.addEntity(e2);
+        
+        CollisionControlSystem collision = new CollisionControlSystem();
+        collision.process(gameData, world);
+        
+        assert(world.getEntities().contains(e1));
+        assert(world.getEntities().contains(e2));
     }
 }
