@@ -37,7 +37,7 @@ public class LoadingUnloadingTest extends NbTestCase {
     }
     
 
-//    public void testApplication() throws InterruptedException, IOException {
+   public void testApplication() throws InterruptedException, IOException {
 //        // Backup original file
 //        copy(get(UPDATES_FILE), get(UPDATES_FILE_ORIGINAL), REPLACE_EXISTING);
 //        
@@ -76,7 +76,7 @@ public class LoadingUnloadingTest extends NbTestCase {
 //        
 //        // Copy back original file
 //        copy(get(UPDATES_FILE_ORIGINAL), get(UPDATES_FILE), REPLACE_EXISTING);
-//    }
+   }
     
     private void waitForUpdate(List<IEntityProcessingService> processors, List<IGamePluginService> plugins, List<IGameInitService> inits, List<IUIService> uis) throws InterruptedException {
         Thread.sleep(10000);
